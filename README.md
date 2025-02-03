@@ -1,4 +1,4 @@
-### Access to insurance to helping communities self-actuate.
+### Access to insurance to help communities self-actuate.
 
 ### Status
 - Research & Development
