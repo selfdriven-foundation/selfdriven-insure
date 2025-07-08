@@ -1,11 +1,11 @@
-### Access to insurance to help communities self-actuate.
+### Access to insurance to help communities share risk and self-actuate.
 
 ### Status
 - Research & Development
 
 ### Contact Us
 - [Connect @ bsky.app](https://bsky.app/profile/markbyers.selfdriven.social)
-- [selfdriven.foundation/connect](https://selfdriven.foundation/connect)
+- [selfdriven.foundation/connect](https://selfdriven.fyi/connect)
 
 ### References
 - [fida.finance](https://fida.finance)
