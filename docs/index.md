@@ -3,14 +3,13 @@ layout: default
 title: Home
 ---
 
-### Access to insurance to help communities share risk and self-actuate.
+### Access to insurance to help communities & their members share risk and self-actuate.
 
-### Status
-- Research & Development
-
-### Contact Us
-- [Connect @ bsky.app](https://bsky.app/profile/markbyers.selfdriven.social)
-- [selfdriven.foundation/connect](https://selfdriven.fyi/connect)
+### Scope
+- Research & develop end to end risk-sharing frameworks,
+- Leverage generally available higher intelligence.
+- Connecting to new personal intelligence agent based distribution channels
+- Leverage the [selfdriven Network](https://selfdriven.network) interfaces.
 
 ### References
 - [fida.finance](https://fida.finance)
@@ -21,9 +20,12 @@ title: Home
 
 - [selfdriven.id](https://selfdriven.id) - Identity & Trust
 - [skillzeb.io](https://skillzeb.io) - templates
-- [heyOcto.ai](https://heyocto.ai) - templates
+- [selfdriven.ai](https://selfdriven.ai)
 - [selfdriven.fyi/intelligence](https://selfdriven.fyi/intelligence)
-- [selfdriven.fyi/research](https://selfdriven.fyi/research)
+- [research.selfdriven.foundation](https://research.selfdriven.foundation)
 - [selfdriven.university](https://selfdriven.university)
+
+### Contact Us
+- [selfdriven.foundation/contact](https://selfdriven.foundation/contact)
 
 
