@@ -23,7 +23,7 @@ title: Home
 - [selfdriven.ai](https://selfdriven.ai)
 - [selfdriven.fyi/intelligence](https://selfdriven.fyi/intelligence)
 - [research.selfdriven.foundation](https://research.selfdriven.foundation)
-- [selfdriven.university](https://selfdriven.university)
+- [selfdriven.institute](https://selfdriven.institute)
 
 ### Contact Us
 - [selfdriven.foundation/contact](https://selfdriven.foundation/contact)
