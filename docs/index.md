@@ -10,10 +10,10 @@ title: Home
 - Leverage generally available higher intelligence.
 - Connecting to new personal intelligence agent based distribution channels
 - Leverage the [selfdriven Network](https://selfdriven.network) interfaces.
+- [Research](/research)
 
 ### References
 - [fida.finance](https://fida.finance)
-- [xerberus.io](https://www.xerberus.io)
 - [Ecosystem Research](https://github.com/selfdriven-foundation/selfdriven-ai/tree/main/research/use-case-tests/o4-deep-research/insurance)
 
 ### Related
