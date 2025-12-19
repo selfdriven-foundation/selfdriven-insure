@@ -260,4 +260,4 @@ Automation settles it.
 
 ---
 
-- [APRA Version)(/research/pixels-to-proofs-insurance-apra)
+- [APRA Version](/research/pixels-to-proofs-insurance-apra)
