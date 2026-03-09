@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: selfdriven
 title: Pixels to Proofs APRA - selfdriven Insure
 permalink: /research/pixels-to-proofs-insurance-apra
 ---

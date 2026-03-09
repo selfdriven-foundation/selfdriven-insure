@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: selfdriven
 title: Research - selfdriven Insure
 permalink: /research
 ---

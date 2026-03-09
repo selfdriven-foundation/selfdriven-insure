@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: selfdriven
 title: COPE - selfdriven Insure
 permalink: /research/cope
 ---

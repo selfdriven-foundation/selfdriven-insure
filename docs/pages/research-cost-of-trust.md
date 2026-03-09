@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: selfdriven
 title: Cost of Trust - selfdriven Insure
 permalink: /research/cost-of-trust
 ---
