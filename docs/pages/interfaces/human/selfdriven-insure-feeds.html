@@ -1,0 +1,1406 @@
+---
+layout: null
+title: Data Feeds - selfdriven Insure
+permalink: /interfaces/human/feeds
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png">
+	<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<title>Feeds - selfdriven.insure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #edeae3;
+  --surface2: #e5e1d8;
+  --border: #ddd8ce;
+  --text: #1a1410;
+  --muted: #6b5f52;
+  --muted2: #9e9085;
+  --accent: #c8442f;
+  --accent-dim: rgba(200,68,47,0.10);
+  --accent-strong: rgba(200,68,47,0.18);
+  --card-radius: 20px;
+  --shadow: 0 2px 16px rgba(0,0,0,0.07);
+  --green: #1a7a4a;
+  --green-dim: rgba(26,122,74,0.12);
+  --amber: #b86800;
+  --amber-dim: rgba(184,104,0,0.12);
+  --blue: #1a4a8a;
+  --blue-dim: rgba(26,74,138,0.10);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0a0a;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --text: #f0ede8;
+    --muted: #b0a89e;
+    --muted2: #7a7268;
+    --accent: #e85d4a;
+    --accent-dim: rgba(232,93,74,0.12);
+    --accent-strong: rgba(232,93,74,0.20);
+    --shadow: 0 2px 24px rgba(0,0,0,0.5);
+    --green: #2dd47a;
+    --green-dim: rgba(45,212,122,0.12);
+    --amber: #f5a623;
+    --amber-dim: rgba(245,166,35,0.12);
+    --blue: #5b9ef0;
+    --blue-dim: rgba(91,158,240,0.10);
+  }
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* NAV */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+.nav-title {
+  font-size: 14px; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--text);
+}
+.nav-title span { color: var(--accent); }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.keri-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 10px 4px 8px;
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  border-radius: 999px;
+  font-size: 11px; font-weight: 600;
+  color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+}
+.keri-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.5; transform:scale(0.8); }
+}
+
+/* LAYOUT */
+.layout {
+  display: flex;
+  margin-top: 56px;
+  min-height: calc(100vh - 56px);
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+  display: flex; flex-direction: column;
+  position: sticky; top: 56px; height: calc(100vh - 56px);
+  overflow-y: auto;
+}
+.sidebar-section {
+  padding: 0 14px 16px;
+}
+.sidebar-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent);
+  padding: 0 6px 8px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 13px; font-weight: 500; color: var(--muted);
+  text-decoration: none;
+  position: relative;
+}
+.sidebar-item:hover { background: var(--surface2); color: var(--text); }
+.sidebar-item.active {
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-weight: 600;
+}
+.sidebar-item .icon { font-size: 14px; width: 18px; text-align: center; }
+.sidebar-badge {
+  margin-left: auto;
+  background: var(--accent);
+  color: white;
+  font-size: 10px; font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+}
+.sidebar-badge.green {
+  background: var(--green);
+}
+.sidebar-badge.amber {
+  background: var(--amber);
+}
+.sidebar-divider {
+  height: 1px; background: var(--border);
+  margin: 8px 14px 16px;
+}
+.sidebar-footer {
+  margin-top: auto;
+  padding: 12px 14px 0;
+  border-top: 1px solid var(--border);
+}
+.identity-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+}
+.identity-card .ic-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
+}
+.identity-card .ic-aid {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: var(--muted);
+  word-break: break-all; line-height: 1.4;
+}
+.identity-card .ic-name {
+  font-size: 11px; font-weight: 600; color: var(--text); margin-bottom: 2px;
+}
+
+/* MAIN */
+.main { flex: 1; overflow-y: auto; padding: 24px; }
+
+/* TOP BAR */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.topbar-left h1 {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.04em;
+  color: var(--text); line-height: 1.2;
+}
+.topbar-left .eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
+}
+.topbar-right { display: flex; gap: 10px; align-items: center; }
+.btn-primary {
+  padding: 9px 20px;
+  background: var(--accent);
+  color: white;
+  border: none; border-radius: 999px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-outline {
+  padding: 8px 18px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border); border-radius: 999px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ORACLE STATUS BAR */
+.oracle-bar {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 12px; margin-bottom: 24px;
+}
+.oracle-pill {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.oracle-pill::before {
+  content: '';
+  position: absolute; top:0; left:0; right:0; height:3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s;
+}
+.oracle-pill:hover::before,
+.oracle-pill.active::before { transform: scaleX(1); }
+.oracle-pill.active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+.oracle-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0;
+}
+.oracle-dot.online { background: var(--green); box-shadow: 0 0 0 3px var(--green-dim); }
+.oracle-dot.degraded { background: var(--amber); box-shadow: 0 0 0 3px var(--amber-dim); }
+.oracle-info .name {
+  font-size: 11px; font-weight: 700; color: var(--text); line-height: 1.2;
+}
+.oracle-info .latency {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--muted2);
+}
+
+/* STATS ROW */
+.stats-row {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 14px; margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 18px 20px;
+  transition: box-shadow 0.2s;
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; top:0; left:0; right:0; height:3px;
+  background: var(--accent); opacity: 0;
+  transition: opacity 0.2s;
+}
+.stat-card:hover { box-shadow: var(--shadow); }
+.stat-card:hover::before { opacity: 1; }
+.stat-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+}
+.stat-value {
+  font-size: 26px; font-weight: 800; letter-spacing: -0.04em; color: var(--text);
+}
+.stat-sub {
+  font-size: 12px; color: var(--muted); margin-top: 4px;
+}
+.stat-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; padding: 2px 8px;
+  border-radius: 999px; margin-top: 6px;
+}
+.stat-badge.up { background: var(--green-dim); color: var(--green); }
+.stat-badge.down { background: var(--accent-dim); color: var(--accent); }
+
+/* MAIN GRID */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+}
+
+/* ORACLE FEED PANEL */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+.panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.panel-title {
+  font-size: 14px; font-weight: 700; color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+}
+.panel-actions { display: flex; gap: 8px; }
+.tag {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tag.active { background: var(--accent); color: white; }
+.tag:not(.active) {
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.tag:not(.active):hover { border-color: var(--accent); color: var(--accent); }
+
+/* ORACLE FEED TABLE */
+.feed-table { width: 100%; }
+.feed-row {
+  display: grid;
+  grid-template-columns: 1fr 120px 100px 100px 90px;
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.12s;
+  position: relative;
+}
+.feed-row:hover { background: var(--accent-dim); }
+.feed-row.updated { animation: rowFlash 0.8s ease; }
+@keyframes rowFlash {
+  0% { background: var(--accent-strong); }
+  100% { background: transparent; }
+}
+.feed-header-row {
+  grid-template-columns: 1fr 120px 100px 100px 90px;
+  padding: 8px 20px;
+  background: var(--surface2);
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted2);
+  display: grid;
+}
+.feed-oracle {
+  display: flex; align-items: center; gap: 10px;
+}
+.oracle-icon {
+  width: 32px; height: 32px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; flex-shrink: 0;
+}
+.feed-oracle-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.feed-oracle-type { font-size: 11px; color: var(--muted); }
+.feed-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; font-weight: 600; color: var(--text);
+}
+.feed-change {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 600;
+}
+.feed-change.up { color: var(--green); }
+.feed-change.down { color: var(--accent); }
+.feed-change.neutral { color: var(--muted); }
+.feed-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--muted2);
+}
+.feed-status {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 8px; border-radius: 999px;
+  font-size: 10px; font-weight: 700;
+}
+.feed-status.live { background: var(--green-dim); color: var(--green); }
+.feed-status.cached { background: var(--amber-dim); color: var(--amber); }
+.feed-status.mock { background: var(--blue-dim); color: var(--blue); }
+
+/* RIGHT PANEL */
+.right-panel { display: flex; flex-direction: column; gap: 16px; }
+
+/* QUERY PANEL */
+.query-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+.query-input-wrap {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.query-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+}
+.query-type-row {
+  display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;
+}
+.query-type-btn {
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px; font-weight: 600;
+  color: var(--muted);
+  cursor: pointer; transition: all 0.15s;
+}
+.query-type-btn.active,
+.query-type-btn:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.query-field {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+  resize: none;
+}
+.query-field:focus { border-color: var(--accent); }
+.query-field::placeholder { color: var(--muted2); }
+.query-run-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; margin-top: 10px;
+  padding: 10px;
+  background: var(--accent);
+  color: white; border: none; border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.query-run-btn:hover { opacity: 0.88; }
+.query-run-btn.loading { opacity: 0.7; cursor: not-allowed; }
+
+/* RESPONSE PANEL */
+.response-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  flex: 1;
+}
+.response-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.response-title {
+  font-size: 12px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.response-body {
+  padding: 14px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--text);
+  line-height: 1.7;
+  min-height: 200px;
+  max-height: 360px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+.response-body .key { color: var(--accent); }
+.response-body .val { color: var(--text); }
+.response-body .str { color: var(--green); }
+.response-body .num { color: var(--blue); }
+.response-body .bool { color: var(--amber); }
+
+/* KERI AUDIT PANEL */
+.keri-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+.keri-event {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.keri-event:last-child { border-bottom: none; }
+.keri-event-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  margin-top: 4px; flex-shrink: 0;
+}
+.keri-event-dot.ixn { background: var(--green); }
+.keri-event-dot.rot { background: var(--amber); }
+.keri-event-dot.icp { background: var(--accent); }
+.keri-event-info .type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; color: var(--accent);
+}
+.keri-event-info .desc {
+  font-size: 11px; color: var(--muted); margin-top: 1px;
+}
+.keri-event-info .digest {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: var(--muted2); margin-top: 3px;
+  word-break: break-all;
+}
+.keri-event-time {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--muted2);
+  flex-shrink: 0;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  width: 480px; max-width: 95vw;
+  overflow: hidden;
+  transform: translateY(16px);
+  transition: transform 0.2s;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-top { height: 4px; background: var(--accent); }
+.modal-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-size: 16px; font-weight: 800; letter-spacing: -0.03em; }
+.modal-close {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--surface2); border: none;
+  color: var(--muted); font-size: 16px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.modal-close:hover { background: var(--accent-dim); color: var(--accent); }
+.modal-body { padding: 20px 24px 24px; }
+.modal-section {
+  margin-bottom: 16px;
+}
+.modal-section-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+}
+.data-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.data-row:last-child { border-bottom: none; }
+.data-row .dk { color: var(--muted); font-weight: 500; }
+.data-row .dv {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text); font-size: 11px; text-align: right;
+  max-width: 220px; word-break: break-all;
+}
+
+/* LIVE TICKER */
+.ticker-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 16px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  display: flex; align-items: center; gap: 12px;
+}
+.ticker-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent);
+  flex-shrink: 0;
+  padding-right: 12px;
+  border-right: 1px solid var(--border);
+}
+.ticker-scroll {
+  display: flex; gap: 28px;
+  animation: tickerMove 30s linear infinite;
+  white-space: nowrap;
+}
+@keyframes tickerMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-item {
+  display: flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--muted);
+}
+.ticker-item .ti-name { color: var(--text); font-weight: 600; }
+.ticker-item .ti-val { color: var(--green); }
+.ticker-item .ti-val.down { color: var(--accent); }
+
+/* SPARKLINE */
+.sparkline-wrap { padding: 12px 20px; }
+canvas.spark { display: block; }
+
+/* EMPTY STATE */
+.empty-response {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 180px;
+  color: var(--muted2);
+  font-size: 12px; text-align: center; gap: 8px;
+}
+.empty-response .icon { font-size: 32px; opacity: 0.5; }
+
+/* SCROLL ANIMATIONS */
+.reveal {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.4s, transform 0.4s;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">sd</div>
+    <span class="nav-title">selfdriven<span>.insure</span></span>
+  </div>
+  <div class="nav-right">
+    <div class="keri-pill" onclick="openKeriModal()">
+      <div class="keri-dot"></div>
+      EKE4g…kqt
+    </div>
+    <button class="btn-primary" onclick="runQuery()">↻ Refresh All</button>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Oracles</div>
+      <a class="sidebar-item active" onclick="setTab('all')">
+        <span class="icon">◈</span> All Feeds
+        <span class="sidebar-badge green">12</span>
+      </a>
+      <a class="sidebar-item" onclick="setTab('property')">
+        <span class="icon">🏠</span> Property Risk
+        <span class="sidebar-badge">4</span>
+      </a>
+      <a class="sidebar-item" onclick="setTab('auto')">
+        <span class="icon">🚗</span> Motor / Auto
+        <span class="sidebar-badge">3</span>
+      </a>
+      <a class="sidebar-item" onclick="setTab('life')">
+        <span class="icon">💗</span> Life & Health
+        <span class="sidebar-badge">3</span>
+      </a>
+      <a class="sidebar-item" onclick="setTab('commercial')">
+        <span class="icon">🏢</span> Commercial
+        <span class="sidebar-badge">2</span>
+      </a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Credentials</div>
+      <a class="sidebar-item" onclick="openModal('acdc')">
+        <span class="icon">🔐</span> ACDC Credentials
+        <span class="sidebar-badge amber">3</span>
+      </a>
+      <a class="sidebar-item">
+        <span class="icon">📋</span> Evidence Chain
+      </a>
+      <a class="sidebar-item">
+        <span class="icon">🧾</span> Audit Trail
+      </a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Analysis</div>
+      <a class="sidebar-item">
+        <span class="icon">📊</span> Risk Score
+      </a>
+      <a class="sidebar-item">
+        <span class="icon">⚡</span> Pricing Engine
+      </a>
+      <a class="sidebar-item">
+        <span class="icon">🎯</span> Fraud Signals
+      </a>
+    </div>
+    <div class="sidebar-footer">
+      <div class="identity-card">
+        <div class="ic-label">KERI Identity</div>
+        <div class="ic-name">Mark — Foundation Operator</div>
+        <div class="ic-aid">EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar reveal">
+      <div class="topbar-left">
+        <div class="eyebrow">Insurance Oracle Network</div>
+        <h1>Data Intelligence Hub</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-outline" onclick="openModal('acdc')">View ACDC Credentials</button>
+      </div>
+    </div>
+
+    <!-- ORACLE STATUS BAR -->
+    <div class="oracle-bar reveal">
+      <div class="oracle-pill active" id="op-verisk">
+        <div class="oracle-dot online"></div>
+        <div class="oracle-info">
+          <div class="name">Verisk / ISO</div>
+          <div class="latency" id="lat-verisk">42ms</div>
+        </div>
+      </div>
+      <div class="oracle-pill" id="op-lexisnexis">
+        <div class="oracle-dot online"></div>
+        <div class="oracle-info">
+          <div class="name">LexisNexis</div>
+          <div class="latency" id="lat-lexis">67ms</div>
+        </div>
+      </div>
+      <div class="oracle-pill" id="op-corelogic">
+        <div class="oracle-dot online"></div>
+        <div class="oracle-info">
+          <div class="name">CoreLogic</div>
+          <div class="latency" id="lat-core">89ms</div>
+        </div>
+      </div>
+      <div class="oracle-pill" id="op-rms">
+        <div class="oracle-dot degraded"></div>
+        <div class="oracle-info">
+          <div class="name">RMS / Moody's</div>
+          <div class="latency" id="lat-rms">312ms ⚠</div>
+        </div>
+      </div>
+      <div class="oracle-pill" id="op-dnb">
+        <div class="oracle-dot online"></div>
+        <div class="oracle-info">
+          <div class="name">D&B / CLUE</div>
+          <div class="latency" id="lat-dnb">55ms</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIVE TICKER -->
+    <div class="ticker-bar reveal">
+      <div class="ticker-label">LIVE</div>
+      <div class="ticker-scroll" id="ticker">
+        <span class="ticker-item"><span class="ti-name">FL-WIND-CAT4</span> <span class="ti-val">$4,820 +2.3%</span></span>
+        <span class="ticker-item"><span class="ti-name">CA-WILDFIRE-HIGH</span> <span class="ti-val">$9,140 +0.8%</span></span>
+        <span class="ticker-item"><span class="ti-name">TX-HAIL-RISK</span> <span class="ti-val">$2,110 -1.1%</span></span>
+        <span class="ticker-item"><span class="ti-name">AUTO-MVR-SCORE</span> <span class="ti-val">82.4 +0.2%</span></span>
+        <span class="ticker-item"><span class="ti-name">CBI-CREDIT-SCORE</span> <span class="ti-val">741 ±0</span></span>
+        <span class="ticker-item"><span class="ti-name">CLUE-CLAIMS-7Y</span> <span class="ti-val">1 claim -0.0%</span></span>
+        <span class="ticker-item"><span class="ti-name">LIFE-MORTALITY</span> <span class="ti-val">0.0042 +0.1%</span></span>
+        <span class="ticker-item"><span class="ti-name">HEALTH-RISK-INDEX</span> <span class="ti-val down">6.8 -0.3%</span></span>
+        <span class="ticker-item"><span class="ti-name">FLOOD-ZONE-AE</span> <span class="ti-val">$1,240 +5.2%</span></span>
+        <span class="ticker-item"><span class="ti-name">COMM-D&B-SCORE</span> <span class="ti-val">78 +1.0%</span></span>
+        <!-- duplicate for seamless loop -->
+        <span class="ticker-item"><span class="ti-name">FL-WIND-CAT4</span> <span class="ti-val">$4,820 +2.3%</span></span>
+        <span class="ticker-item"><span class="ti-name">CA-WILDFIRE-HIGH</span> <span class="ti-val">$9,140 +0.8%</span></span>
+        <span class="ticker-item"><span class="ti-name">TX-HAIL-RISK</span> <span class="ti-val">$2,110 -1.1%</span></span>
+        <span class="ticker-item"><span class="ti-name">AUTO-MVR-SCORE</span> <span class="ti-val">82.4 +0.2%</span></span>
+        <span class="ticker-item"><span class="ti-name">CBI-CREDIT-SCORE</span> <span class="ti-val">741 ±0</span></span>
+        <span class="ticker-item"><span class="ti-name">CLUE-CLAIMS-7Y</span> <span class="ti-val">1 claim -0.0%</span></span>
+        <span class="ticker-item"><span class="ti-name">LIFE-MORTALITY</span> <span class="ti-val">0.0042 +0.1%</span></span>
+        <span class="ticker-item"><span class="ti-name">HEALTH-RISK-INDEX</span> <span class="ti-val down">6.8 -0.3%</span></span>
+        <span class="ticker-item"><span class="ti-name">FLOOD-ZONE-AE</span> <span class="ti-val">$1,240 +5.2%</span></span>
+        <span class="ticker-item"><span class="ti-name">COMM-D&B-SCORE</span> <span class="ti-val">78 +1.0%</span></span>
+      </div>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="stats-row reveal">
+      <div class="stat-card">
+        <div class="stat-label">Oracle Queries Today</div>
+        <div class="stat-value" id="stat-queries">2,847</div>
+        <div class="stat-badge up">↑ 14% vs yesterday</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Risk Premium</div>
+        <div class="stat-value" id="stat-premium">$3,241</div>
+        <div class="stat-badge down">↑ $84 this week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">KERI Events Logged</div>
+        <div class="stat-value" id="stat-keri">1,192</div>
+        <div class="stat-badge up">↑ 7% integrity</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Oracles</div>
+        <div class="stat-value">4/5</div>
+        <div class="stat-badge" style="background:var(--amber-dim);color:var(--amber)">⚠ RMS degraded</div>
+      </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="main-grid reveal">
+
+      <!-- ORACLE FEED PANEL -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            ◈ Oracle Data Feeds
+          </div>
+          <div class="panel-actions">
+            <span class="tag active" onclick="filterFeed('all',this)">All</span>
+            <span class="tag" onclick="filterFeed('property',this)">Property</span>
+            <span class="tag" onclick="filterFeed('auto',this)">Auto</span>
+            <span class="tag" onclick="filterFeed('life',this)">Life</span>
+          </div>
+        </div>
+
+        <div class="feed-header-row">
+          <div>Oracle / Feed</div>
+          <div>Current Value</div>
+          <div>24h Change</div>
+          <div>Last Update</div>
+          <div>Status</div>
+        </div>
+
+        <div id="feed-body">
+          <!-- populated by JS -->
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="right-panel">
+
+        <!-- QUERY PANEL -->
+        <div class="query-box">
+          <div class="query-input-wrap">
+            <div class="query-label">Oracle Query</div>
+            <div class="query-type-row" id="qtype-row">
+              <button class="query-type-btn active" onclick="setQueryType('property',this)">Property</button>
+              <button class="query-type-btn" onclick="setQueryType('auto',this)">Auto</button>
+              <button class="query-type-btn" onclick="setQueryType('life',this)">Life</button>
+              <button class="query-type-btn" onclick="setQueryType('commercial',this)">Commercial</button>
+            </div>
+            <textarea class="query-field" id="query-input" rows="4" placeholder="42 Wallaby Way, Sydney NSW 2000&#10;PropertyType: Residential&#10;YearBuilt: 1998&#10;FloodZone: auto-detect"></textarea>
+            <button class="query-run-btn" id="run-btn" onclick="runQuery()">
+              <span id="run-label">▶ Query All Oracles</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- RESPONSE -->
+        <div class="response-box">
+          <div class="response-header">
+            <div class="response-title">Response</div>
+            <span class="feed-status mock" id="resp-status">awaiting query</span>
+          </div>
+          <div class="response-body" id="response-body">
+            <div class="empty-response">
+              <div class="icon">◈</div>
+              <div>Enter a query and run</div>
+              <div style="font-size:10px;color:var(--muted2)">KERI event will be logged on each query</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KERI AUDIT PANEL -->
+        <div class="keri-panel">
+          <div class="panel-header">
+            <div class="panel-title">🔐 KEL — Key Event Log</div>
+          </div>
+          <div id="keri-events">
+            <div class="keri-event">
+              <div class="keri-event-dot icp"></div>
+              <div class="keri-event-info">
+                <div class="type">icp — Inception</div>
+                <div class="desc">AID established · 3 witnesses</div>
+                <div class="digest">sha256·a3f8c9d1e4b2770f92…</div>
+              </div>
+              <div class="keri-event-time">09:14</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL: KERI -->
+<div class="modal-overlay" id="keri-modal">
+  <div class="modal">
+    <div class="modal-top"></div>
+    <div class="modal-header">
+      <div class="modal-title">🔐 KERI Identity</div>
+      <button class="modal-close" onclick="closeModal('keri-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-label">Autonomous Identifier</div>
+        <div class="data-row"><span class="dk">AID</span><span class="dv">EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt</span></div>
+        <div class="data-row"><span class="dk">Seq No</span><span class="dv">sn:7</span></div>
+        <div class="data-row"><span class="dk">Signing Keys</span><span class="dv">1-of-1 Ed25519</span></div>
+        <div class="data-row"><span class="dk">Pre-rotation</span><span class="dv">committed ✓</span></div>
+        <div class="data-row"><span class="dk">Witnesses</span><span class="dv">3 (threshold: 2)</span></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">ACDC Credentials</div>
+        <div class="data-row"><span class="dk">Role</span><span class="dv">Foundation Operator</span></div>
+        <div class="data-row"><span class="dk">Scope</span><span class="dv">selfdriven.insure · oracle:read · oracle:query</span></div>
+        <div class="data-row"><span class="dk">Issued By</span><span class="dv">selfdriven Foundation vLEI</span></div>
+        <div class="data-row"><span class="dk">Expiry</span><span class="dv">2026-12-31</span></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">Passkey Binding</div>
+        <div class="data-row"><span class="dk">Device</span><span class="dv">MacBook Pro (Touch ID)</span></div>
+        <div class="data-row"><span class="dk">Bound via</span><span class="dv">ixn event sn:4</span></div>
+        <div class="data-row"><span class="dk">FIDO2 AAGUID</span><span class="dv">fbfc3007-154e-4ecc…</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: ACDC -->
+<div class="modal-overlay" id="acdc-modal">
+  <div class="modal">
+    <div class="modal-top"></div>
+    <div class="modal-header">
+      <div class="modal-title">📋 ACDC Credential Pack</div>
+      <button class="modal-close" onclick="closeModal('acdc-modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-label">Oracle Access Credential</div>
+        <div class="data-row"><span class="dk">Oracle</span><span class="dv">Verisk Analytics · ISO v4.2</span></div>
+        <div class="data-row"><span class="dk">Scope</span><span class="dv">loss-cost · cat-model · policy-data</span></div>
+        <div class="data-row"><span class="dk">ACDC SAID</span><span class="dv">EGY8f_1iCJPpzMLmQ4nTk6…</span></div>
+        <div class="data-row"><span class="dk">Status</span><span class="dv" style="color:var(--green)">ACTIVE ✓</span></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">LexisNexis Access Credential</div>
+        <div class="data-row"><span class="dk">Oracle</span><span class="dv">LexisNexis Risk Solutions</span></div>
+        <div class="data-row"><span class="dk">Scope</span><span class="dv">MVR · CLUE · fraud-signals · MapView</span></div>
+        <div class="data-row"><span class="dk">ACDC SAID</span><span class="dv">EHX9a_2kDKQqzNMmR5oUl7…</span></div>
+        <div class="data-row"><span class="dk">Status</span><span class="dv" style="color:var(--green)">ACTIVE ✓</span></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">CoreLogic Access Credential</div>
+        <div class="data-row"><span class="dk">Oracle</span><span class="dv">CoreLogic Property Intelligence</span></div>
+        <div class="data-row"><span class="dk">Scope</span><span class="dv">property-value · hazard-score · reconstruction-cost</span></div>
+        <div class="data-row"><span class="dk">ACDC SAID</span><span class="dv">EJZ0b_3lELRrzONnS6pVm8…</span></div>
+        <div class="data-row"><span class="dk">Status</span><span class="dv" style="color:var(--amber)">PENDING RENEWAL ⚠</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const FEEDS = [
+  { id:'v1', oracle:'Verisk / ISO', type:'property', icon:'🏠', iconBg:'#f5e8e5',
+    label:'Loss Cost Index — AU Residential', value:'$3,842', raw:3842, change:'+2.1%', dir:'up',
+    updated:'09:31:14', status:'live' },
+  { id:'v2', oracle:'Verisk / ISO', type:'property', icon:'🌊', iconBg:'#e8f0f5',
+    label:'Flood Zone Premium — AE Zone', value:'$1,240', raw:1240, change:'+5.2%', dir:'up',
+    updated:'09:31:14', status:'live' },
+  { id:'v3', oracle:'Verisk / ISO', type:'property', icon:'🔥', iconBg:'#f5ede8',
+    label:'Wildfire Hazard Score — CA', value:'8.4 / 10', raw:8.4, change:'+0.3', dir:'up',
+    updated:'09:30:58', status:'live' },
+  { id:'l1', oracle:'LexisNexis', type:'auto', icon:'🚗', iconBg:'#e8f5ee',
+    label:'MVR Score — Primary Driver', value:'82.4 pts', raw:82.4, change:'+0.2', dir:'up',
+    updated:'09:31:22', status:'live' },
+  { id:'l2', oracle:'LexisNexis', type:'auto', icon:'📋', iconBg:'#eef0f5',
+    label:'CLUE Report — Property Claims', value:'1 claim / 7yr', raw:1, change:'neutral', dir:'neutral',
+    updated:'09:28:41', status:'cached' },
+  { id:'l3', oracle:'LexisNexis', type:'auto', icon:'🚨', iconBg:'#f5eee8',
+    label:'Fraud Signal Index', value:'LOW 12/100', raw:12, change:'-3', dir:'up',
+    updated:'09:31:05', status:'live' },
+  { id:'c1', oracle:'CoreLogic', type:'property', icon:'🏗️', iconBg:'#f0f5e8',
+    label:'Reconstruction Cost Value', value:'$548,200', raw:548200, change:'+$1,400', dir:'up',
+    updated:'09:29:33', status:'live' },
+  { id:'c2', oracle:'CoreLogic', type:'property', icon:'📍', iconBg:'#e8eef5',
+    label:'Property Hazard Score', value:'4.2 / 10', raw:4.2, change:'-0.1', dir:'up',
+    updated:'09:29:33', status:'live' },
+  { id:'r1', oracle:'RMS / Moody\'s', type:'property', icon:'🌪️', iconBg:'#f5f0e8',
+    label:'Cat Model — TC Return Period', value:'1:150yr', raw:150, change:'neutral', dir:'neutral',
+    updated:'09:15:02', status:'cached' },
+  { id:'d1', oracle:'D&B Commercial', type:'commercial', icon:'🏢', iconBg:'#e8f5f2',
+    label:'Business Credit Score', value:'78 / 100', raw:78, change:'+1.0', dir:'up',
+    updated:'09:31:18', status:'live' },
+  { id:'h1', oracle:'Vitality / IoT', type:'life', icon:'💗', iconBg:'#f5e8ee',
+    label:'Health Risk Index', value:'6.8 / 10', raw:6.8, change:'-0.3', dir:'up',
+    updated:'09:31:00', status:'live' },
+  { id:'h2', oracle:'LexisNexis', type:'life', icon:'📜', iconBg:'#eee8f5',
+    label:'Mortality Rate — Age 40-44', value:'0.00418', raw:0.00418, change:'+0.1%', dir:'down',
+    updated:'09:30:15', status:'live' },
+];
+
+let currentFilter = 'all';
+let queryType = 'property';
+let keriSeq = 1;
+
+// ─── RENDER FEED ──────────────────────────────────────────────────────────────
+function renderFeed(filter) {
+  const body = document.getElementById('feed-body');
+  const rows = filter === 'all' ? FEEDS : FEEDS.filter(f => f.type === filter);
+  body.innerHTML = rows.map(f => `
+    <div class="feed-row" id="row-${f.id}" onclick="openFeedDetail('${f.id}')">
+      <div class="feed-oracle">
+        <div class="oracle-icon" style="background:${f.iconBg}">${f.icon}</div>
+        <div>
+          <div class="feed-oracle-name">${f.label}</div>
+          <div class="feed-oracle-type">${f.oracle}</div>
+        </div>
+      </div>
+      <div class="feed-value">${f.value}</div>
+      <div class="feed-change ${f.dir === 'neutral' ? 'neutral' : f.dir === 'up' ? 'up' : 'down'}">${f.change}</div>
+      <div class="feed-time" id="time-${f.id}">${f.updated}</div>
+      <div>
+        <span class="feed-status ${f.status}">${f.status}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterFeed(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.panel-actions .tag').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderFeed(filter);
+}
+
+// ─── QUERY ────────────────────────────────────────────────────────────────────
+const QUERY_PLACEHOLDERS = {
+  property: '42 Wallaby Way, Sydney NSW 2000\nPropertyType: Residential\nYearBuilt: 1998\nFloodZone: auto-detect',
+  auto: 'VIN: 1HGBH41JXMN109186\nDriver DOB: 1984-03-15\nLicence: NSW DL4471882\nYears Licensed: 12',
+  life: 'DOB: 1984-03-15\nGender: M\nSmoker: No\nBMI: 24.2\nCoverAmount: $500,000',
+  commercial: 'ABN: 78 123 456 789\nEntityType: Pty Ltd\nIndustry: ANZSIC 6120\nRevenue: $2.4M'
+};
+
+function setQueryType(type, el) {
+  queryType = type;
+  document.querySelectorAll('#qtype-row .query-type-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('query-input').placeholder = QUERY_PLACEHOLDERS[type];
+}
+
+const MOCK_RESPONSES = {
+  property: {
+    "oracle": "selfdriven.insure — Composite Response",
+    "queryType": "PROPERTY_RISK",
+    "address": "42 Wallaby Way, Sydney NSW 2000",
+    "timestamp": "2026-03-10T09:31:22.481Z",
+    "sources": {
+      "Verisk_ISO": {
+        "lossCostIndex": 3842,
+        "floodZone": "AE",
+        "floodPremiumBase": 1240,
+        "wildfireHazard": 4.1,
+        "windHazard": 2.8
+      },
+      "CoreLogic": {
+        "reconstructionCostValue": 548200,
+        "propertyHazardScore": 4.2,
+        "landValue": 820000,
+        "dwellingValue": 548200,
+        "constructionType": "Brick Veneer"
+      },
+      "RMS_Moodys": {
+        "catModelTC": "1:150yr",
+        "AAL_annual": 1840,
+        "status": "cached — oracle degraded"
+      }
+    },
+    "compositePremiumIndicative": 3241,
+    "riskTier": "STANDARD",
+    "keriEvent": {
+      "type": "ixn",
+      "aid": "EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt",
+      "sn": 8,
+      "digest": "sha256-d4e9f1a2b3c7810e55af"
+    }
+  },
+  auto: {
+    "oracle": "selfdriven.insure — Composite Response",
+    "queryType": "AUTO_RISK",
+    "vin": "1HGBH41JXMN109186",
+    "timestamp": "2026-03-10T09:31:22.481Z",
+    "sources": {
+      "LexisNexis_MVR": {
+        "mvrScore": 82.4,
+        "violations_5yr": 1,
+        "accidents_5yr": 0,
+        "licenceSuspensions": 0
+      },
+      "LexisNexis_CLUE": {
+        "autoClaims_7yr": 2,
+        "atFaultClaims": 0,
+        "lastClaimDate": "2022-11-14"
+      },
+      "LexisNexis_FraudSignal": {
+        "fraudIndex": 12,
+        "tier": "LOW",
+        "flags": []
+      }
+    },
+    "compositePremiumIndicative": 1840,
+    "riskTier": "PREFERRED",
+    "keriEvent": {
+      "type": "ixn",
+      "aid": "EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt",
+      "sn": 9,
+      "digest": "sha256-a1b2c3d4e5f6710e88bc"
+    }
+  },
+  life: {
+    "oracle": "selfdriven.insure — Composite Response",
+    "queryType": "LIFE_RISK",
+    "timestamp": "2026-03-10T09:31:22.481Z",
+    "sources": {
+      "Vitality_IoT": {
+        "healthRiskIndex": 6.8,
+        "activityScore": 74,
+        "BMI": 24.2,
+        "bloodPressureFlag": false
+      },
+      "LexisNexis_Mortality": {
+        "mortalityRate": 0.00418,
+        "cohort": "M_40-44_NonSmoker",
+        "loadingFactor": 1.00
+      },
+      "Verisk_ISO": {
+        "occupationClass": 1,
+        "pastimeHazard": "LOW"
+      }
+    },
+    "compositePremiumIndicative": 92,
+    "riskTier": "PREFERRED",
+    "keriEvent": {
+      "type": "ixn",
+      "aid": "EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt",
+      "sn": 10,
+      "digest": "sha256-f9e8d7c6b5a4320f11de"
+    }
+  },
+  commercial: {
+    "oracle": "selfdriven.insure — Composite Response",
+    "queryType": "COMMERCIAL_RISK",
+    "abn": "78 123 456 789",
+    "timestamp": "2026-03-10T09:31:22.481Z",
+    "sources": {
+      "DnB": {
+        "creditScore": 78,
+        "paydexScore": 80,
+        "employeeCount": 12,
+        "yearsInBusiness": 6
+      },
+      "Verisk_ISO": {
+        "industryLossIndex": 2.4,
+        "liabilityRiskClass": "B",
+        "workersCompRate": 1.82
+      }
+    },
+    "compositePremiumIndicative": 4820,
+    "riskTier": "STANDARD",
+    "keriEvent": {
+      "type": "ixn",
+      "aid": "EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt",
+      "sn": 11,
+      "digest": "sha256-c8b7a6d5e4f3210g22ef"
+    }
+  }
+};
+
+function syntaxHighlight(json) {
+  if (typeof json !== 'string') json = JSON.stringify(json, null, 2);
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => {
+    let cls = 'num';
+    if (/^"/.test(match)) {
+      cls = /:$/.test(match) ? 'key' : 'str';
+    } else if (/true|false/.test(match)) {
+      cls = 'bool';
+    }
+    return `<span class="${cls}">${match}</span>`;
+  });
+}
+
+function addKeriEvent(type, desc, digest) {
+  const now = new Date();
+  const time = now.toTimeString().slice(0,8);
+  const events = document.getElementById('keri-events');
+  const el = document.createElement('div');
+  el.className = 'keri-event';
+  el.innerHTML = `
+    <div class="keri-event-dot ${type}"></div>
+    <div class="keri-event-info">
+      <div class="type">${type} — ${type === 'ixn' ? 'Interaction' : type === 'rot' ? 'Rotation' : 'Inception'}</div>
+      <div class="desc">${desc}</div>
+      <div class="digest">${digest}</div>
+    </div>
+    <div class="keri-event-time">${time}</div>
+  `;
+  events.insertBefore(el, events.firstChild);
+  keriSeq++;
+}
+
+function runQuery() {
+  const btn = document.getElementById('run-btn');
+  const label = document.getElementById('run-label');
+  const respBody = document.getElementById('response-body');
+  const respStatus = document.getElementById('resp-status');
+
+  btn.classList.add('loading');
+  label.textContent = '⏳ Querying oracles…';
+  respStatus.textContent = 'fetching';
+  respStatus.className = 'feed-status cached';
+  respBody.innerHTML = '<div class="empty-response"><div class="icon">⏳</div><div>Contacting oracle network…</div></div>';
+
+  const delay = 800 + Math.random() * 600;
+  setTimeout(() => {
+    const resp = MOCK_RESPONSES[queryType];
+    resp.timestamp = new Date().toISOString();
+    resp.keriEvent.sn = keriSeq;
+    resp.keriEvent.digest = 'sha256-' + Math.random().toString(36).slice(2,18);
+
+    respBody.innerHTML = syntaxHighlight(resp);
+    respStatus.textContent = 'live';
+    respStatus.className = 'feed-status live';
+    btn.classList.remove('loading');
+    label.textContent = '▶ Query All Oracles';
+
+    addKeriEvent('ixn', `Oracle query · ${queryType} · sn:${keriSeq}`, resp.keriEvent.digest);
+
+    // flash a feed row
+    const typeRows = FEEDS.filter(f => f.type === queryType || queryType === 'all');
+    if (typeRows.length) {
+      const r = typeRows[Math.floor(Math.random() * typeRows.length)];
+      const row = document.getElementById('row-' + r.id);
+      if (row) { row.classList.add('updated'); setTimeout(() => row.classList.remove('updated'), 900); }
+    }
+
+    // update stats
+    const q = document.getElementById('stat-queries');
+    q.textContent = (parseInt(q.textContent.replace(/,/g,'')) + 1).toLocaleString();
+    const k = document.getElementById('stat-keri');
+    k.textContent = (parseInt(k.textContent.replace(/,/g,'')) + 1).toLocaleString();
+  }, delay);
+}
+
+// ─── MODALS ───────────────────────────────────────────────────────────────────
+function openKeriModal() {
+  document.getElementById('keri-modal').classList.add('open');
+}
+function openModal(type) {
+  document.getElementById(type + '-modal').classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.classList.remove('open');
+  }
+});
+
+// ─── FEED DETAIL ──────────────────────────────────────────────────────────────
+function openFeedDetail(id) {
+  const f = FEEDS.find(x => x.id === id);
+  if (!f) return;
+  // Pre-fill query and run
+  setQueryType(f.type, document.querySelector(`[onclick="setQueryType('${f.type}',this)"]`) || document.querySelector('#qtype-row .query-type-btn'));
+  document.getElementById('query-input').value = `Feed: ${f.label}\nOracle: ${f.oracle}\nCurrent: ${f.value}`;
+}
+
+// ─── SIDEBAR TAB ──────────────────────────────────────────────────────────────
+function setTab(tab) {
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  filterFeed(tab === 'all' ? 'all' : tab, document.querySelector('.panel-actions .tag.active') || document.querySelector('.panel-actions .tag'));
+}
+
+// ─── LIVE UPDATES ─────────────────────────────────────────────────────────────
+function jitter(val, pct) {
+  const mult = 1 + (Math.random() - 0.5) * pct;
+  return typeof val === 'number' ? +(val * mult).toFixed(val < 1 ? 5 : val < 100 ? 2 : 0) : val;
+}
+
+function liveUpdate() {
+  const f = FEEDS[Math.floor(Math.random() * FEEDS.length)];
+  const newVal = jitter(f.raw, 0.01);
+  const diff = newVal - f.raw;
+  f.raw = newVal;
+  f.dir = diff >= 0 ? 'up' : 'down';
+  f.change = (diff >= 0 ? '+' : '') + (f.raw < 1 ? diff.toFixed(5) : diff.toFixed(0));
+
+  // format value
+  if (typeof newVal === 'number') {
+    if (newVal > 1000) f.value = '$' + newVal.toLocaleString();
+    else if (newVal < 1) f.value = newVal.toFixed(5);
+    else if (newVal > 100) f.value = newVal.toFixed(0) + ' pts';
+    else f.value = newVal.toFixed(1) + ' / 10';
+  }
+
+  // update time
+  const now = new Date();
+  f.updated = now.toTimeString().slice(0,8);
+
+  // re-render if visible
+  const row = document.getElementById('row-' + f.id);
+  if (row) {
+    row.classList.add('updated');
+    setTimeout(() => row.classList.remove('updated'), 900);
+    renderFeed(currentFilter);
+  }
+
+  // update latencies randomly
+  const lats = ['lat-verisk','lat-lexis','lat-core','lat-dnb'];
+  const l = lats[Math.floor(Math.random() * lats.length)];
+  document.getElementById(l).textContent = (30 + Math.floor(Math.random() * 80)) + 'ms';
+}
+
+// ─── SCROLL REVEAL ────────────────────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      e.target.style.transitionDelay = (i * 0.06) + 's';
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+renderFeed('all');
+setInterval(liveUpdate, 3200);
+</script>
+</body>
+</html>
