@@ -7,7 +7,7 @@ defaults:
       path: "pages"
       type: "pages"
     values:
-      layout: default
+      layout: selfdriven
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
