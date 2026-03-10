@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -623,19 +628,88 @@ async function lookupVin() {
         year = year || result.vin_decoded.ModelYear || '';
         setStep('dbvin','done');
       } else {
-        // DB.VIN had no data — use WMI hints + VIN position decoding
-        result.dbvin = { oracle:'DB.VIN (Global)', note:'No record found', latency_ms:Date.now()-t0 };
+        // DB.VIN had no data — escalate to Claude AI VIN oracle
         const hintMake = wmiHint(vin);
         const hintYear = decodeModelYear(vin);
         const hintCountry = decodeCountry(vin);
-        if (isPartialDecode(result.vin_decoded)) {
-          result.vin_decoded.Make = hintMake;
-          result.vin_decoded.ModelYear = hintYear;
-          result.vin_decoded.PlantCountry = hintCountry;
-          result.vin_decoded._mergedFromWmiHints = true;
-          make = hintMake || ''; year = hintYear || '';
+        document.getElementById('step-dbvin-label').textContent = 'DB.VIN: no record — querying Claude AI VIN oracle…';
+        try {
+          const aiRes = await fetch('https://api.anthropic.com/v1/messages', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+              model: 'claude-sonnet-4-20250514',
+              max_tokens: 400,
+              system: 'You are an expert automotive VIN decoder with deep knowledge of Japanese, European and global vehicle identification. Respond ONLY with a valid JSON object and nothing else — no markdown, no explanation, no backticks.',
+              messages:[{ role:'user', content:
+                `Decode this VIN: ${vin}
+WMI hint: ${hintMake || 'unknown'}, Country: ${hintCountry}, Est. Year: ${hintYear || 'unknown'}
+NHTSA returned a partial decode (non-US vehicle, limited data).
+
+Return a JSON object with these fields (use null if genuinely unknown):
+{
+  "make": string,
+  "model": string,
+  "modelYear": string,
+  "bodyType": string,
+  "engineDisplacementCC": number or null,
+  "fuelType": string,
+  "transmission": string,
+  "driveType": string,
+  "trim": string or null,
+  "plantCountry": string,
+  "confidence": "high"|"medium"|"low",
+  "decodingNotes": string (brief explanation of how you decoded VDS positions 4-8)
+}`
+              }]
+            })
+          });
+          const aiData = await aiRes.json();
+          const rawText = aiData.content?.find(b => b.type==='text')?.text || '{}';
+          const clean = rawText.replace(/```json|```/g,'').trim();
+          const ai = JSON.parse(clean);
+          result.dbvin = {
+            oracle: 'Claude AI VIN Oracle',
+            source: 'Anthropic Claude (JDM/global VDS decode)',
+            brand: ai.make || hintMake,
+            model: ai.model || null,
+            year: ai.modelYear || hintYear,
+            fuelType: ai.fuelType || null,
+            bodyType: ai.bodyType || null,
+            transmission: ai.transmission || null,
+            driveType: ai.driveType || null,
+            trim: ai.trim || null,
+            registrationCountry: ai.plantCountry || hintCountry,
+            confidence: ai.confidence || 'medium',
+            decodingNotes: ai.decodingNotes || null,
+            latency_ms: Date.now()-t0
+          };
+          // Merge into vin_decoded
+          if (isPartialDecode(result.vin_decoded)) {
+            result.vin_decoded.Make = result.vin_decoded.Make || ai.make || hintMake;
+            result.vin_decoded.Model = result.vin_decoded.Model || ai.model;
+            result.vin_decoded.ModelYear = result.vin_decoded.ModelYear || ai.modelYear || hintYear;
+            result.vin_decoded.BodyClass = result.vin_decoded.BodyClass || ai.bodyType;
+            result.vin_decoded.FuelTypePrimary = result.vin_decoded.FuelTypePrimary || ai.fuelType;
+            result.vin_decoded.DriveType = result.vin_decoded.DriveType || ai.driveType;
+            result.vin_decoded.TransmissionStyle = result.vin_decoded.TransmissionStyle || ai.transmission;
+            result.vin_decoded.PlantCountry = result.vin_decoded.PlantCountry || ai.plantCountry || hintCountry;
+            result.vin_decoded._mergedFromClaudeOracle = true;
+            make = result.vin_decoded.Make || ''; year = result.vin_decoded.ModelYear || '';
+          }
+          setStep('dbvin','done');
+        } catch(aiErr) {
+          // Claude call failed — fall back to WMI hints only
+          result.dbvin = { oracle:'Claude AI VIN Oracle', error: aiErr.message, latency_ms:Date.now()-t0 };
+          if (isPartialDecode(result.vin_decoded)) {
+            result.vin_decoded.Make = hintMake;
+            result.vin_decoded.ModelYear = hintYear;
+            result.vin_decoded.PlantCountry = hintCountry;
+            result.vin_decoded._mergedFromWmiHints = true;
+            make = hintMake || ''; year = hintYear || '';
+          }
+          setStep('dbvin','error');
         }
-        setStep('dbvin','done');
       }
     } catch(e) {
       // Graceful: use WMI hints even if DB.VIN fails
@@ -799,13 +873,13 @@ function renderResults(d) {
         <div class="oracle-source">
           <div class="oracle-source-icon">🔍</div>
           <div>
-            <div class="oracle-source-name">NHTSA vPIC${vd._mergedFromDbVin?' + DB.VIN':vd._mergedFromWmiHints?' + WMI Hints':''}</div>
-            <div class="oracle-source-type">VIN Decoder${vd._mergedFromDbVin?' · Global fallback applied':vd._mergedFromWmiHints?' · WMI-decoded':' · 130+ fields'}</div>
+            <div class="oracle-source-name">NHTSA vPIC${vd._mergedFromClaudeOracle?' + Claude AI':vd._mergedFromDbVin?' + DB.VIN':vd._mergedFromWmiHints?' + WMI Hints':''}</div>
+            <div class="oracle-source-type">VIN Decoder${vd._mergedFromClaudeOracle?' · AI oracle enriched':vd._mergedFromDbVin?' · Global fallback applied':vd._mergedFromWmiHints?' · WMI-decoded':' · 130+ fields'}</div>
           </div>
         </div>
         <div class="oracle-metric-label">Decode Status</div>
         <div class="oracle-metric-value" style="font-size:15px;color:${vd._mergedFromDbVin||vd._mergedFromWmiHints?'var(--blue)':vd.ErrorText?.includes('0 - VIN decoded clean')?'var(--green)':'var(--amber)'}">
-          ${vd._mergedFromDbVin?'✓ Global merge':vd._mergedFromWmiHints?'✓ WMI decoded':vd.ErrorText?.includes('0 - VIN decoded clean')?'✓ Clean':'⚠ Partial'}
+          ${vd._mergedFromClaudeOracle?'✓ AI enriched':vd._mergedFromDbVin?'✓ Global merge':vd._mergedFromWmiHints?'✓ WMI decoded':vd.ErrorText?.includes('0 - VIN decoded clean')?'✓ Clean':'⚠ Partial'}
         </div>
         <div class="oracle-rows" style="margin-top:10px">
           <div class="oracle-row"><span class="ok">Manufacturer</span><span class="ov">${(vd.Manufacturer||vd.Make||'—').slice(0,26)}</span></div>
@@ -845,25 +919,34 @@ function renderResults(d) {
       </div>
     </div>` : d.dbvin ? `
     <div class="oracle-card">
-      <div class="oracle-card-top" style="background:var(--blue)"></div>
+      <div class="oracle-card-top" style="background:${d.dbvin.oracle?.includes('Claude')?'var(--accent)':'var(--blue)'}"></div>
       <div class="oracle-card-body">
         <div class="oracle-source">
-          <div class="oracle-source-icon">🌏</div>
-          <div><div class="oracle-source-name">DB.VIN</div><div class="oracle-source-type">Global Vehicle Registry</div></div>
+          <div class="oracle-source-icon">${d.dbvin.oracle?.includes('Claude')?'🤖':'🌏'}</div>
+          <div>
+            <div class="oracle-source-name">${d.dbvin.oracle?.includes('Claude')?'Claude AI Oracle':'DB.VIN'}</div>
+            <div class="oracle-source-type">${d.dbvin.oracle?.includes('Claude')?'VDS Decode · JDM / Global':'Global Vehicle Registry'}</div>
+          </div>
         </div>
-        <div class="oracle-metric-label">WMI Decoded</div>
-        <div class="oracle-metric-value" style="font-size:15px;color:var(--blue)">${vd.Make||'Unknown make'}</div>
+        <div class="oracle-metric-label">${d.dbvin.oracle?.includes('Claude')?'AI-Decoded Vehicle':'Global Record'}</div>
+        <div class="oracle-metric-value" style="font-size:15px;color:${d.dbvin.oracle?.includes('Claude')?'var(--accent)':'var(--blue)'}">
+          ${d.dbvin.brand||vd.Make||'—'} ${d.dbvin.model||vd.Model||''}
+        </div>
         <div class="oracle-rows" style="margin-top:10px">
-          <div class="oracle-row"><span class="ok">Est. Year</span><span class="ov">${vd.ModelYear||'—'}</span></div>
-          <div class="oracle-row"><span class="ok">Origin</span><span class="ov">${vd.PlantCountry||decodeCountry(d.vin)}</span></div>
-          <div class="oracle-row"><span class="ok">WMI</span><span class="ov" style="font-family:JetBrains Mono,monospace">${d.vin.slice(0,3)}</span></div>
-          <div class="oracle-row"><span class="ok">DB.VIN Record</span><span class="ov amber" title="This VIN has no entry in DB.VIN — likely a domestic-market vehicle never registered in a covered region (EU/AUS)">No EU/AUS record</span></div>
+          <div class="oracle-row"><span class="ok">Year</span><span class="ov">${d.dbvin.year||vd.ModelYear||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Body</span><span class="ov">${d.dbvin.bodyType||vd.BodyClass||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Fuel</span><span class="ov">${d.dbvin.fuelType||vd.FuelTypePrimary||'—'}</span></div>
+          ${d.dbvin.transmission?`<div class="oracle-row"><span class="ok">Transmission</span><span class="ov">${d.dbvin.transmission}</span></div>`:''}
+          ${d.dbvin.driveType?`<div class="oracle-row"><span class="ok">Drive</span><span class="ov">${d.dbvin.driveType}</span></div>`:''}
+          <div class="oracle-row"><span class="ok">Origin</span><span class="ov">${d.dbvin.registrationCountry||vd.PlantCountry||'—'}</span></div>
+          ${d.dbvin.confidence?`<div class="oracle-row"><span class="ok">Confidence</span><span class="ov ${d.dbvin.confidence==='high'?'green':d.dbvin.confidence==='medium'?'amber':'red'}">${d.dbvin.confidence.toUpperCase()}</span></div>`:''}
         </div>
-        <div style="margin-top:10px;padding:8px 10px;background:var(--amber-dim);border-radius:8px;font-size:10px;color:var(--amber);line-height:1.5">
-          DB.VIN covers EU & Australian-registered vehicles. A domestic-market vehicle (e.g. Japan-only) with no export history will have no record here — this is expected, not an error.
-        </div>
+        ${d.dbvin.decodingNotes?`<div style="margin-top:10px;padding:8px 10px;background:rgba(200,68,47,0.07);border-radius:8px;font-size:10px;color:var(--muted);line-height:1.5;font-style:italic">${d.dbvin.decodingNotes}</div>`:''}
         <div class="oracle-status-row">
-          <span class="oracle-tag derived"><div class="oracle-tag-dot"></div>WMI Hint</span>
+          <span class="oracle-tag ${d.dbvin.oracle?.includes('Claude')?'derived':'live'}">
+            <div class="oracle-tag-dot" style="${d.dbvin.oracle?.includes('Claude')?'background:var(--accent)':''}"></div>
+            ${d.dbvin.oracle?.includes('Claude')?'AI Oracle':'Live'}
+          </span>
           <span class="oracle-latency">${d.dbvin.latency_ms||'—'}ms</span>
         </div>
       </div>
