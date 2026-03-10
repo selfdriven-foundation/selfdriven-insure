@@ -1,6 +1,6 @@
 ---
 layout: selfdriven
-title: Home
+title: selfdriven Insure
 ---
 
 ### Access to insurance to help communities & their members share risk and self-actuate.
