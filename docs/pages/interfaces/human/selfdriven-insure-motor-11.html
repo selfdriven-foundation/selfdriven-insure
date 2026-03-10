@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<title>Motor Vehicle - selfdriven.insure - v10</title>
+<title>Motor Vehicle - selfdriven.insure - v11</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -378,7 +383,12 @@ let keriSn = 1, currentJson = null;
 // US/Canada = 1-5
 function isNonUsVin(vin) {
   const first = vin[0].toUpperCase();
-  return !/^[1-5]/.test(first);
+  if (/^[1-5]/.test(first)) return false; // Definite US/Canada/Mexico
+  // J-WMIs that are US-market (built in US plants, NHTSA registered)
+  const usMarketJWmi = ['JF1','JF2','JS3','JS4','JM1','JM3','JN1','JN8','JH4','JHM','JT2','JT3','JT4','JT6','JTA','JTJ','JTK','JTN','JTP'];
+  const wmi3 = vin.slice(0,3).toUpperCase();
+  if (usMarketJWmi.includes(wmi3)) return false; // Treat as US for NHTSA purposes
+  return true;
 }
 
 // Decode model year from VIN position 10 (index 9)
@@ -584,6 +594,13 @@ function decodeVDS(vin, hintMake, hintYear, hintCountry) {
     'FR':'Accord', 'CR':'Accord', 'YK':'Odyssey', 'RC':'Odyssey',
   };
 
+  // Subaru JF VDS
+  const subaruModels = {
+    'G':'Impreza / WRX', 'B':'Legacy / Outback', 'S':'Forester',
+    'T':'Impreza', 'V':'XV / Crosstrek', 'Z':'BRZ', 'A':'Ascent',
+    'L':'Legacy', 'O':'Outback', 'F':'Forester', 'E':'WRX',
+  };
+
   // Nissan JN VDS
   const nissanModels = {
     'FCAA':'X-Trail', 'TBAA':'X-Trail', 'KNAA':'Qashqai',
@@ -656,6 +673,17 @@ function decodeVDS(vin, hintMake, hintYear, hintCountry) {
     for (const [code, mod] of Object.entries(nissanModels)) {
       if (vds.startsWith(code)) { model = mod; confidence = 'high'; break; }
     }
+  } else if (wmi.startsWith('JF1') || wmi.startsWith('JF2')) {
+    // Subaru — pos4 is body/series code
+    model = subaruModels[pos4] || subaruModels[pos5] || 'Impreza/Legacy/Forester';
+    bodyType = pos4 === 'G' ? 'Sedan/Hatchback' : pos4 === 'B' ? 'Sedan/Wagon' : pos4 === 'S' || pos4 === 'F' ? 'SUV' : pos4 === 'V' ? 'SUV' : 'Sedan';
+    confidence = model !== 'Impreza/Legacy/Forester' ? 'high' : 'medium';
+  } else if (wmi.startsWith('JM1') || wmi.startsWith('JM3')) {
+    // Mazda
+    const mazdaMap = {'G':'Mazda3','K':'Mazda6','7':'CX-7','5':'CX-5','9':'CX-9','3':'CX-3','R':'MX-5/Miata'};
+    model = mazdaMap[pos4] || mazdaMap[pos5] || 'Mazda';
+    bodyType = /CX/.test(model||'') ? 'SUV' : 'Sedan/Hatchback';
+    confidence = 'medium';
   }
 
   // Engine decode
@@ -1010,32 +1038,46 @@ async function lookupVin() {
   // ── 5: NCAP Ratings ──
   setStep('ratings','active');
   if (nonUs || !make) {
-    result.ncap_ratings={oracle:'NHTSA NCAP',available:false,note:'Non-US/unidentified vehicle — not in NHTSA NCAP database',data:null,latency_ms:0};
+    result.ncap_ratings={oracle:'NHTSA NCAP',available:false,note:'Non-US vehicle — not in NHTSA NCAP database',data:null,latency_ms:0};
     setStep('ratings','skipped'); document.getElementById('si-ratings').textContent='—';
-  } else try {
-    const t0 = Date.now();
-    const ncapModel = model || '';
-    const res = await fetch(`https://api.nhtsa.gov/SafetyRatings/modelyear/${year}/make/${encodeURIComponent(make)}/model/${encodeURIComponent(ncapModel)}`);
-    const data = await res.json();
-    const vehicles = data.Results ?? [];
-    let ratings = null;
-    if (vehicles.length > 0) {
-      const vid = vehicles[0].VehicleId;
-      const rRes = await fetch(`https://api.nhtsa.gov/SafetyRatings/VehicleId/${vid}`);
-      const rData = await rRes.json();
-      const r = rData.Results?.[0] ?? {};
-      ratings = {
-        VehicleId:vid, VehicleDescription:r.VehicleDescription,
-        OverallRating:r.OverallRating, OverallFrontCrashRating:r.OverallFrontCrashRating,
-        OverallSideCrashRating:r.OverallSideCrashRating, RolloverRating:r.RolloverRating,
-        NHTSAElectronicStabilityControl:r.NHTSAElectronicStabilityControl,
-        NHTSAForwardCollisionWarning:r.NHTSAForwardCollisionWarning,
-        NHTSALaneDepartureWarning:r.NHTSALaneDepartureWarning
-      };
-    }
-    result.ncap_ratings = { oracle:'NHTSA NCAP', available:ratings!==null, data:ratings, latency_ms:Date.now()-t0 };
-    setStep('ratings','done');
-  } catch(e) { result.ncap_ratings={oracle:'NHTSA NCAP',available:false,error:e.message}; setStep('ratings','error'); }
+  } else {
+    try {
+      const t0 = Date.now();
+      let ncapModel = model || result.vin_decoded?.Model || result.dbvin?.model || '';
+      if (!ncapModel) {
+        try {
+          const mlistRes = await fetch(`https://api.nhtsa.gov/SafetyRatings/modelyear/${year}/make/${encodeURIComponent(make)}`);
+          const mlistData = await mlistRes.json();
+          ncapModel = mlistData.Results?.[0]?.Model || '';
+        } catch(e) { /* ignore */ }
+      }
+      if (!ncapModel) {
+        result.ncap_ratings={oracle:'NHTSA NCAP',available:false,note:'Model unavailable for NCAP lookup',data:null,latency_ms:0};
+        setStep('ratings','skipped'); document.getElementById('si-ratings').textContent='N/A';
+      } else {
+        const res = await fetch(`https://api.nhtsa.gov/SafetyRatings/modelyear/${year}/make/${encodeURIComponent(make)}/model/${encodeURIComponent(ncapModel)}`);
+        const data = await res.json();
+        const vehicles = data.Results ?? [];
+        let ratings = null;
+        if (vehicles.length > 0) {
+          const vid = vehicles[0].VehicleId;
+          const rRes = await fetch(`https://api.nhtsa.gov/SafetyRatings/VehicleId/${vid}`);
+          const rData = await rRes.json();
+          const r = rData.Results?.[0] ?? {};
+          ratings = {
+            VehicleId:vid, VehicleDescription:r.VehicleDescription,
+            OverallRating:r.OverallRating, OverallFrontCrashRating:r.OverallFrontCrashRating,
+            OverallSideCrashRating:r.OverallSideCrashRating, RolloverRating:r.RolloverRating,
+            NHTSAElectronicStabilityControl:r.NHTSAElectronicStabilityControl,
+            NHTSAForwardCollisionWarning:r.NHTSAForwardCollisionWarning,
+            NHTSALaneDepartureWarning:r.NHTSALaneDepartureWarning
+          };
+        }
+        result.ncap_ratings = { oracle:'NHTSA NCAP', available:ratings!==null, data:ratings, latency_ms:Date.now()-t0 };
+        setStep('ratings','done');
+      }
+    } catch(e) { result.ncap_ratings={oracle:'NHTSA NCAP',available:false,error:e.message}; setStep('ratings','error'); }
+  }
 
   // ── 6: AU Market Valuation (Claude AI Oracle) ──
   setStep('valuation','active');
