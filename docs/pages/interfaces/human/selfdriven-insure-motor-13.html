@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<title>Motor Vehicle - selfdriven.insure - v12</title>
+<title>Motor Vehicle - selfdriven.insure - v13</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1070,10 +1075,17 @@ async function lookupVin() {
   } else {
     try {
       const t0 = Date.now();
-      const complaintModel = nonUs ? '' : model;
-      const res = await fetch(`https://api.nhtsa.gov/complaints/complaintsByVehicle?make=${encodeURIComponent(make)}${complaintModel?'&model='+encodeURIComponent(complaintModel):''}${year?'&modelYear='+year:''}`);
-      const data = await res.json();
-      const complaints = data.results ?? [];
+      const complaintModel = model || result.dbvin?.model || result.vin_decoded?.Model || '';
+      let complaintData;
+      if (complaintModel) {
+        const c1 = await fetch(`https://api.nhtsa.gov/complaints/complaintsByVehicle?make=${encodeURIComponent(make)}&model=${encodeURIComponent(complaintModel)}${year?'&modelYear='+year:''}`);
+        if (c1.ok) { complaintData = await c1.json(); }
+      }
+      if (!complaintData || !complaintData.results) {
+        const c2 = await fetch(`https://api.nhtsa.gov/complaints/complaintsByVehicle?make=${encodeURIComponent(make)}${year?'&modelYear='+year:''}`);
+        complaintData = c2.ok ? await c2.json() : { results: [] };
+      }
+      const complaints = complaintData.results ?? [];
       const byComp = {};
       complaints.forEach(c => { const k = c.components||'Unknown'; byComp[k]=(byComp[k]||0)+1; });
       result.complaints = {
