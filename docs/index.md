@@ -16,6 +16,9 @@ title: selfdriven Insure
 - [Feeds Dashboard](/interfaces/human/feeds)
 - [Property](/interfaces/human/property)
 - [Motor Vehicle](/interfaces/human/motor-vehicle)
+- [Commercial](/interfaces/human/commercial)
+- [Life & Health](/interfaces/human/life-health)
+
 
 ### References
 - [fida.finance](https://fida.finance)

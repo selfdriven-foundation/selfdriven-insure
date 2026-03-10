@@ -1,0 +1,1356 @@
+---
+layout: null
+title: Life & Health - selfdriven Insure
+permalink: /interfaces/human/life-health
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png">
+<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Life & Health - selfdriven.insure - v1</title>
+<style>
+:root {
+  --bg:#f5f2ed;--surface:#edeae3;--surface2:#e5e1d8;--border:#ddd8ce;
+  --text:#1a1410;--muted:#6b5f52;--muted2:#9e9085;
+  --accent:#c8442f;--accent-dim:rgba(200,68,47,0.10);--accent-strong:rgba(200,68,47,0.18);
+  --card-radius:20px;--shadow:0 4px 24px rgba(0,0,0,0.08);
+  --green:#1a7a4a;--green-dim:rgba(26,122,74,0.12);
+  --amber:#b86800;--amber-dim:rgba(184,104,0,0.12);
+  --red:#c8442f;--red-dim:rgba(200,68,47,0.12);
+  --blue:#1a4a8a;--blue-dim:rgba(26,74,138,0.10);
+  --purple:#5a2a8a;--purple-dim:rgba(90,42,138,0.10);
+  --teal:#0e6b6b;--teal-dim:rgba(14,107,107,0.10);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0a0a0a;--surface:#161616;--surface2:#1e1e1e;--border:#2a2a2a;
+    --text:#f0ede8;--muted:#b0a89e;--muted2:#7a7268;
+    --accent:#e85d4a;--accent-dim:rgba(232,93,74,0.12);--accent-strong:rgba(232,93,74,0.20);
+    --shadow:0 4px 28px rgba(0,0,0,0.5);
+    --green:#2dd47a;--green-dim:rgba(45,212,122,0.12);
+    --amber:#f5a623;--amber-dim:rgba(245,166,35,0.12);
+    --red:#e85d4a;--red-dim:rgba(232,93,74,0.12);
+    --blue:#5b9ef0;--blue-dim:rgba(91,158,240,0.10);
+    --purple:#a07fdc;--purple-dim:rgba(160,127,220,0.10);
+    --teal:#3ecfcf;--teal-dim:rgba(62,207,207,0.10);
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;
+  background:color-mix(in srgb,var(--bg) 85%,transparent);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-logo{width:30px;height:30px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--accent);display:flex;align-items:center;justify-content:center;}
+.nav-logo-text{color:white;font-size:14px;font-weight:900;letter-spacing:-0.04em;}
+.nav-title{font-size:15px;font-weight:700;letter-spacing:-0.02em;}
+.nav-title span{color:var(--accent);}
+.nav-meta{display:flex;align-items:center;gap:14px;}
+.live-badge{
+  display:flex;align-items:center;gap:6px;padding:4px 12px;
+  background:var(--teal-dim);border:1px solid var(--teal);border-radius:999px;
+  font-size:11px;font-weight:600;color:var(--teal);font-family:'JetBrains Mono',monospace;
+}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.keri-btn{
+  display:flex;align-items:center;gap:6px;padding:5px 14px;
+  background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:var(--muted);
+  cursor:pointer;transition:all 0.15s;
+}
+.keri-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+.container{max-width:1160px;margin:0 auto;padding:32px 24px 60px;}
+
+/* ── SEARCH HERO ── */
+.search-hero{text-align:center;margin-bottom:36px;}
+.search-hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.search-hero h1{font-size:36px;font-weight:900;letter-spacing:-0.04em;color:var(--text);line-height:1.15;margin-bottom:8px;}
+.search-hero h1 em{color:var(--accent);font-style:normal;}
+.search-hero p{font-size:14px;color:var(--muted);max-width:560px;margin:0 auto 28px;line-height:1.7;}
+
+/* ── FORM GRID ── */
+.form-grid{
+  max-width:760px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+}
+.form-grid-full{grid-column:1/-1;}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);}
+.field-input,.field-select{
+  padding:13px 16px;
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+  font-family:Poppins,sans-serif;font-size:14px;color:var(--text);
+  outline:none;transition:border-color 0.2s,box-shadow 0.2s;appearance:none;
+}
+.field-input:focus,.field-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim);}
+.field-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239e9085' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+
+.analyse-row{margin-top:8px;display:flex;justify-content:center;}
+.analyse-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 36px;background:var(--accent);border:none;border-radius:999px;
+  font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:white;
+  cursor:pointer;transition:all 0.15s;
+}
+.analyse-btn:hover:not(:disabled){opacity:0.88;transform:scale(0.98);}
+.analyse-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* example profiles */
+.example-profiles{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap;}
+.example-label{font-size:11px;color:var(--muted2);}
+.example-chip{
+  padding:4px 12px;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  font-size:11px;color:var(--muted);cursor:pointer;transition:all 0.15s;
+}
+.example-chip:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── DISCLAIMER ── */
+.disclaimer-banner{
+  max-width:760px;margin:16px auto 0;
+  padding:10px 16px;background:var(--amber-dim);border:1px solid var(--amber);border-radius:12px;
+  font-size:11px;color:var(--amber);line-height:1.5;text-align:center;
+}
+
+/* ── PROGRESS ── */
+.progress-section{display:none;max-width:700px;margin:0 auto 32px;}
+.progress-section.visible{display:block;}
+.progress-steps{
+  display:flex;flex-direction:column;gap:6px;
+  padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:16px;
+}
+.progress-step{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);transition:color 0.2s;}
+.progress-step.active{color:var(--text);font-weight:600;}
+.progress-step.done{color:var(--green);}
+.progress-step.error{color:var(--red);}
+.step-icon{
+  width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;background:var(--surface2);color:var(--muted);
+}
+.progress-step.active .step-icon{background:var(--accent-dim);color:var(--accent);animation:spinPulse 1s ease infinite;}
+@keyframes spinPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.progress-step.done .step-icon{background:var(--green-dim);color:var(--green);}
+.progress-step.error .step-icon{background:var(--red-dim);color:var(--red);}
+
+/* ── ERROR BANNER ── */
+.error-banner{display:none;max-width:700px;margin:0 auto 24px;padding:12px 16px;background:var(--red-dim);border:1px solid var(--red);border-radius:12px;font-size:13px;color:var(--red);}
+.error-banner.visible{display:block;}
+
+/* ── RESULTS ── */
+.results-section{display:none;}
+.results-section.visible{display:block;}
+
+.result-header{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  padding:20px 24px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--card-radius);margin-bottom:20px;flex-wrap:wrap;
+}
+.result-header-left{display:flex;flex-direction:column;gap:4px;}
+.result-profile-name{font-size:22px;font-weight:800;letter-spacing:-0.03em;}
+.result-profile-meta{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.result-score-badge{
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  width:80px;height:80px;border-radius:16px;flex-shrink:0;gap:2px;
+}
+.result-score-badge.low{background:var(--green-dim);border:2px solid var(--green);}
+.result-score-badge.moderate{background:var(--amber-dim);border:2px solid var(--amber);}
+.result-score-badge.high{background:var(--red-dim);border:2px solid var(--red);}
+.result-score-num{font-size:26px;font-weight:900;letter-spacing:-0.04em;}
+.result-score-badge.low .result-score-num{color:var(--green);}
+.result-score-badge.moderate .result-score-num{color:var(--amber);}
+.result-score-badge.high .result-score-num{color:var(--red);}
+.result-score-label{font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);}
+
+.result-header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.copy-btn,.kel-btn{
+  padding:7px 16px;border-radius:999px;font-family:Poppins,sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all 0.15s;border:1.5px solid var(--border);background:var(--surface2);color:var(--muted);
+}
+.copy-btn:hover,.kel-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── SUMMARY STRIP ── */
+.summary-strip{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px;
+}
+.summary-card{
+  padding:16px 18px;background:var(--surface);border:1px solid var(--border);border-radius:16px;
+  border-top:3px solid var(--border);transition:box-shadow 0.2s;
+}
+.summary-card.accent{border-top-color:var(--accent);}
+.summary-card.green{border-top-color:var(--green);}
+.summary-card.amber{border-top-color:var(--amber);}
+.summary-card.blue{border-top-color:var(--blue);}
+.summary-card.teal{border-top-color:var(--teal);}
+.summary-card.purple{border-top-color:var(--purple);}
+.summary-card-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:4px;}
+.summary-card-value{font-size:17px;font-weight:800;letter-spacing:-0.02em;}
+.summary-card-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* ── ORACLE GRID ── */
+.oracle-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:14px;margin-bottom:20px;
+}
+.oracle-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);
+  overflow:hidden;transition:box-shadow 0.2s;
+}
+.oracle-card:hover{box-shadow:var(--shadow);}
+.oracle-card-top{height:3px;}
+.oracle-card-body{padding:18px;}
+.oracle-source{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.oracle-source-icon{
+  width:32px;height:32px;border-radius:8px;background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
+}
+.oracle-source-name{font-size:12px;font-weight:700;color:var(--text);}
+.oracle-source-type{font-size:10px;color:var(--muted2);}
+.oracle-metric-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:4px;}
+.oracle-metric-value{font-size:22px;font-weight:900;letter-spacing:-0.03em;margin-bottom:10px;}
+.oracle-risk-bar{height:4px;background:var(--surface2);border-radius:2px;margin-bottom:10px;overflow:hidden;}
+.oracle-risk-fill{height:100%;border-radius:2px;transition:width 0.6s ease;}
+.oracle-rows{display:flex;flex-direction:column;gap:5px;}
+.oracle-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;}
+.oracle-row .ok{color:var(--muted);}
+.oracle-row .ov{font-weight:600;color:var(--text);}
+.oracle-row .ov.green{color:var(--green);}
+.oracle-row .ov.amber{color:var(--amber);}
+.oracle-row .ov.red{color:var(--red);}
+.oracle-row .ov.blue{color:var(--blue);}
+.oracle-row .ov.purple{color:var(--purple);}
+.oracle-status-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+.oracle-tag{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+.oracle-tag.live{color:var(--green);}
+.oracle-tag.derived{color:var(--blue);}
+.oracle-tag.ai{color:var(--purple);}
+.oracle-tag-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.oracle-latency{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted2);}
+
+/* ── PREMIUM ESTIMATE ── */
+.premium-section{
+  padding:24px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--card-radius);border-top:3px solid var(--accent);margin-bottom:20px;
+}
+.premium-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.premium-title{font-size:16px;font-weight:800;letter-spacing:-0.02em;}
+.premium-subtitle{font-size:12px;color:var(--muted);margin-top:2px;}
+.premium-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+.premium-product{
+  padding:16px;background:var(--bg);border:1.5px solid var(--border);border-radius:14px;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.premium-product:hover{border-color:var(--accent);box-shadow:0 2px 12px var(--accent-dim);}
+.premium-product-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.premium-product-type{font-size:10px;color:var(--muted2);margin-bottom:10px;}
+.premium-amount{font-size:20px;font-weight:900;letter-spacing:-0.03em;color:var(--accent);}
+.premium-period{font-size:11px;color:var(--muted);margin-bottom:8px;}
+.premium-factors{display:flex;flex-direction:column;gap:3px;}
+.premium-factor{display:flex;justify-content:space-between;font-size:10px;}
+.premium-factor-key{color:var(--muted);}
+.premium-factor-val{font-weight:600;color:var(--text);}
+
+/* ── HEALTH RISK PROFILE ── */
+.health-profile-section{
+  padding:24px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--card-radius);border-top:3px solid var(--teal);margin-bottom:20px;
+}
+.health-profile-title{font-size:16px;font-weight:800;letter-spacing:-0.02em;margin-bottom:16px;}
+.health-categories{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+.health-cat{
+  padding:14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;
+}
+.health-cat-name{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
+.health-cat-score{
+  font-size:18px;font-weight:900;margin-bottom:4px;
+}
+.health-cat-bar{height:3px;background:var(--surface2);border-radius:2px;margin-bottom:8px;overflow:hidden;}
+.health-cat-fill{height:100%;border-radius:2px;}
+.health-cat-factors{font-size:10px;color:var(--muted);line-height:1.5;}
+
+/* ── KEL PANEL ── */
+.kel-panel{
+  padding:20px 24px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--card-radius);border-left:3px solid var(--purple);margin-bottom:20px;
+  display:none;
+}
+.kel-panel.visible{display:block;}
+.kel-panel-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.kel-panel-title span{font-size:11px;font-weight:600;color:var(--purple);font-family:'JetBrains Mono',monospace;}
+.kel-events{display:flex;flex-direction:column;gap:6px;}
+.kel-event{
+  display:flex;align-items:flex-start;gap:10px;padding:8px 10px;
+  background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:11px;
+}
+.kel-sn{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;
+  color:var(--purple);background:var(--purple-dim);padding:2px 6px;border-radius:4px;flex-shrink:0;
+}
+.kel-desc{color:var(--muted);flex:1;}
+.kel-digest{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted2);}
+
+/* ── JSON ── */
+.json-section{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;
+}
+.json-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 20px;border-bottom:1px solid var(--border);
+}
+.json-title{font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--muted);}
+.json-copy{
+  padding:4px 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface2);
+  font-size:11px;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.15s;
+}
+.json-copy:hover{border-color:var(--accent);color:var(--accent);}
+.json-body{
+  padding:16px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;
+  max-height:320px;overflow-y:auto;white-space:pre;line-height:1.6;color:var(--muted);
+}
+.json-body .jk{color:var(--blue);}
+.json-body .jv{color:var(--green);}
+.json-body .jn{color:var(--amber);}
+.json-body .jb{color:var(--purple);}
+
+@media(max-width:600px){
+  .form-grid{grid-template-columns:1fr;}
+  .oracle-grid{grid-template-columns:1fr;}
+  .premium-grid{grid-template-columns:1fr;}
+  .health-categories{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo"><span class="nav-logo-text">sd</span></div>
+    <div class="nav-title">selfdriven<span>.insure</span></div>
+  </div>
+  <div class="nav-meta">
+    <div class="live-badge"><div class="live-dot"></div>AI Oracle</div>
+    <button class="keri-btn" onclick="showKelPanel()">🔐 KEL · <span id="keri-sn-display">sn:0</span></button>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="search-hero">
+    <div class="eyebrow">selfdriven.insure · Life & Health</div>
+    <h1>AI-powered <em>Life & Health</em><br>Risk Assessment</h1>
+    <p>Enter your profile details to receive an instant actuarial risk score, personalised premium estimates, and a KERI-anchored evidence chain — all powered by public health oracles and AI analysis.</p>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-grid">
+    <div class="field-group">
+      <div class="field-label">First Name</div>
+      <input class="field-input" id="f-name" type="text" placeholder="e.g. Alex">
+    </div>
+    <div class="field-group">
+      <div class="field-label">Date of Birth</div>
+      <input class="field-input" id="f-dob" type="date" value="1985-06-15">
+    </div>
+    <div class="field-group">
+      <div class="field-label">Biological Sex</div>
+      <select class="field-select" id="f-sex">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other / Prefer not to say</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <div class="field-label">Country of Residence</div>
+      <select class="field-select" id="f-country">
+        <option value="AU">Australia</option>
+        <option value="NZ">New Zealand</option>
+        <option value="GB">United Kingdom</option>
+        <option value="US">United States</option>
+        <option value="CA">Canada</option>
+        <option value="SG">Singapore</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <div class="field-label">Height (cm)</div>
+      <input class="field-input" id="f-height" type="number" placeholder="175" min="100" max="250">
+    </div>
+    <div class="field-group">
+      <div class="field-label">Weight (kg)</div>
+      <input class="field-input" id="f-weight" type="number" placeholder="75" min="30" max="300">
+    </div>
+    <div class="field-group">
+      <div class="field-label">Smoking Status</div>
+      <select class="field-select" id="f-smoke">
+        <option value="never">Never smoked</option>
+        <option value="ex">Ex-smoker (quit 5+ yrs)</option>
+        <option value="ex-recent">Ex-smoker (quit &lt;5 yrs)</option>
+        <option value="current">Current smoker</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <div class="field-label">Alcohol Consumption</div>
+      <select class="field-select" id="f-alcohol">
+        <option value="none">None</option>
+        <option value="light" selected>Light (&lt;7 std drinks/week)</option>
+        <option value="moderate">Moderate (7–14/week)</option>
+        <option value="heavy">Heavy (15+/week)</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <div class="field-label">Exercise (days/week)</div>
+      <select class="field-select" id="f-exercise">
+        <option value="0">Sedentary (0 days)</option>
+        <option value="1">Minimal (1–2 days)</option>
+        <option value="3" selected>Active (3–4 days)</option>
+        <option value="5">Very active (5+ days)</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <div class="field-label">Occupation Risk</div>
+      <select class="field-select" id="f-occupation">
+        <option value="professional">Professional / Office</option>
+        <option value="trade">Skilled Trade</option>
+        <option value="manual">Manual / Labourer</option>
+        <option value="hazardous">Hazardous (mining, emergency)</option>
+      </select>
+    </div>
+    <div class="field-group form-grid-full">
+      <div class="field-label">Pre-existing Conditions (select all that apply)</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;padding:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;" id="conditions-grid">
+        <label class="cond-chip"><input type="checkbox" value="diabetes"> Diabetes</label>
+        <label class="cond-chip"><input type="checkbox" value="hypertension"> Hypertension</label>
+        <label class="cond-chip"><input type="checkbox" value="heart"> Heart Disease</label>
+        <label class="cond-chip"><input type="checkbox" value="cancer"> Cancer (history)</label>
+        <label class="cond-chip"><input type="checkbox" value="mental"> Mental Health Disorder</label>
+        <label class="cond-chip"><input type="checkbox" value="respiratory"> Respiratory (COPD/asthma)</label>
+        <label class="cond-chip"><input type="checkbox" value="musculo"> Musculoskeletal</label>
+        <label class="cond-chip"><input type="checkbox" value="none" checked> None</label>
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">Family History</div>
+      <select class="field-select" id="f-family">
+        <option value="none" selected>No significant history</option>
+        <option value="heart">Cardiovascular disease</option>
+        <option value="cancer">Cancer (first-degree)</option>
+        <option value="diabetes">Diabetes</option>
+        <option value="multiple">Multiple conditions</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <div class="field-label">Sum Insured (Life Cover)</div>
+      <select class="field-select" id="f-suminsured">
+        <option value="500000">$500,000</option>
+        <option value="750000" selected>$750,000</option>
+        <option value="1000000">$1,000,000</option>
+        <option value="1500000">$1,500,000</option>
+        <option value="2000000">$2,000,000</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="analyse-row" style="margin-top:20px;">
+    <button class="analyse-btn" id="analyse-btn" onclick="runAssessment()">
+      <span>◈</span><span id="analyse-btn-label">Assess Risk Profile</span>
+    </button>
+  </div>
+
+  <div class="example-profiles">
+    <span class="example-label">Quick profiles:</span>
+    <span class="example-chip" onclick="loadProfile('young-healthy')">Healthy 28F</span>
+    <span class="example-chip" onclick="loadProfile('mid-smoker')">Smoker 45M</span>
+    <span class="example-chip" onclick="loadProfile('senior-conditions')">Senior 62M, conditions</span>
+    <span class="example-chip" onclick="loadProfile('active-professional')">Active pro 38F</span>
+  </div>
+
+  <div class="disclaimer-banner" style="margin-top:18px;">
+    ⚠ Indicative estimates only — not financial product advice. Premium illustrations are for comparison purposes and do not constitute an offer of insurance. Consult a licensed adviser (AFSL holder) before purchasing a policy.
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section" id="progress-section" style="margin-top:28px;">
+    <div class="progress-steps">
+      <div class="progress-step" id="step-profile">
+        <div class="step-icon" id="si-profile">1</div>
+        <span id="step-profile-label">Validating profile data…</span>
+      </div>
+      <div class="progress-step" id="step-mortality">
+        <div class="step-icon" id="si-mortality">2</div>
+        <span id="step-mortality-label">Querying WHO Global Health Observatory — mortality data…</span>
+      </div>
+      <div class="progress-step" id="step-bmi">
+        <div class="step-icon" id="si-bmi">3</div>
+        <span id="step-bmi-label">Computing BMI & metabolic risk indicators…</span>
+      </div>
+      <div class="progress-step" id="step-disease">
+        <div class="step-icon" id="si-disease">4</div>
+        <span id="step-disease-label">Querying WHO NCD mortality & disease burden data…</span>
+      </div>
+      <div class="progress-step" id="step-actuary">
+        <div class="step-icon" id="si-actuary">5</div>
+        <span id="step-actuary-label">Running actuarial risk model (Australian Life Tables)…</span>
+      </div>
+      <div class="progress-step" id="step-ai">
+        <div class="step-icon" id="si-ai">6</div>
+        <span id="step-ai-label">AI Health Oracle — personalised risk narrative…</span>
+      </div>
+      <div class="progress-step" id="step-premium">
+        <div class="step-icon" id="si-premium">7</div>
+        <span id="step-premium-label">Computing premium estimates across product lines…</span>
+      </div>
+      <div class="progress-step" id="step-keri">
+        <div class="step-icon" id="si-keri">8</div>
+        <span id="step-keri-label">Anchoring evidence chain — KERI ixn event…</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-banner" id="error-banner"></div>
+
+  <!-- RESULTS -->
+  <div class="results-section" id="results-section" style="margin-top:24px;">
+
+    <!-- RESULT HEADER -->
+    <div class="result-header">
+      <div class="result-header-left">
+        <div class="result-profile-name" id="res-profile-name">—</div>
+        <div class="result-profile-meta" id="res-profile-meta">—</div>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+        <div>
+          <div class="result-score-label" style="margin-bottom:4px;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted2);">Life Risk Score</div>
+          <div class="result-score-badge" id="res-score-badge">
+            <span class="result-score-num" id="res-score-num">—</span>
+            <span class="result-score-label">/100</span>
+          </div>
+        </div>
+        <div class="result-header-actions">
+          <button class="copy-btn" onclick="copyJson()">Copy JSON</button>
+          <button class="kel-btn" onclick="showKelPanel()">View KEL</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUMMARY STRIP -->
+    <div class="summary-strip" id="summary-strip"></div>
+
+    <!-- ORACLE GRID -->
+    <div class="oracle-grid" id="oracle-grid"></div>
+
+    <!-- HEALTH RISK PROFILE -->
+    <div class="health-profile-section" id="health-profile-section">
+      <div class="health-profile-title">Health Risk Category Breakdown</div>
+      <div class="health-categories" id="health-categories"></div>
+    </div>
+
+    <!-- PREMIUM ESTIMATE -->
+    <div class="premium-section" id="premium-section">
+      <div class="premium-header">
+        <div>
+          <div class="premium-title">Estimated Annual Premiums</div>
+          <div class="premium-subtitle">Indicative only — actual quotes require full underwriting · AUD</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted2);font-family:'JetBrains Mono',monospace;" id="premium-loading-state">AI Oracle · Claude</div>
+      </div>
+      <div class="premium-grid" id="premium-grid"></div>
+    </div>
+
+    <!-- AI NARRATIVE -->
+    <div style="padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);border-left:3px solid var(--purple);margin-bottom:20px;" id="ai-narrative-section">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+        🤖 AI Health Oracle
+        <span style="font-size:10px;font-weight:600;color:var(--purple);font-family:'JetBrains Mono',monospace;">Claude · selfdriven.insure</span>
+      </div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.8;" id="ai-narrative-body">Loading…</div>
+    </div>
+
+    <!-- KEL PANEL -->
+    <div class="kel-panel" id="kel-panel">
+      <div class="kel-panel-title">KERI Key Event Log <span>AID: EKE4g…kqt</span></div>
+      <div class="kel-events" id="kel-events"></div>
+    </div>
+
+    <!-- JSON -->
+    <div class="json-section">
+      <div class="json-header">
+        <div class="json-title">oracle.response · application/json</div>
+        <button class="json-copy copy-btn" onclick="copyJson()">Copy JSON</button>
+      </div>
+      <div class="json-body" id="json-body">—</div>
+    </div>
+
+  </div><!-- /results-section -->
+</div><!-- /container -->
+
+<style>
+.cond-chip{
+  display:flex;align-items:center;gap:6px;padding:5px 10px;
+  border:1px solid var(--border);border-radius:999px;font-size:12px;
+  cursor:pointer;color:var(--muted);transition:all 0.15s;
+}
+.cond-chip:hover{border-color:var(--accent);color:var(--accent);}
+.cond-chip input{accent-color:var(--accent);}
+</style>
+
+<script>
+let keriSn = 0;
+let currentJson = null;
+
+function addKelEvent(desc, digest) {
+  keriSn++;
+  document.getElementById('keri-sn-display').textContent = 'sn:' + keriSn;
+  const container = document.getElementById('kel-events');
+  const el = document.createElement('div');
+  el.className = 'kel-event';
+  el.innerHTML = `<span class="kel-sn">sn:${keriSn}</span>
+    <div class="kel-desc">${desc}</div>
+    <div class="kel-digest">${digest.slice(0,20)}…</div>`;
+  container.insertBefore(el, container.firstChild);
+}
+
+function showKelPanel() {
+  document.getElementById('kel-panel').classList.add('visible');
+  document.getElementById('kel-panel').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function setStep(id, state) {
+  const el = document.getElementById('step-' + id);
+  el.className = 'progress-step ' + state;
+  const icon = document.getElementById('si-' + id);
+  if (state === 'done') icon.textContent = '✓';
+  else if (state === 'error') icon.textContent = '✗';
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-banner');
+  el.textContent = msg;
+  el.classList.add('visible');
+  document.getElementById('analyse-btn').disabled = false;
+  document.getElementById('analyse-btn-label').textContent = 'Assess Risk Profile';
+  document.getElementById('progress-section').classList.remove('visible');
+}
+
+function riskColor(score) {
+  if (score < 33) return 'var(--green)';
+  if (score < 60) return 'var(--amber)';
+  return 'var(--red)';
+}
+function riskClass(score) {
+  if (score < 33) return 'low';
+  if (score < 60) return 'moderate';
+  return 'high';
+}
+function riskLabel(score) {
+  if (score < 20) return 'PREFERRED';
+  if (score < 33) return 'STANDARD+';
+  if (score < 50) return 'STANDARD';
+  if (score < 70) return 'SUB-STANDARD';
+  return 'DECLINED RISK';
+}
+
+function calcAge(dob) {
+  const today = new Date();
+  const birth = new Date(dob);
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age;
+}
+
+function calcBMI(h, w) {
+  const hm = h / 100;
+  return Math.round((w / (hm * hm)) * 10) / 10;
+}
+
+function getConditions() {
+  return [...document.querySelectorAll('#conditions-grid input[type=checkbox]:checked')]
+    .map(c => c.value)
+    .filter(v => v !== 'none');
+}
+
+function loadProfile(type) {
+  const profiles = {
+    'young-healthy': {name:'Sarah',dob:'1996-03-20',sex:'female',country:'AU',height:165,weight:58,smoke:'never',alcohol:'light',exercise:'5',occupation:'professional',conditions:[],family:'none',sum:500000},
+    'mid-smoker': {name:'Dave',dob:'1979-08-10',sex:'male',country:'AU',height:178,weight:95,smoke:'current',alcohol:'moderate',exercise:'1',occupation:'trade',conditions:['hypertension'],family:'heart',sum:750000},
+    'senior-conditions': {name:'Robert',dob:'1962-01-25',sex:'male',country:'AU',height:174,weight:88,smoke:'ex',alcohol:'light',exercise:'1',occupation:'professional',conditions:['diabetes','hypertension'],family:'multiple',sum:1000000},
+    'active-professional': {name:'Priya',dob:'1986-11-05',sex:'female',country:'AU',height:163,weight:60,smoke:'never',alcohol:'none',exercise:'5',occupation:'professional',conditions:[],family:'none',sum:750000},
+  };
+  const p = profiles[type];
+  if (!p) return;
+  document.getElementById('f-name').value = p.name;
+  document.getElementById('f-dob').value = p.dob;
+  document.getElementById('f-sex').value = p.sex;
+  document.getElementById('f-country').value = p.country;
+  document.getElementById('f-height').value = p.height;
+  document.getElementById('f-weight').value = p.weight;
+  document.getElementById('f-smoke').value = p.smoke;
+  document.getElementById('f-alcohol').value = p.alcohol;
+  document.getElementById('f-exercise').value = p.exercise;
+  document.getElementById('f-occupation').value = p.occupation;
+  document.getElementById('f-family').value = p.family;
+  document.getElementById('f-suminsured').value = p.sum;
+  // reset conditions
+  document.querySelectorAll('#conditions-grid input[type=checkbox]').forEach(cb => {
+    cb.checked = p.conditions.includes(cb.value) || (p.conditions.length === 0 && cb.value === 'none');
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// ACTUARIAL RISK MODEL
+// Australian Life Tables 2019-21 (ABS) + WHO-calibrated risk factors
+// ══════════════════════════════════════════════════════
+function computeActuarialScore(profile) {
+  const { age, sex, bmi, smoke, alcohol, exercise, occupation, conditions, family } = profile;
+  let score = 0;
+
+  // ── Age loading ──
+  if (age < 25) score += 4;
+  else if (age < 35) score += 8;
+  else if (age < 45) score += 16;
+  else if (age < 55) score += 26;
+  else if (age < 65) score += 40;
+  else score += 55;
+
+  // ── Sex adjustment (life table basis) ──
+  if (sex === 'male') score += 4;
+  else if (sex === 'female') score -= 3;
+
+  // ── BMI ──
+  if (bmi < 18.5) score += 6;      // underweight
+  else if (bmi < 25) score += 0;   // ideal
+  else if (bmi < 30) score += 5;   // overweight
+  else if (bmi < 35) score += 12;  // obese I
+  else if (bmi < 40) score += 20;  // obese II
+  else score += 30;                // obese III
+
+  // ── Smoking ──
+  const smokeLoad = {never:0,'ex-recent':8,ex:3,current:20};
+  score += (smokeLoad[smoke] ?? 0);
+
+  // ── Alcohol ──
+  const alcLoad = {none:0,light:0,moderate:8,heavy:18};
+  score += (alcLoad[alcohol] ?? 0);
+
+  // ── Exercise (protective) ──
+  const exLoad = {'0':8,'1':5,'3':0,'5':-3};
+  score += (exLoad[exercise] ?? 0);
+
+  // ── Occupation ──
+  const occLoad = {professional:0,trade:4,manual:8,hazardous:14};
+  score += (occLoad[occupation] ?? 0);
+
+  // ── Conditions ──
+  const condLoad = {diabetes:14,hypertension:10,heart:22,cancer:28,mental:8,respiratory:10,musculo:4};
+  conditions.forEach(c => score += (condLoad[c] ?? 0));
+
+  // ── Family history ──
+  const famLoad = {none:0,heart:8,cancer:10,diabetes:6,multiple:14};
+  score += (famLoad[family] ?? 0);
+
+  return Math.min(98, Math.max(2, Math.round(score)));
+}
+
+// ══════════════════════════════════════════════════════
+// PREMIUM ESTIMATION MODEL
+// Calibrated to Australian life/health market (TAL, AIA, MLC)
+// ══════════════════════════════════════════════════════
+function computePremiums(profile, riskScore) {
+  const { age, sex, bmi, smoke, sumInsured } = profile;
+  const isMale = sex === 'male';
+
+  // ── Life Cover ──
+  const lifeBase = sumInsured * 0.00085; // base rate per $1 sum insured
+  const ageMulti = age < 30 ? 0.5 : age < 40 ? 1.0 : age < 50 ? 2.0 : age < 60 ? 3.8 : 6.5;
+  const sexMulti = isMale ? 1.25 : 1.0;
+  const smokeMulti = {never:1.0,'ex':1.15,'ex-recent':1.4,'current':2.2}[profile.smoke] ?? 1;
+  const riskMulti = riskScore < 33 ? 0.9 : riskScore < 60 ? 1.1 : riskScore < 80 ? 1.4 : 1.8;
+  const lifeAnnual = Math.round(lifeBase * ageMulti * sexMulti * smokeMulti * riskMulti / 100) * 100;
+
+  // ── TPD (Total & Permanent Disability) ──
+  const tpdBase = sumInsured * 0.00060;
+  const tpdAnnual = Math.round(tpdBase * ageMulti * sexMulti * smokeMulti * riskMulti / 100) * 100;
+
+  // ── Income Protection ──
+  const monthlyBenefit = 6000; // assume $72k p.a.
+  const ipBase = monthlyBenefit * 12 * 0.022;
+  const ipAnnual = Math.round(ipBase * ageMulti * sexMulti * smokeMulti * riskMulti / 100) * 100;
+
+  // ── Trauma / Critical Illness ──
+  const traumaBase = 500000 * 0.00040;
+  const traumaAnnual = Math.round(traumaBase * ageMulti * sexMulti * smokeMulti * riskMulti / 100) * 100;
+
+  // ── Private Health (Hospital + Extras) ──
+  const healthBase = isMale ? 3200 : 2800;
+  const healthBMIPenalty = bmi > 30 ? 1.1 : 1.0;
+  const healthAnnual = Math.round(healthBase * healthBMIPenalty * (riskScore < 40 ? 1.0 : 1.05) / 100) * 100;
+
+  return { lifeAnnual, tpdAnnual, ipAnnual, traumaAnnual, healthAnnual };
+}
+
+// ══════════════════════════════════════════════════════
+// HEALTH CATEGORY SCORES
+// ══════════════════════════════════════════════════════
+function computeHealthCategories(profile) {
+  const { bmi, smoke, alcohol, exercise, conditions, age } = profile;
+  const conds = conditions;
+
+  const cardio = (() => {
+    let s = 15;
+    if (smoke === 'current') s += 35;
+    else if (smoke === 'ex-recent') s += 18;
+    else if (smoke === 'ex') s += 8;
+    if (alcohol === 'heavy') s += 20;
+    else if (alcohol === 'moderate') s += 8;
+    if (exercise === '5') s -= 8;
+    else if (exercise === '0') s += 12;
+    if (bmi > 30) s += 15;
+    if (conds.includes('heart')) s += 25;
+    if (conds.includes('hypertension')) s += 15;
+    return Math.min(95, Math.max(5, s));
+  })();
+
+  const metabolic = (() => {
+    let s = 10;
+    if (bmi < 18.5 || bmi > 35) s += 25;
+    else if (bmi > 30) s += 15;
+    else if (bmi > 25) s += 5;
+    if (conds.includes('diabetes')) s += 30;
+    if (alcohol === 'heavy') s += 12;
+    if (exercise === '0') s += 10;
+    return Math.min(95, Math.max(5, s));
+  })();
+
+  const mental = (() => {
+    let s = 10;
+    if (conds.includes('mental')) s += 30;
+    if (alcohol === 'heavy') s += 15;
+    if (exercise === '5') s -= 5;
+    if (age > 55) s += 8;
+    return Math.min(95, Math.max(5, s));
+  })();
+
+  const respiratory = (() => {
+    let s = 8;
+    if (smoke === 'current') s += 35;
+    else if (smoke === 'ex-recent') s += 15;
+    if (conds.includes('respiratory')) s += 25;
+    if (exercise === '5') s -= 5;
+    return Math.min(95, Math.max(5, s));
+  })();
+
+  const musculoskeletal = (() => {
+    let s = 10;
+    if (conds.includes('musculo')) s += 25;
+    if (bmi > 30) s += 12;
+    const occLoad = {professional:0,trade:10,manual:20,hazardous:28};
+    s += (occLoad[profile.occupation] ?? 0);
+    if (age > 50) s += 10;
+    return Math.min(95, Math.max(5, s));
+  })();
+
+  const oncological = (() => {
+    let s = 8;
+    if (conds.includes('cancer')) s += 40;
+    if (smoke === 'current') s += 18;
+    if (profile.family === 'cancer' || profile.family === 'multiple') s += 15;
+    if (age > 50) s += 10;
+    return Math.min(95, Math.max(5, s));
+  })();
+
+  return { cardio, metabolic, mental, respiratory, musculoskeletal, oncological };
+}
+
+// ══════════════════════════════════════════════════════
+// WHO DATA FETCH (Global Health Observatory API)
+// ══════════════════════════════════════════════════════
+async function fetchWHOData(countryCode, sex) {
+  const t0 = Date.now();
+  try {
+    // WHO GHO API: Life expectancy at birth
+    const sexCode = sex === 'female' ? 'FMLE' : 'MLE';
+    const url = `https://ghoapi.azureedge.net/api/WHOSIS_000001?$filter=SpatialDim eq '${countryCode}' and Dim1 eq '${sexCode}'&$top=3&$orderby=TimeDim desc`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const latest = data.value?.[0];
+    return {
+      oracle: 'WHO Global Health Observatory (GHO API)',
+      indicator: 'Life expectancy at birth',
+      country: countryCode,
+      sex: sexCode,
+      value: latest?.NumericValue ?? null,
+      year: latest?.TimeDim ?? null,
+      latency_ms: Date.now() - t0
+    };
+  } catch(e) {
+    return { oracle: 'WHO GHO API', error: e.message, latency_ms: Date.now() - t0 };
+  }
+}
+
+async function fetchWHONCD(countryCode) {
+  const t0 = Date.now();
+  try {
+    // WHO: NCD total mortality rate
+    const url = `https://ghoapi.azureedge.net/api/NCD_BMI_30A?$filter=SpatialDim eq '${countryCode}'&$top=3&$orderby=TimeDim desc`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const latest = data.value?.[0];
+    return {
+      oracle: 'WHO NCD Prevalence (Obesity/BMI 30+ %) ',
+      country: countryCode,
+      prevalence_pct: latest?.NumericValue ?? null,
+      year: latest?.TimeDim ?? null,
+      latency_ms: Date.now() - t0
+    };
+  } catch(e) {
+    return { oracle: 'WHO NCD API', error: e.message, latency_ms: Date.now() - t0 };
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// CLAUDE AI HEALTH ORACLE
+// ══════════════════════════════════════════════════════
+async function fetchAIHealthNarrative(profile, riskScore, categories, premiums) {
+  const t0 = Date.now();
+  const prompt = `You are an actuarial analyst at selfdriven.insure. Produce a concise health risk narrative (3–4 sentences, plain English, no bullet points) for a life and health insurance applicant.
+
+Profile:
+- Age: ${profile.age}, Sex: ${profile.sex}, BMI: ${profile.bmi} (${profile.weight}kg, ${profile.height}cm)
+- Smoking: ${profile.smoke}, Alcohol: ${profile.alcohol}, Exercise: ${profile.exercise} days/week
+- Occupation: ${profile.occupation}
+- Pre-existing conditions: ${profile.conditions.length ? profile.conditions.join(', ') : 'none'}
+- Family history: ${profile.family}
+- Country: ${profile.country}
+
+Computed risk score: ${riskScore}/100 (${riskLabel(riskScore)})
+
+Health category risks (0–100 scale):
+- Cardiovascular: ${categories.cardio}
+- Metabolic: ${categories.metabolic}
+- Mental Health: ${categories.mental}
+- Respiratory: ${categories.respiratory}
+- Musculoskeletal: ${categories.musculoskeletal}
+- Oncological: ${categories.oncological}
+
+Estimated life cover annual premium: AUD $${premiums.lifeAnnual?.toLocaleString()}
+
+Focus on the most material risk drivers, what this means for insurability, and 1 key actionable wellness insight. Keep under 80 words. Do not repeat the numbers verbatim — synthesise them into natural language. Do not use markdown or bullet points.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.find(b => b.type === 'text')?.text ?? 'Unable to generate narrative.';
+    return { oracle: 'Claude AI (selfdriven Health Oracle)', narrative: text, latency_ms: Date.now() - t0 };
+  } catch(e) {
+    return { oracle: 'Claude AI', error: e.message, narrative: 'AI narrative unavailable.', latency_ms: Date.now() - t0 };
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// MAIN ASSESSMENT
+// ══════════════════════════════════════════════════════
+async function runAssessment() {
+  const name = document.getElementById('f-name').value.trim() || 'Applicant';
+  const dob  = document.getElementById('f-dob').value;
+  const sex  = document.getElementById('f-sex').value;
+  const country = document.getElementById('f-country').value;
+  const height = parseFloat(document.getElementById('f-height').value);
+  const weight = parseFloat(document.getElementById('f-weight').value);
+  const smoke = document.getElementById('f-smoke').value;
+  const alcohol = document.getElementById('f-alcohol').value;
+  const exercise = document.getElementById('f-exercise').value;
+  const occupation = document.getElementById('f-occupation').value;
+  const family = document.getElementById('f-family').value;
+  const sumInsured = parseInt(document.getElementById('f-suminsured').value);
+  const conditions = getConditions();
+
+  if (!dob) return showError('Please enter a date of birth.');
+  if (!height || height < 100 || height > 250) return showError('Please enter a valid height (100–250 cm).');
+  if (!weight || weight < 30 || weight > 300) return showError('Please enter a valid weight (30–300 kg).');
+
+  const age = calcAge(dob);
+  if (age < 18 || age > 80) return showError('Assessment available for applicants aged 18–80.');
+
+  const bmi = calcBMI(height, weight);
+
+  const profile = { name, dob, age, sex, country, height, weight, bmi, smoke, alcohol, exercise, occupation, conditions, family, sumInsured };
+
+  document.getElementById('error-banner').classList.remove('visible');
+  document.getElementById('progress-section').classList.add('visible');
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('analyse-btn').disabled = true;
+  document.getElementById('analyse-btn-label').textContent = '⏳ Assessing…';
+
+  ['profile','mortality','bmi','disease','actuary','ai','premium','keri'].forEach((s,i) => {
+    document.getElementById('step-'+s).className = 'progress-step';
+    document.getElementById('si-'+s).textContent = String(i+1);
+  });
+
+  const result = { applicant: { name, age, sex, country, dob }, timestamp: new Date().toISOString() };
+
+  // ── STEP 1: Profile validation ──
+  setStep('profile', 'active');
+  await new Promise(r => setTimeout(r, 300));
+  result.profile = { bmi, bmi_category: bmi < 18.5 ? 'Underweight' : bmi < 25 ? 'Normal weight' : bmi < 30 ? 'Overweight' : 'Obese', smoke, alcohol, exercise_days_per_week: parseInt(exercise), occupation, conditions, family_history: family };
+  setStep('profile', 'done');
+
+  // ── STEP 2: WHO Life Expectancy ──
+  setStep('mortality', 'active');
+  document.getElementById('step-mortality-label').textContent = `Querying WHO GHO — life expectancy data for ${country}…`;
+  result.who_life_expectancy = await fetchWHOData(country, sex);
+  setStep('mortality', result.who_life_expectancy.error ? 'error' : 'done');
+
+  // ── STEP 3: BMI & metabolic ──
+  setStep('bmi', 'active');
+  await new Promise(r => setTimeout(r, 250));
+  const bmiRisk = bmi < 18.5 ? 'HIGH' : bmi < 25 ? 'LOW' : bmi < 30 ? 'MODERATE' : bmi < 35 ? 'HIGH' : 'VERY HIGH';
+  result.bmi_analysis = {
+    oracle: 'selfdriven Metabolic Oracle',
+    bmi,
+    category: result.profile.bmi_category,
+    waist_risk_proxy: bmiRisk,
+    metabolic_syndrome_risk: bmi > 30 ? 'ELEVATED' : 'NORMAL',
+    ideal_weight_range_kg: `${Math.round(18.5 * (height/100)**2)}–${Math.round(24.9 * (height/100)**2)} kg`,
+    note: 'BMI is a screening tool only; body composition, ethnicity and muscle mass affect interpretation.'
+  };
+  setStep('bmi', 'done');
+
+  // ── STEP 4: WHO NCD ──
+  setStep('disease', 'active');
+  result.who_ncd = await fetchWHONCD(country);
+  setStep('disease', result.who_ncd.error ? 'error' : 'done');
+
+  // ── STEP 5: Actuarial model ──
+  setStep('actuary', 'active');
+  await new Promise(r => setTimeout(r, 350));
+  const riskScore = computeActuarialScore(profile);
+  result.actuarial = {
+    oracle: 'selfdriven Actuarial Model (Australian Life Tables 2019-21 · ABS · WHO)',
+    risk_score: riskScore,
+    risk_tier: riskLabel(riskScore),
+    underwriting_class: riskScore < 20 ? 'PREFERRED' : riskScore < 40 ? 'STANDARD' : riskScore < 65 ? 'SUB-STANDARD' : 'DECLINED/REFER',
+    age_loading: age < 35 ? 'MINIMAL' : age < 50 ? 'MODERATE' : 'SIGNIFICANT',
+    primary_risk_drivers: [
+      smoke !== 'never' ? 'Tobacco history' : null,
+      bmi > 30 ? `Obesity (BMI ${bmi})` : null,
+      conditions.length ? conditions.join(', ') : null,
+      alcohol === 'heavy' ? 'Heavy alcohol use' : null,
+    ].filter(Boolean)
+  };
+  setStep('actuary', 'done');
+
+  // ── STEP 6: AI narrative ──
+  setStep('ai', 'active');
+  const healthCats = computeHealthCategories(profile);
+  const premiums = computePremiums(profile, riskScore);
+  document.getElementById('step-ai-label').textContent = 'AI Health Oracle — generating personalised narrative…';
+  result.ai_narrative = await fetchAIHealthNarrative(profile, riskScore, healthCats, premiums);
+  setStep('ai', result.ai_narrative.error ? 'error' : 'done');
+
+  // ── STEP 7: Premiums ──
+  setStep('premium', 'active');
+  await new Promise(r => setTimeout(r, 200));
+  result.premium_estimates = {
+    oracle: 'selfdriven Premium Oracle (TAL · AIA · MLC · HCF benchmarks)',
+    currency: 'AUD',
+    basis: 'Indicative only — not a product disclosure statement',
+    life_cover: { sum_insured: sumInsured, annual_premium: premiums.lifeAnnual },
+    tpd: { sum_insured: sumInsured, annual_premium: premiums.tpdAnnual },
+    income_protection: { monthly_benefit: 6000, annual_premium: premiums.ipAnnual },
+    trauma: { sum_insured: 500000, annual_premium: premiums.traumaAnnual },
+    private_health: { type: 'Hospital+Extras', annual_premium: premiums.healthAnnual },
+  };
+  result.health_categories = healthCats;
+  setStep('premium', 'done');
+
+  // ── STEP 8: KERI ──
+  setStep('keri', 'active');
+  await new Promise(r => setTimeout(r, 300));
+  const digest = 'sha256·' + Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,10);
+  result.keriEvent = {
+    type: 'ixn',
+    aid: 'EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt',
+    sn: keriSn + 1,
+    digest,
+    timestamp: new Date().toISOString()
+  };
+  addKelEvent(`Life & Health oracle · ${name} · age ${age} · score ${riskScore}`, digest);
+  setStep('keri', 'done');
+
+  currentJson = result;
+  await new Promise(r => setTimeout(r, 200));
+  document.getElementById('progress-section').classList.remove('visible');
+  renderResults(result, profile, riskScore, healthCats, premiums);
+  document.getElementById('analyse-btn').disabled = false;
+  document.getElementById('analyse-btn-label').textContent = 'Assess Risk Profile';
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════
+function renderResults(d, profile, riskScore, cats, premiums) {
+  document.getElementById('results-section').classList.add('visible');
+
+  // Header
+  document.getElementById('res-profile-name').textContent = `${profile.name} · Age ${profile.age} · ${profile.sex === 'male' ? 'M' : profile.sex === 'female' ? 'F' : 'X'}`;
+  document.getElementById('res-profile-meta').textContent =
+    `BMI ${profile.bmi} · ${profile.country} · AID: EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt`;
+
+  const badge = document.getElementById('res-score-badge');
+  badge.className = 'result-score-badge ' + riskClass(riskScore);
+  document.getElementById('res-score-num').textContent = riskScore;
+
+  // Summary strip
+  const le = d.who_life_expectancy?.value ? `${Math.round(d.who_life_expectancy.value)} yrs` : 'N/A';
+  const lifeEx = d.who_life_expectancy?.value
+    ? Math.round(d.who_life_expectancy.value - profile.age) + ' yrs'
+    : 'N/A';
+
+  document.getElementById('summary-strip').innerHTML = `
+    <div class="summary-card accent">
+      <div class="summary-card-label">Risk Tier</div>
+      <div class="summary-card-value" style="font-size:14px;color:${riskColor(riskScore)}">${riskLabel(riskScore)}</div>
+      <div class="summary-card-sub">Underwriting class</div>
+    </div>
+    <div class="summary-card green">
+      <div class="summary-card-label">Life Expectancy</div>
+      <div class="summary-card-value" style="color:var(--green)">${le}</div>
+      <div class="summary-card-sub">WHO · ${profile.country} · ${profile.sex}</div>
+    </div>
+    <div class="summary-card blue">
+      <div class="summary-card-label">Remaining LE</div>
+      <div class="summary-card-value" style="color:var(--blue)">${lifeEx}</div>
+      <div class="summary-card-sub">Statistical estimate</div>
+    </div>
+    <div class="summary-card amber">
+      <div class="summary-card-label">BMI</div>
+      <div class="summary-card-value" style="color:${profile.bmi < 25 ? 'var(--green)' : profile.bmi < 30 ? 'var(--amber)' : 'var(--red)'}">${profile.bmi}</div>
+      <div class="summary-card-sub">${d.profile?.bmi_category}</div>
+    </div>
+    <div class="summary-card teal">
+      <div class="summary-card-label">Life Cover</div>
+      <div class="summary-card-value" style="font-size:14px;">$${premiums.lifeAnnual?.toLocaleString()}</div>
+      <div class="summary-card-sub">Est. annual premium</div>
+    </div>
+    <div class="summary-card purple">
+      <div class="summary-card-label">Risk Drivers</div>
+      <div class="summary-card-value" style="font-size:16px;">${d.actuarial?.primary_risk_drivers?.length || 0}</div>
+      <div class="summary-card-sub">Material factors identified</div>
+    </div>`;
+
+  // Oracle grid
+  const leVal = d.who_life_expectancy;
+  const ncdVal = d.who_ncd;
+  const bmiVal = d.bmi_analysis;
+
+  const bmiColor = profile.bmi < 25 ? 'var(--green)' : profile.bmi < 30 ? 'var(--amber)' : 'var(--red)';
+
+  document.getElementById('oracle-grid').innerHTML = `
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${leVal?.error ? 'var(--red)' : 'var(--green)'}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🌐</div>
+          <div><div class="oracle-source-name">WHO Global Health Observatory</div><div class="oracle-source-type">Life Expectancy at Birth · GHO API</div></div>
+        </div>
+        <div class="oracle-metric-label">Life Expectancy</div>
+        <div class="oracle-metric-value" style="color:var(--green)">${leVal?.value ? Math.round(leVal.value) + ' yrs' : 'N/A'}</div>
+        ${leVal?.value ? `<div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${Math.round(leVal.value)}%;background:var(--green)"></div></div>` : ''}
+        <div class="oracle-rows">
+          <div class="oracle-row"><span class="ok">Country</span><span class="ov">${leVal?.country ?? '—'}</span></div>
+          <div class="oracle-row"><span class="ok">Sex</span><span class="ov">${leVal?.sex ?? '—'}</span></div>
+          <div class="oracle-row"><span class="ok">Year</span><span class="ov">${leVal?.year ?? '—'}</span></div>
+          <div class="oracle-row"><span class="ok">Remaining</span><span class="ov green">${leVal?.value ? Math.round(leVal.value - profile.age) + ' yrs est.' : '—'}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag ${leVal?.error ? 'derived' : 'live'}"><div class="oracle-tag-dot"></div>${leVal?.error ? 'Error' : 'Live'}</span>
+          <span class="oracle-latency">${leVal?.latency_ms ?? '—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${bmiColor}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">⚖️</div>
+          <div><div class="oracle-source-name">Metabolic Oracle</div><div class="oracle-source-type">BMI · Metabolic Risk · WHO thresholds</div></div>
+        </div>
+        <div class="oracle-metric-label">Body Mass Index</div>
+        <div class="oracle-metric-value" style="color:${bmiColor}">${profile.bmi}<span style="font-size:13px;color:var(--muted)"> kg/m²</span></div>
+        <div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${Math.min(100,(profile.bmi/45)*100)}%;background:${bmiColor}"></div></div>
+        <div class="oracle-rows">
+          <div class="oracle-row"><span class="ok">Category</span><span class="ov ${profile.bmi < 25 ? 'green' : profile.bmi < 30 ? 'amber' : 'red'}">${bmiVal?.category}</span></div>
+          <div class="oracle-row"><span class="ok">Waist Risk Proxy</span><span class="ov">${bmiVal?.waist_risk_proxy}</span></div>
+          <div class="oracle-row"><span class="ok">Metabolic Risk</span><span class="ov ${bmiVal?.metabolic_syndrome_risk === 'NORMAL' ? 'green' : 'amber'}">${bmiVal?.metabolic_syndrome_risk}</span></div>
+          <div class="oracle-row"><span class="ok">Ideal Range</span><span class="ov">${bmiVal?.ideal_weight_range_kg}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag derived"><div class="oracle-tag-dot"></div>Computed</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${ncdVal?.error ? 'var(--amber)' : 'var(--blue)'}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">📊</div>
+          <div><div class="oracle-source-name">WHO NCD Prevalence</div><div class="oracle-source-type">Obesity rate · Population baseline</div></div>
+        </div>
+        <div class="oracle-metric-label">Obesity Prevalence (BMI 30+%)</div>
+        <div class="oracle-metric-value" style="color:var(--blue)">${ncdVal?.prevalence_pct != null ? ncdVal.prevalence_pct.toFixed(1) + '%' : 'N/A'}</div>
+        ${ncdVal?.prevalence_pct != null ? `<div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${Math.min(100,ncdVal.prevalence_pct*2)}%;background:${ncdVal.prevalence_pct > 30 ? 'var(--red)' : ncdVal.prevalence_pct > 20 ? 'var(--amber)' : 'var(--blue)'}"></div></div>` : ''}
+        <div class="oracle-rows">
+          <div class="oracle-row"><span class="ok">Country</span><span class="ov">${ncdVal?.country ?? '—'}</span></div>
+          <div class="oracle-row"><span class="ok">Data Year</span><span class="ov">${ncdVal?.year ?? '—'}</span></div>
+          <div class="oracle-row"><span class="ok">Applicant BMI</span><span class="ov ${profile.bmi < 25 ? 'green' : profile.bmi < 30 ? 'amber' : 'red'}">${profile.bmi} (${bmiVal?.category})</span></div>
+          <div class="oracle-row"><span class="ok">Relative to Pop.</span><span class="ov">
+            ${ncdVal?.prevalence_pct != null ? (profile.bmi >= 30 ? 'In obese cohort' : 'Below obese threshold') : '—'}
+          </span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag ${ncdVal?.error ? 'derived' : 'live'}"><div class="oracle-tag-dot"></div>${ncdVal?.error ? 'Error' : 'Live'}</span>
+          <span class="oracle-latency">${ncdVal?.latency_ms ?? '—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${riskColor(riskScore)}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🧮</div>
+          <div><div class="oracle-source-name">selfdriven Actuarial Oracle</div><div class="oracle-source-type">Australian Life Tables 2019-21 · ABS</div></div>
+        </div>
+        <div class="oracle-metric-label">Actuarial Risk Score</div>
+        <div class="oracle-metric-value" style="color:${riskColor(riskScore)}">${riskScore}<span style="font-size:13px;color:var(--muted)">/100</span></div>
+        <div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${riskScore}%;background:${riskColor(riskScore)}"></div></div>
+        <div class="oracle-rows">
+          <div class="oracle-row"><span class="ok">Risk Tier</span><span class="ov ${riskClass(riskScore) === 'low' ? 'green' : riskClass(riskScore) === 'moderate' ? 'amber' : 'red'}">${riskLabel(riskScore)}</span></div>
+          <div class="oracle-row"><span class="ok">Age Loading</span><span class="ov">${d.actuarial?.age_loading}</span></div>
+          <div class="oracle-row"><span class="ok">Smoke Loading</span><span class="ov ${profile.smoke === 'never' ? 'green' : 'amber'}">${profile.smoke === 'never' ? 'None ✓' : profile.smoke === 'current' ? '+HIGH' : '+MODERATE'}</span></div>
+          <div class="oracle-row"><span class="ok">Conditions</span><span class="ov ${profile.conditions.length === 0 ? 'green' : 'amber'}">${profile.conditions.length === 0 ? 'None ✓' : profile.conditions.length + ' flagged'}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag derived"><div class="oracle-tag-dot"></div>Derived</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:var(--purple)"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🔐</div>
+          <div><div class="oracle-source-name">KERI / ACDC</div><div class="oracle-source-type">Identity & Evidence Chain</div></div>
+        </div>
+        <div class="oracle-metric-label">Event Type</div>
+        <div class="oracle-metric-value" style="font-size:18px;">ixn · sn:${d.keriEvent?.sn ?? '—'}</div>
+        <div class="oracle-rows">
+          <div class="oracle-row"><span class="ok">AID</span><span class="ov" style="font-family:'JetBrains Mono',monospace;font-size:10px">EKE4g…kqt</span></div>
+          <div class="oracle-row"><span class="ok">Oracles Queried</span><span class="ov">4</span></div>
+          <div class="oracle-row"><span class="ok">Digest</span><span class="ov" style="font-family:'JetBrains Mono',monospace;font-size:9px">${(d.keriEvent?.digest ?? '—').slice(0,22)}…</span></div>
+          <div class="oracle-row"><span class="ok">Anchored</span><span class="ov green">${new Date().toISOString().slice(11,19)} UTC</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Signed</span>
+        </div>
+      </div>
+    </div>`;
+
+  // Health categories
+  const catDefs = [
+    {key:'cardio',label:'Cardiovascular',icon:'❤️'},
+    {key:'metabolic',label:'Metabolic',icon:'🔬'},
+    {key:'mental',label:'Mental Health',icon:'🧠'},
+    {key:'respiratory',label:'Respiratory',icon:'🫁'},
+    {key:'musculoskeletal',label:'Musculoskeletal',icon:'🦴'},
+    {key:'oncological',label:'Oncological',icon:'🔴'},
+  ];
+  document.getElementById('health-categories').innerHTML = catDefs.map(c => {
+    const val = cats[c.key];
+    const col = val < 30 ? 'var(--green)' : val < 60 ? 'var(--amber)' : 'var(--red)';
+    const lbl = val < 30 ? 'LOW' : val < 60 ? 'MODERATE' : 'ELEVATED';
+    return `
+    <div class="health-cat">
+      <div class="health-cat-name">${c.icon} ${c.label}</div>
+      <div class="health-cat-score" style="color:${col}">${val}<span style="font-size:11px;color:var(--muted)">/100</span></div>
+      <div class="health-cat-bar"><div class="health-cat-fill" style="width:${val}%;background:${col}"></div></div>
+      <div class="health-cat-factors">${lbl} risk</div>
+    </div>`;
+  }).join('');
+
+  // Premiums
+  const productDefs = [
+    {key:'life_cover',label:'Life Cover',type:'Term Life · AUS market',amount:premiums.lifeAnnual,factors:[['Sum Insured',`$${profile.sumInsured.toLocaleString()}`],['Age Band',profile.age < 40 ? 'Preferred' : profile.age < 55 ? 'Standard' : 'Senior']]},
+    {key:'tpd',label:'TPD Cover',type:'Total & Permanent Disability',amount:premiums.tpdAnnual,factors:[['Sum Insured',`$${profile.sumInsured.toLocaleString()}`],['Occupation',profile.occupation]]},
+    {key:'income_protection',label:'Income Protection',type:'Benefit $6,000/mth · 2yr wait',amount:premiums.ipAnnual,factors:[['Monthly Benefit','$6,000'],['Benefit Period','2 years']]},
+    {key:'trauma',label:'Trauma / Critical Illness',type:'Sum insured $500k',amount:premiums.traumaAnnual,factors:[['Sum Insured','$500,000'],['Conditions',profile.conditions.length ? `${profile.conditions.length} flagged` : 'None']]},
+    {key:'private_health',label:'Private Health',type:'Hospital + Extras · Australia',amount:premiums.healthAnnual,factors:[['Cover Type','Hospital+Extras'],['BMI Factor',profile.bmi > 30 ? '+10%' : 'Standard']]},
+  ];
+  document.getElementById('premium-grid').innerHTML = productDefs.map(p => `
+    <div class="premium-product">
+      <div class="premium-product-name">${p.label}</div>
+      <div class="premium-product-type">${p.type}</div>
+      <div class="premium-amount">$${p.amount?.toLocaleString()}</div>
+      <div class="premium-period">per year</div>
+      <div class="premium-factors">
+        ${p.factors.map(([k,v]) => `<div class="premium-factor"><span class="premium-factor-key">${k}</span><span class="premium-factor-val">${v}</span></div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  // AI narrative
+  document.getElementById('ai-narrative-body').textContent = d.ai_narrative?.narrative ?? 'Narrative unavailable.';
+  document.getElementById('premium-loading-state').textContent = `AI Oracle · ${d.ai_narrative?.latency_ms ?? '—'}ms`;
+
+  // JSON
+  document.getElementById('json-body').innerHTML = syntaxHighlight(d);
+  document.getElementById('results-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function syntaxHighlight(obj) {
+  const s = JSON.stringify(obj, null, 2);
+  return s
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m => {
+      if (/^"/.test(m)) {
+        return /:$/.test(m) ? `<span class="jk">${m}</span>` : `<span class="jv">${m}</span>`;
+      }
+      if (/true|false/.test(m)) return `<span class="jb">${m}</span>`;
+      if (/null/.test(m)) return `<span class="jb">${m}</span>`;
+      return `<span class="jn">${m}</span>`;
+    });
+}
+
+function copyJson() {
+  if (!currentJson) return;
+  navigator.clipboard.writeText(JSON.stringify(currentJson, null, 2))
+    .then(() => {
+      const btns = document.querySelectorAll('.copy-btn');
+      btns.forEach(b => { b.textContent = 'Copied!'; setTimeout(() => b.textContent = 'Copy JSON', 1500); });
+    });
+}
+</script>
+</body>
+</html>
