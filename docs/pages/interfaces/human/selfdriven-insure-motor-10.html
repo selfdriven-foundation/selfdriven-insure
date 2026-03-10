@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<title>Motor Vehicle - selfdriven.insure - v9</title>
+<title>Motor Vehicle - selfdriven.insure - v10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -957,51 +962,65 @@ async function lookupVin() {
 
   // ── 3: Recalls ──
   setStep('recalls','active');
-  try {
-    const t0 = Date.now();
-    if (!make) { result.recalls={oracle:'NHTSA ODI',Count:0,note:'Make unavailable — skipped'}; setStep('recalls','skipped'); document.getElementById('si-recalls').textContent='—'; } else {
-    const res = await fetch(`https://api.nhtsa.gov/recalls/recallsByVehicle?make=${encodeURIComponent(make)}${model?'&model='+encodeURIComponent(model):''}${year?'&modelYear='+year:''}`);}
-    const data = await res.json();
-    const recalls = data.results ?? [];
-    result.recalls = {
-      oracle:'NHTSA ODI Recalls', Count:recalls.length,
-      note: !make ? 'Make unavailable — recall search skipped' : undefined,
-      Items:recalls.slice(0,6).map(r => ({
-        NHTSACampaignNumber:r.NHTSACampaignNumber,
-        Component:r.Component,
-        Summary:(r.Summary||'').slice(0,200),
-        Consequence:(r.Consequence||'').slice(0,150),
-        RemedyDescription:(r.RemedyDescription||'').slice(0,150),
-        ReportReceivedDate:r.ReportReceivedDate
-      })),
-      latency_ms:Date.now()-t0
-    };
-    setStep('recalls','done');
-  } catch(e) { result.recalls={oracle:'NHTSA ODI',Count:0,error:e.message}; setStep('recalls','error'); }
+  if (!make) {
+    result.recalls = { oracle:'NHTSA ODI', Count:0, note:'Make unavailable — skipped' };
+    setStep('recalls','skipped'); document.getElementById('si-recalls').textContent='—';
+  } else {
+    try {
+      const t0 = Date.now();
+      // Only include model param when NHTSA has record of it (non-US VINs often have no NHTSA model entry)
+      const recallModel = nonUs ? '' : model;
+      const res = await fetch(`https://api.nhtsa.gov/recalls/recallsByVehicle?make=${encodeURIComponent(make)}${recallModel?'&model='+encodeURIComponent(recallModel):''}${year?'&modelYear='+year:''}`);
+      const data = await res.json();
+      const recalls = data.results ?? [];
+      result.recalls = {
+        oracle:'NHTSA ODI Recalls', Count:recalls.length,
+        Items:recalls.slice(0,6).map(r => ({
+          NHTSACampaignNumber:r.NHTSACampaignNumber,
+          Component:r.Component,
+          Summary:(r.Summary||'').slice(0,200),
+          Consequence:(r.Consequence||'').slice(0,150),
+          RemedyDescription:(r.RemedyDescription||'').slice(0,150),
+          ReportReceivedDate:r.ReportReceivedDate
+        })),
+        latency_ms:Date.now()-t0
+      };
+      setStep('recalls','done');
+    } catch(e) { result.recalls={oracle:'NHTSA ODI',Count:0,error:e.message}; setStep('recalls','error'); }
+  }
 
   // ── 4: Complaints ──
   setStep('complaints','active');
-  try {
-    const t0 = Date.now();
-    if (!make) { result.complaints={oracle:'NHTSA VOQ',Count:0,note:'Make unavailable — skipped'}; setStep('complaints','skipped'); document.getElementById('si-complaints').textContent='—'; } else {
-    const res = await fetch(`https://api.nhtsa.gov/complaints/complaintsByVehicle?make=${encodeURIComponent(make)}${model?'&model='+encodeURIComponent(model):''}${year?'&modelYear='+year:''}`);}
-    const data = await res.json();
-    const complaints = data.results ?? [];
-    const byComp = {};
-    complaints.forEach(c => { const k = c.components||'Unknown'; byComp[k]=(byComp[k]||0)+1; });
-    result.complaints = {
-      oracle:'NHTSA VOQ Complaints', Count:complaints.length,
-      TopComponents:Object.entries(byComp).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k,v])=>({component:k,count:v})),
-      latency_ms:Date.now()-t0
-    };
-    setStep('complaints','done');
-  } catch(e) { result.complaints={oracle:'NHTSA VOQ',Count:0,error:e.message}; setStep('complaints','error'); }
+  if (!make) {
+    result.complaints = { oracle:'NHTSA VOQ', Count:0, note:'Make unavailable — skipped' };
+    setStep('complaints','skipped'); document.getElementById('si-complaints').textContent='—';
+  } else {
+    try {
+      const t0 = Date.now();
+      const complaintModel = nonUs ? '' : model;
+      const res = await fetch(`https://api.nhtsa.gov/complaints/complaintsByVehicle?make=${encodeURIComponent(make)}${complaintModel?'&model='+encodeURIComponent(complaintModel):''}${year?'&modelYear='+year:''}`);
+      const data = await res.json();
+      const complaints = data.results ?? [];
+      const byComp = {};
+      complaints.forEach(c => { const k = c.components||'Unknown'; byComp[k]=(byComp[k]||0)+1; });
+      result.complaints = {
+        oracle:'NHTSA VOQ Complaints', Count:complaints.length,
+        TopComponents:Object.entries(byComp).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k,v])=>({component:k,count:v})),
+        latency_ms:Date.now()-t0
+      };
+      setStep('complaints','done');
+    } catch(e) { result.complaints={oracle:'NHTSA VOQ',Count:0,error:e.message}; setStep('complaints','error'); }
+  }
 
   // ── 5: NCAP Ratings ──
   setStep('ratings','active');
-  try {
+  if (nonUs || !make) {
+    result.ncap_ratings={oracle:'NHTSA NCAP',available:false,note:'Non-US/unidentified vehicle — not in NHTSA NCAP database',data:null,latency_ms:0};
+    setStep('ratings','skipped'); document.getElementById('si-ratings').textContent='—';
+  } else try {
     const t0 = Date.now();
-    const res = await fetch(`https://api.nhtsa.gov/SafetyRatings/modelyear/${year}/make/${encodeURIComponent(make)}/model/${encodeURIComponent(model)}`);
+    const ncapModel = model || '';
+    const res = await fetch(`https://api.nhtsa.gov/SafetyRatings/modelyear/${year}/make/${encodeURIComponent(make)}/model/${encodeURIComponent(ncapModel)}`);
     const data = await res.json();
     const vehicles = data.Results ?? [];
     let ratings = null;
