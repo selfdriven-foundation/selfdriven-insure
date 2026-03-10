@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<title>Motor Vehicle - selfdriven.insure - v5</title>
+<title>Motor Vehicle - selfdriven.insure - v6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -891,7 +896,7 @@ function renderResults(d) {
       </div>
     </div>
 
-    ${d.dbvin && d.dbvin.brand ? `
+    ${d.dbvin && d.dbvin.oracle?.includes('Claude') ? `
     <div class="oracle-card">
       <div class="oracle-card-top" style="background:var(--blue)"></div>
       <div class="oracle-card-body">
@@ -912,36 +917,29 @@ function renderResults(d) {
           <span class="oracle-latency">${d.dbvin.latency_ms||'—'}ms</span>
         </div>
       </div>
-    </div>` : d.dbvin ? `
+    </div>` : d.dbvin && d.dbvin.brand ? `
     <div class="oracle-card">
-      <div class="oracle-card-top" style="background:${d.dbvin.oracle?.includes('Claude')?'var(--accent)':'var(--blue)'}"></div>
+      <div class="oracle-card-top" style="background:var(--blue)"></div>
       <div class="oracle-card-body">
         <div class="oracle-source">
-          <div class="oracle-source-icon">${d.dbvin.oracle?.includes('Claude')?'🤖':'🌏'}</div>
+          <div class="oracle-source-icon">🌏</div>
           <div>
-            <div class="oracle-source-name">${d.dbvin.oracle?.includes('Claude')?'Claude AI Oracle':'DB.VIN'}</div>
-            <div class="oracle-source-type">${d.dbvin.oracle?.includes('Claude')?'VDS Decode · JDM / Global':'Global Vehicle Registry'}</div>
+            <div class="oracle-source-name">DB.VIN</div>
+            <div class="oracle-source-type">Global Vehicle Registry</div>
           </div>
         </div>
-        <div class="oracle-metric-label">${d.dbvin.oracle?.includes('Claude')?'AI-Decoded Vehicle':'Global Record'}</div>
-        <div class="oracle-metric-value" style="font-size:15px;color:${d.dbvin.oracle?.includes('Claude')?'var(--accent)':'var(--blue)'}">
-          ${d.dbvin.brand||vd.Make||'—'} ${d.dbvin.model||vd.Model||''}
+        <div class="oracle-metric-label">Global Record</div>
+        <div class="oracle-metric-value" style="font-size:16px;color:var(--blue)">
+          ${d.dbvin.brand||'—'} ${d.dbvin.model||''}
         </div>
         <div class="oracle-rows" style="margin-top:10px">
-          <div class="oracle-row"><span class="ok">Year</span><span class="ov">${d.dbvin.year||vd.ModelYear||'—'}</span></div>
-          <div class="oracle-row"><span class="ok">Body</span><span class="ov">${d.dbvin.bodyType||vd.BodyClass||'—'}</span></div>
-          <div class="oracle-row"><span class="ok">Fuel</span><span class="ov">${d.dbvin.fuelType||vd.FuelTypePrimary||'—'}</span></div>
-          ${d.dbvin.transmission?`<div class="oracle-row"><span class="ok">Transmission</span><span class="ov">${d.dbvin.transmission}</span></div>`:''}
-          ${d.dbvin.driveType?`<div class="oracle-row"><span class="ok">Drive</span><span class="ov">${d.dbvin.driveType}</span></div>`:''}
-          <div class="oracle-row"><span class="ok">Origin</span><span class="ov">${d.dbvin.registrationCountry||vd.PlantCountry||'—'}</span></div>
-          ${d.dbvin.confidence?`<div class="oracle-row"><span class="ok">Confidence</span><span class="ov ${d.dbvin.confidence==='high'?'green':d.dbvin.confidence==='medium'?'amber':'red'}">${d.dbvin.confidence.toUpperCase()}</span></div>`:''}
+          <div class="oracle-row"><span class="ok">Year</span><span class="ov">${d.dbvin.year||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Body Type</span><span class="ov">${d.dbvin.bodyType||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Fuel Type</span><span class="ov">${d.dbvin.fuelType||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Reg. Country</span><span class="ov">${d.dbvin.registrationCountry||'—'}</span></div>
         </div>
-        ${d.dbvin.decodingNotes?`<div style="margin-top:10px;padding:8px 10px;background:rgba(200,68,47,0.07);border-radius:8px;font-size:10px;color:var(--muted);line-height:1.5;font-style:italic">${d.dbvin.decodingNotes}</div>`:''}
         <div class="oracle-status-row">
-          <span class="oracle-tag ${d.dbvin.oracle?.includes('Claude')?'derived':'live'}">
-            <div class="oracle-tag-dot" style="${d.dbvin.oracle?.includes('Claude')?'background:var(--accent)':''}"></div>
-            ${d.dbvin.oracle?.includes('Claude')?'AI Oracle':'Live'}
-          </span>
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
           <span class="oracle-latency">${d.dbvin.latency_ms||'—'}ms</span>
         </div>
       </div>
