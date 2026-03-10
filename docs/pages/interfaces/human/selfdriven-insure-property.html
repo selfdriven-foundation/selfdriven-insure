@@ -1,0 +1,1206 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/property
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png">
+<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<title>Property - selfdriven.insure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f2ed;
+  --surface: #edeae3;
+  --surface2: #e5e1d8;
+  --border: #ddd8ce;
+  --text: #1a1410;
+  --muted: #6b5f52;
+  --muted2: #9e9085;
+  --accent: #c8442f;
+  --accent-dim: rgba(200,68,47,0.10);
+  --accent-strong: rgba(200,68,47,0.18);
+  --card-radius: 20px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --green: #1a7a4a;
+  --green-dim: rgba(26,122,74,0.12);
+  --amber: #b86800;
+  --amber-dim: rgba(184,104,0,0.12);
+  --red: #c8442f;
+  --red-dim: rgba(200,68,47,0.12);
+  --blue: #1a4a8a;
+  --blue-dim: rgba(26,74,138,0.10);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0a0a;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --text: #f0ede8;
+    --muted: #b0a89e;
+    --muted2: #7a7268;
+    --accent: #e85d4a;
+    --accent-dim: rgba(232,93,74,0.12);
+    --accent-strong: rgba(232,93,74,0.20);
+    --shadow: 0 4px 28px rgba(0,0,0,0.5);
+    --green: #2dd47a;
+    --green-dim: rgba(45,212,122,0.12);
+    --amber: #f5a623;
+    --amber-dim: rgba(245,166,35,0.12);
+    --red: #e85d4a;
+    --red-dim: rgba(232,93,74,0.12);
+    --blue: #5b9ef0;
+    --blue-dim: rgba(91,158,240,0.10);
+  }
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; height: 56px;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-logo {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; color: #fff;
+}
+.nav-title { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; }
+.nav-title span { color: var(--accent); }
+.nav-meta {
+  display: flex; align-items: center; gap: 14px;
+}
+.live-badge {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 12px;
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  border-radius: 999px;
+  font-size: 11px; font-weight: 600; color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
+}
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green);
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.keri-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  cursor: pointer; transition: all 0.15s;
+}
+.keri-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── MAIN LAYOUT ── */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 60px;
+}
+
+/* ── SEARCH HERO ── */
+.search-hero {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.search-hero .eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+}
+.search-hero h1 {
+  font-size: 36px; font-weight: 900; letter-spacing: -0.04em;
+  color: var(--text); line-height: 1.15; margin-bottom: 8px;
+}
+.search-hero h1 em { color: var(--accent); font-style: normal; }
+.search-hero p {
+  font-size: 14px; color: var(--muted); max-width: 520px; margin: 0 auto 28px;
+  line-height: 1.7;
+}
+
+/* ── SEARCH BOX ── */
+.search-box {
+  display: flex; gap: 0;
+  max-width: 680px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-box:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-dim);
+}
+.search-input {
+  flex: 1;
+  padding: 16px 20px;
+  background: transparent;
+  border: none; outline: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px; color: var(--text);
+}
+.search-input::placeholder { color: var(--muted2); }
+.search-btn {
+  padding: 12px 28px;
+  background: var(--accent);
+  border: none; border-radius: 12px;
+  margin: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px; font-weight: 700; color: white;
+  cursor: pointer; transition: all 0.15s;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 8px;
+}
+.search-btn:hover:not(:disabled) { opacity: 0.88; transform: scale(0.98); }
+.search-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* example addresses */
+.example-addresses {
+  display: flex; align-items: center; gap: 8px; justify-content: center;
+  margin-top: 14px; flex-wrap: wrap;
+}
+.example-label { font-size: 11px; color: var(--muted2); }
+.example-chip {
+  padding: 4px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 11px; color: var(--muted);
+  cursor: pointer; transition: all 0.15s;
+}
+.example-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── PROGRESS BAR ── */
+.progress-section {
+  display: none;
+  max-width: 680px; margin: 0 auto 32px;
+}
+.progress-section.visible { display: block; }
+.progress-steps {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.progress-step {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 12px; color: var(--muted);
+  transition: color 0.2s;
+}
+.progress-step.active { color: var(--text); font-weight: 600; }
+.progress-step.done { color: var(--green); }
+.progress-step.error { color: var(--red); }
+.step-icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+  background: var(--surface2); color: var(--muted);
+}
+.progress-step.active .step-icon {
+  background: var(--accent-dim);
+  color: var(--accent);
+  animation: spinPulse 1s ease infinite;
+}
+@keyframes spinPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
+.progress-step.done .step-icon { background: var(--green-dim); color: var(--green); }
+.progress-step.error .step-icon { background: var(--red-dim); color: var(--red); }
+
+/* ── RESULTS GRID ── */
+.results-section { display: none; }
+.results-section.visible { display: block; }
+
+.result-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 24px; gap: 16px;
+}
+.result-address {
+  flex: 1;
+}
+.result-address .eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
+}
+.result-address h2 {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.03em;
+  color: var(--text); line-height: 1.2;
+}
+.result-address .sub {
+  font-size: 13px; color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 4px;
+}
+.result-score-badge {
+  flex-shrink: 0;
+  width: 80px; height: 80px;
+  border-radius: 18px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  border: 2px solid;
+}
+.result-score-badge .score-num {
+  font-size: 28px; font-weight: 700; line-height: 1;
+}
+.result-score-badge .score-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 2px;
+}
+
+/* score colours */
+.score-low { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+.score-med { background: var(--amber-dim); border-color: var(--amber); color: var(--amber); }
+.score-high { background: var(--red-dim); border-color: var(--red); color: var(--red); }
+
+/* ── ORACLE CARDS ── */
+.oracle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+@media(max-width:780px) { .oracle-grid { grid-template-columns: 1fr 1fr; } }
+@media(max-width:500px) { .oracle-grid { grid-template-columns: 1fr; } }
+
+.oracle-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.oracle-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-2px);
+}
+.oracle-card-top {
+  height: 4px;
+  background: var(--accent);
+}
+.oracle-card-body { padding: 16px 18px; }
+.oracle-source {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px;
+}
+.oracle-source-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  background: var(--surface2);
+}
+.oracle-source-name {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent);
+}
+.oracle-source-type {
+  font-size: 11px; color: var(--muted);
+}
+.oracle-metric-label {
+  font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 500;
+}
+.oracle-metric-value {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.03em;
+  color: var(--text); line-height: 1.1;
+}
+.oracle-metric-unit {
+  font-size: 12px; color: var(--muted); margin-top: 2px;
+}
+.oracle-risk-bar {
+  margin-top: 10px;
+  height: 5px; border-radius: 3px;
+  background: var(--surface2);
+  overflow: hidden;
+}
+.oracle-risk-fill {
+  height: 100%; border-radius: 3px;
+  transition: width 1s ease;
+}
+.oracle-rows { margin-top: 10px; }
+.oracle-row {
+  display: flex; justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.oracle-row:last-child { border-bottom: none; }
+.oracle-row .ok { color: var(--muted); }
+.oracle-row .ov {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: var(--text); text-align: right;
+}
+.oracle-row .ov.green { color: var(--green); }
+.oracle-row .ov.amber { color: var(--amber); }
+.oracle-row .ov.red { color: var(--red); }
+.oracle-status-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 10px; padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.oracle-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 999px;
+  font-size: 10px; font-weight: 700;
+}
+.oracle-tag.live { background: var(--green-dim); color: var(--green); }
+.oracle-tag.derived { background: var(--blue-dim); color: var(--blue); }
+.oracle-tag.modelled { background: var(--amber-dim); color: var(--amber); }
+.oracle-tag-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+.oracle-latency {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--muted2);
+}
+
+/* ── BOTTOM GRID: JSON + KEL ── */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 16px;
+}
+@media(max-width:780px) { .bottom-grid { grid-template-columns: 1fr; } }
+
+.json-panel, .kel-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+}
+.panel-hdr {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.panel-hdr-title {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--muted);
+  display: flex; align-items: center; gap: 8px;
+}
+.copy-btn {
+  padding: 4px 12px; border-radius: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  cursor: pointer; transition: all 0.15s;
+}
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.json-body {
+  padding: 16px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; line-height: 1.8;
+  max-height: 340px; overflow-y: auto;
+  color: var(--text); white-space: pre-wrap; word-break: break-word;
+}
+.json-body .jk { color: var(--accent); }
+.json-body .js { color: var(--green); }
+.json-body .jn { color: var(--blue); }
+.json-body .jb { color: var(--amber); }
+
+.kel-event {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+}
+.kel-event:last-child { border-bottom: none; }
+.kel-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 3px;
+}
+.kel-dot.icp { background: var(--accent); }
+.kel-dot.ixn { background: var(--green); }
+.kel-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700; color: var(--accent); font-size: 10px;
+}
+.kel-desc { color: var(--muted); margin-top: 1px; line-height: 1.4; }
+.kel-digest {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: var(--muted2); margin-top: 3px; word-break: break-all;
+}
+.kel-time {
+  margin-left: auto; flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--muted2);
+}
+
+/* ── MAP ── */
+.map-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  height: 200px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.map-embed {
+  width: 100%; height: 100%; border: none;
+}
+.map-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  color: var(--muted2); font-size: 13px;
+}
+
+/* error */
+.error-banner {
+  display: none;
+  padding: 14px 18px;
+  background: var(--red-dim);
+  border: 1px solid var(--red);
+  border-radius: 14px;
+  color: var(--red);
+  font-size: 13px; font-weight: 500;
+  margin-bottom: 20px;
+}
+.error-banner.visible { display: block; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">sd</div>
+    <span class="nav-title">selfdriven<span>.insure</span></span>
+  </div>
+  <div class="nav-meta">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      Live Oracle Feed
+    </div>
+    <div class="keri-btn" onclick="showKelPanel()">
+      🔐 EKE4g…kqt
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- SEARCH HERO -->
+  <div class="search-hero">
+    <div class="eyebrow">Property Risk Intelligence</div>
+    <h1>Real-time oracle lookup<br>for <em>any address</em></h1>
+    <p>Aggregates live data from Nominatim, Open-Meteo, and BigDataCloud — elevation, flood risk, weather hazards, and fire index — anchored to your KERI identity.</p>
+
+    <div class="search-box">
+      <input class="search-input" id="addr-input" type="text"
+        placeholder="Enter any address (e.g. 1 Martin Place, Sydney NSW)"
+        onkeydown="if(event.key==='Enter')lookupProperty()" />
+      <button class="search-btn" id="search-btn" onclick="lookupProperty()">
+        <span id="search-btn-label">◈ Analyse</span>
+      </button>
+    </div>
+
+    <div class="example-addresses">
+      <span class="example-label">Try:</span>
+      <span class="example-chip" onclick="fillAndRun('1 Martin Place, Sydney NSW')">Sydney CBD</span>
+      <span class="example-chip" onclick="fillAndRun('42 Wharf St, Mooloolaba QLD')">Mooloolaba QLD</span>
+      <span class="example-chip" onclick="fillAndRun('15 River Rd, Lismore NSW')">Lismore NSW</span>
+      <span class="example-chip" onclick="fillAndRun('88 Collins St, Melbourne VIC')">Melbourne CBD</span>
+      <span class="example-chip" onclick="fillAndRun('10 Downing Street, London')">London</span>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-banner" id="error-banner"></div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section" id="progress-section">
+    <div class="progress-steps" id="progress-steps">
+      <div class="progress-step" id="step-geocode">
+        <div class="step-icon" id="si-geocode">1</div>
+        <span>Geocoding address via Nominatim (OSM)…</span>
+      </div>
+      <div class="progress-step" id="step-elevation">
+        <div class="step-icon" id="si-elevation">2</div>
+        <span>Fetching elevation data — Open-Meteo DEM…</span>
+      </div>
+      <div class="progress-step" id="step-weather">
+        <div class="step-icon" id="si-weather">3</div>
+        <span>Pulling weather & wind hazard — Open-Meteo…</span>
+      </div>
+      <div class="progress-step" id="step-flood">
+        <div class="step-icon" id="si-flood">4</div>
+        <span>Querying flood discharge model — Open-Meteo…</span>
+      </div>
+      <div class="progress-step" id="step-airquality">
+        <div class="step-icon" id="si-airquality">5</div>
+        <span>Checking air quality & fire index — Open-Meteo…</span>
+      </div>
+      <div class="progress-step" id="step-geodata">
+        <div class="step-icon" id="si-geodata">6</div>
+        <span>Enriching locality data — BigDataCloud…</span>
+      </div>
+      <div class="progress-step" id="step-keri">
+        <div class="step-icon" id="si-keri">7</div>
+        <span>Logging KERI interaction event to KEL…</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-section" id="results-section">
+
+    <!-- address header -->
+    <div class="result-header">
+      <div class="result-address">
+        <div class="eyebrow">Property Risk Report</div>
+        <h2 id="res-address-line">—</h2>
+        <div class="sub" id="res-coords">—</div>
+      </div>
+      <div class="result-score-badge" id="res-score-badge">
+        <div class="score-num" id="res-score-num">—</div>
+        <div class="score-label">Risk Score</div>
+      </div>
+    </div>
+
+    <!-- MAP -->
+    <div class="map-wrap" id="map-wrap">
+      <div class="map-placeholder">🗺 Map will load here</div>
+    </div>
+
+    <!-- ORACLE CARDS -->
+    <div class="oracle-grid" id="oracle-grid">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- BOTTOM: JSON + KEL -->
+    <div class="bottom-grid">
+      <div class="json-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">◈ Composite Oracle Response</div>
+          <button class="copy-btn" onclick="copyJson()">Copy JSON</button>
+        </div>
+        <div class="json-body" id="json-body">—</div>
+      </div>
+
+      <div class="kel-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">🔐 Key Event Log (KEL)</div>
+        </div>
+        <div id="kel-events">
+          <div class="kel-event">
+            <div class="kel-dot icp"></div>
+            <div>
+              <div class="kel-type">icp — Inception</div>
+              <div class="kel-desc">AID established · 3 witnesses · sn:0</div>
+              <div class="kel-digest">sha256·a3f8c9d1e4b2770f92ab34cd56ef78901234</div>
+            </div>
+            <div class="kel-time">session</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /results -->
+
+</div><!-- /container -->
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+let keriSn = 1;
+let currentJson = null;
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function setStep(id, state) { // 'active' | 'done' | 'error'
+  const el = document.getElementById('step-' + id);
+  const icon = document.getElementById('si-' + id);
+  el.className = 'progress-step ' + state;
+  if (state === 'done')   icon.textContent = '✓';
+  if (state === 'error')  icon.textContent = '✕';
+  if (state === 'active') icon.textContent = '⟳';
+}
+
+function showError(msg) {
+  const b = document.getElementById('error-banner');
+  b.textContent = '⚠ ' + msg;
+  b.classList.add('visible');
+  document.getElementById('search-btn').disabled = false;
+  document.getElementById('search-btn-label').textContent = '◈ Analyse';
+  document.getElementById('progress-section').classList.remove('visible');
+}
+
+function hideError() {
+  document.getElementById('error-banner').classList.remove('visible');
+}
+
+function syntaxHighlight(obj) {
+  const json = JSON.stringify(obj, null, 2);
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g, m => {
+    let cls = 'jn';
+    if (/^"/.test(m)) cls = /:$/.test(m) ? 'jk' : 'js';
+    else if (/true|false/.test(m)) cls = 'jb';
+    return `<span class="${cls}">${m}</span>`;
+  });
+}
+
+function addKelEvent(desc, digest) {
+  const now = new Date();
+  const time = now.toTimeString().slice(0,8);
+  const events = document.getElementById('kel-events');
+  const el = document.createElement('div');
+  el.className = 'kel-event';
+  el.innerHTML = `
+    <div class="kel-dot ixn"></div>
+    <div>
+      <div class="kel-type">ixn — Interaction · sn:${keriSn}</div>
+      <div class="kel-desc">${desc}</div>
+      <div class="kel-digest">${digest}</div>
+    </div>
+    <div class="kel-time">${time}</div>
+  `;
+  events.insertBefore(el, events.childNodes[0] || null);
+  keriSn++;
+}
+
+function riskColor(pct) {
+  if (pct < 33) return 'var(--green)';
+  if (pct < 66) return 'var(--amber)';
+  return 'var(--red)';
+}
+function riskClass(score) {
+  if (score < 33) return 'score-low';
+  if (score < 66) return 'score-med';
+  return 'score-high';
+}
+function riskLabel(score) {
+  if (score < 33) return 'LOW';
+  if (score < 55) return 'MODERATE';
+  if (score < 75) return 'HIGH';
+  return 'VERY HIGH';
+}
+
+function showKelPanel() {
+  document.getElementById('results-section').classList.add('visible');
+  document.querySelector('.kel-panel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ── FILL & RUN ─────────────────────────────────────────────────────────────
+function fillAndRun(addr) {
+  document.getElementById('addr-input').value = addr;
+  lookupProperty();
+}
+
+// ── COPY JSON ──────────────────────────────────────────────────────────────
+function copyJson() {
+  if (!currentJson) return;
+  navigator.clipboard.writeText(JSON.stringify(currentJson, null, 2))
+    .then(() => { const b = document.querySelector('.copy-btn'); b.textContent = 'Copied!'; setTimeout(() => b.textContent = 'Copy JSON', 1500); });
+}
+
+// ── RISK SCORING ───────────────────────────────────────────────────────────
+function computeRiskScore(data) {
+  let score = 0;
+  // Elevation risk: below 5m = very high flood exposure
+  const elev = data.elevation?.elevation_m ?? 50;
+  if (elev < 2)   score += 35;
+  else if (elev < 5)  score += 25;
+  else if (elev < 10) score += 15;
+  else if (elev < 20) score += 8;
+  else score += 2;
+
+  // Wind speed
+  const wind = data.weather?.wind_speed_10m ?? 10;
+  if (wind > 60) score += 20;
+  else if (wind > 40) score += 12;
+  else if (wind > 20) score += 5;
+
+  // Precipitation
+  const precip = data.weather?.precipitation_probability ?? 20;
+  score += Math.round(precip * 0.12);
+
+  // Flood discharge
+  const flood = data.flood?.river_discharge ?? 0;
+  if (flood > 500) score += 25;
+  else if (flood > 200) score += 15;
+  else if (flood > 50)  score += 7;
+  else score += 1;
+
+  // Fire index
+  const fire = data.airquality?.fire_radiative_power ?? 0;
+  if (fire > 100) score += 15;
+  else if (fire > 30) score += 8;
+  else if (fire > 5)  score += 3;
+
+  return Math.min(99, Math.round(score));
+}
+
+// ── MAIN LOOKUP ────────────────────────────────────────────────────────────
+async function lookupProperty() {
+  const addr = document.getElementById('addr-input').value.trim();
+  if (!addr) return;
+
+  // Reset UI
+  hideError();
+  document.getElementById('progress-section').classList.add('visible');
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('search-btn').disabled = true;
+  document.getElementById('search-btn-label').textContent = '⏳ Querying…';
+  ['geocode','elevation','weather','flood','airquality','geodata','keri'].forEach(s => {
+    const el = document.getElementById('step-' + s);
+    el.className = 'progress-step';
+    document.getElementById('si-' + s).textContent = {
+      geocode:'1', elevation:'2', weather:'3', flood:'4',
+      airquality:'5', geodata:'6', keri:'7'
+    }[s];
+  });
+
+  const result = { address: addr, timestamp: new Date().toISOString() };
+
+  // ── STEP 1: Geocode ──
+  setStep('geocode', 'active');
+  let lat, lon, displayName;
+  try {
+    const t0 = Date.now();
+    const geoRes = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addr)}&format=json&limit=1&addressdetails=1`,
+      { headers: { 'Accept-Language': 'en' } }
+    );
+    const geoData = await geoRes.json();
+    if (!geoData.length) throw new Error('Address not found. Please try a more specific address.');
+    const g = geoData[0];
+    lat = parseFloat(g.lat);
+    lon = parseFloat(g.lon);
+    displayName = g.display_name;
+    const latency = Date.now() - t0;
+    result.geocode = {
+      oracle: 'Nominatim (OpenStreetMap)',
+      lat, lon,
+      display_name: displayName,
+      osm_type: g.osm_type,
+      importance: parseFloat(g.importance?.toFixed(3) ?? 0),
+      latency_ms: latency
+    };
+    setStep('geocode', 'done');
+  } catch (e) {
+    setStep('geocode', 'error');
+    return showError('Geocoding failed: ' + e.message);
+  }
+
+  // ── STEP 2: Elevation ──
+  setStep('elevation', 'active');
+  try {
+    const t0 = Date.now();
+    const elevRes = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lon}`);
+    const elevData = await elevRes.json();
+    const elev = elevData.elevation?.[0] ?? null;
+    result.elevation = {
+      oracle: 'Open-Meteo Elevation (ESA Copernicus DEM 90m)',
+      elevation_m: elev,
+      flood_exposure: elev === null ? 'unknown' :
+        elev < 2 ? 'EXTREME' : elev < 5 ? 'VERY HIGH' : elev < 10 ? 'HIGH' :
+        elev < 20 ? 'MODERATE' : elev < 50 ? 'LOW' : 'VERY LOW',
+      latency_ms: Date.now() - t0
+    };
+    setStep('elevation', 'done');
+  } catch (e) {
+    result.elevation = { oracle: 'Open-Meteo Elevation', error: e.message };
+    setStep('elevation', 'error');
+  }
+
+  // ── STEP 3: Weather ──
+  setStep('weather', 'active');
+  try {
+    const t0 = Date.now();
+    const wRes = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+      `&current=temperature_2m,wind_speed_10m,wind_gusts_10m,precipitation_probability,weather_code,relative_humidity_2m` +
+      `&daily=precipitation_sum,wind_speed_10m_max,wind_gusts_10m_max` +
+      `&forecast_days=1&timezone=auto`
+    );
+    const wData = await wRes.json();
+    const cur = wData.current || {};
+    const daily = wData.daily || {};
+    result.weather = {
+      oracle: 'Open-Meteo Weather (BOM / NOAA)',
+      temperature_2m: cur.temperature_2m,
+      wind_speed_10m: cur.wind_speed_10m,
+      wind_gusts_10m: cur.wind_gusts_10m,
+      precipitation_probability: cur.precipitation_probability,
+      relative_humidity: cur.relative_humidity_2m,
+      weather_code: cur.weather_code,
+      daily_precip_mm: daily.precipitation_sum?.[0],
+      daily_max_wind_kmh: daily.wind_speed_10m_max?.[0],
+      daily_max_gust_kmh: daily.wind_gusts_10m_max?.[0],
+      timezone: wData.timezone,
+      latency_ms: Date.now() - t0
+    };
+    setStep('weather', 'done');
+  } catch (e) {
+    result.weather = { oracle: 'Open-Meteo Weather', error: e.message };
+    setStep('weather', 'error');
+  }
+
+  // ── STEP 4: Flood ──
+  setStep('flood', 'active');
+  try {
+    const t0 = Date.now();
+    const fRes = await fetch(
+      `https://flood-api.open-meteo.com/v1/flood?latitude=${lat}&longitude=${lon}` +
+      `&daily=river_discharge,river_discharge_max&forecast_days=1`
+    );
+    const fData = await fRes.json();
+    const fd = fData.daily || {};
+    const discharge = fd.river_discharge?.[0] ?? 0;
+    const dischargeMax = fd.river_discharge_max?.[0] ?? 0;
+    result.flood = {
+      oracle: 'Open-Meteo Flood API (GloFAS)',
+      river_discharge: discharge,
+      river_discharge_max: dischargeMax,
+      flood_risk_tier: discharge < 10 ? 'LOW' : discharge < 100 ? 'MODERATE' : discharge < 500 ? 'HIGH' : 'EXTREME',
+      unit: 'm³/s',
+      latency_ms: Date.now() - t0
+    };
+    setStep('flood', 'done');
+  } catch (e) {
+    result.flood = { oracle: 'Open-Meteo Flood API', error: e.message, river_discharge: 0 };
+    setStep('flood', 'error');
+  }
+
+  // ── STEP 5: Air Quality / Fire ──
+  setStep('airquality', 'active');
+  try {
+    const t0 = Date.now();
+    const aqRes = await fetch(
+      `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}` +
+      `&current=pm10,pm2_5,us_aqi,fire_radiative_power` +
+      `&domains=auto`
+    );
+    const aqData = await aqRes.json();
+    const aq = aqData.current || {};
+    const frp = aq.fire_radiative_power ?? 0;
+    result.airquality = {
+      oracle: 'Open-Meteo Air Quality (CAMS)',
+      pm10: aq.pm10,
+      pm2_5: aq.pm2_5,
+      us_aqi: aq.us_aqi,
+      fire_radiative_power: frp,
+      fire_risk: frp < 1 ? 'NONE' : frp < 10 ? 'LOW' : frp < 50 ? 'MODERATE' : frp < 200 ? 'HIGH' : 'EXTREME',
+      latency_ms: Date.now() - t0
+    };
+    setStep('airquality', 'done');
+  } catch (e) {
+    result.airquality = { oracle: 'Open-Meteo Air Quality', error: e.message, fire_radiative_power: 0 };
+    setStep('airquality', 'error');
+  }
+
+  // ── STEP 6: BigDataCloud Reverse Geocode ──
+  setStep('geodata', 'active');
+  try {
+    const t0 = Date.now();
+    const bgRes = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
+    );
+    const bgData = await bgRes.json();
+    result.locality = {
+      oracle: 'BigDataCloud Reverse Geocode',
+      locality: bgData.locality,
+      city: bgData.city,
+      principalSubdivision: bgData.principalSubdivision,
+      countryName: bgData.countryName,
+      countryCode: bgData.countryCode,
+      postcode: bgData.postcode,
+      latency_ms: Date.now() - t0
+    };
+    setStep('geodata', 'done');
+  } catch (e) {
+    result.locality = { oracle: 'BigDataCloud', error: e.message };
+    setStep('geodata', 'error');
+  }
+
+  // ── STEP 7: KERI event ──
+  setStep('keri', 'active');
+  await new Promise(r => setTimeout(r, 300));
+  const digest = 'sha256·' + Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,10);
+  result.keriEvent = {
+    type: 'ixn',
+    aid: 'EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt',
+    sn: keriSn,
+    digest,
+    timestamp: new Date().toISOString()
+  };
+  addKelEvent(`Property oracle query · ${addr.slice(0,40)}`, digest);
+  setStep('keri', 'done');
+
+  // ── RENDER RESULTS ──
+  await new Promise(r => setTimeout(r, 200));
+  document.getElementById('progress-section').classList.remove('visible');
+  renderResults(result);
+
+  currentJson = result;
+  document.getElementById('search-btn').disabled = false;
+  document.getElementById('search-btn-label').textContent = '◈ Analyse';
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function renderResults(d) {
+  const sec = document.getElementById('results-section');
+  sec.classList.add('visible');
+
+  // Address
+  document.getElementById('res-address-line').textContent =
+    d.locality?.locality
+      ? `${d.locality.locality}, ${d.locality.principalSubdivision ?? ''}`
+      : d.geocode?.display_name?.split(',').slice(0,3).join(',') ?? d.address;
+
+  document.getElementById('res-coords').textContent =
+    `${d.geocode.lat.toFixed(5)}, ${d.geocode.lon.toFixed(5)} · ${d.locality?.countryName ?? ''}`;
+
+  // Score
+  const score = computeRiskScore(d);
+  const badge = document.getElementById('res-score-badge');
+  badge.className = 'result-score-badge ' + riskClass(score);
+  document.getElementById('res-score-num').textContent = score;
+  badge.title = riskLabel(score);
+
+  // Map (OpenStreetMap iframe)
+  const mapWrap = document.getElementById('map-wrap');
+  const lat = d.geocode.lat, lon = d.geocode.lon;
+  const bbox = [lon-0.01, lat-0.007, lon+0.01, lat+0.007].join(',');
+  mapWrap.innerHTML = `<iframe class="map-embed"
+    src="https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lon}"
+    allowfullscreen loading="lazy"></iframe>`;
+
+  // Oracle cards
+  const elev = d.elevation?.elevation_m;
+  const elevRisk = d.elevation?.flood_exposure ?? 'UNKNOWN';
+  const wind = d.weather?.wind_speed_10m;
+  const gust = d.weather?.wind_gusts_10m;
+  const precip = d.weather?.precipitation_probability ?? 0;
+  const precipMm = d.weather?.daily_precip_mm ?? 0;
+  const discharge = d.flood?.river_discharge ?? 0;
+  const dischargeMax = d.flood?.river_discharge_max ?? 0;
+  const floodTier = d.flood?.flood_risk_tier ?? '—';
+  const frp = d.airquality?.fire_radiative_power ?? 0;
+  const fireRisk = d.airquality?.fire_risk ?? '—';
+  const aqi = d.airquality?.us_aqi ?? '—';
+  const temp = d.weather?.temperature_2m;
+  const humidity = d.weather?.relative_humidity;
+
+  // elevation fill
+  const elevPct = elev === null || elev === undefined ? 50 :
+    Math.max(0, Math.min(100, 100 - Math.min(elev, 100)));
+
+  // flood fill
+  const floodPct = Math.min(100, (discharge / 500) * 100);
+
+  // fire fill
+  const firePct = Math.min(100, (frp / 200) * 100);
+
+  // wind fill
+  const windPct = Math.min(100, ((wind ?? 0) / 120) * 100);
+
+  const grid = document.getElementById('oracle-grid');
+  grid.innerHTML = `
+
+    <!-- GEOCODE CARD -->
+    <div class="oracle-card">
+      <div class="oracle-card-top"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🗺</div>
+          <div>
+            <div class="oracle-source-name">Nominatim</div>
+            <div class="oracle-source-type">OpenStreetMap</div>
+          </div>
+        </div>
+        <div class="oracle-metric-label">Geocode Confidence</div>
+        <div class="oracle-metric-value">${(d.geocode.importance * 100).toFixed(0)}<span style="font-size:14px;color:var(--muted)">%</span></div>
+        <div class="oracle-rows">
+          <div class="oracle-row"><span class="ok">Latitude</span><span class="ov">${d.geocode.lat.toFixed(5)}°</span></div>
+          <div class="oracle-row"><span class="ok">Longitude</span><span class="ov">${d.geocode.lon.toFixed(5)}°</span></div>
+          <div class="oracle-row"><span class="ok">OSM Type</span><span class="ov">${d.geocode.osm_type}</span></div>
+          <div class="oracle-row"><span class="ok">Country</span><span class="ov">${d.locality?.countryCode ?? '—'}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${d.geocode.latency_ms}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ELEVATION CARD -->
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${elevRisk==='EXTREME'?'var(--red)':elevRisk==='VERY HIGH'?'var(--red)':elevRisk==='HIGH'?'var(--amber)':elevRisk==='MODERATE'?'var(--amber)':'var(--green)'}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🏔</div>
+          <div>
+            <div class="oracle-source-name">Open-Meteo DEM</div>
+            <div class="oracle-source-type">ESA Copernicus 90m</div>
+          </div>
+        </div>
+        <div class="oracle-metric-label">Ground Elevation</div>
+        <div class="oracle-metric-value">${elev !== null && elev !== undefined ? elev.toFixed(1) : '—'}<span style="font-size:14px;color:var(--muted)">m</span></div>
+        <div class="oracle-metric-unit">Flood exposure: <strong style="color:${elevRisk==='EXTREME'||elevRisk==='VERY HIGH'?'var(--red)':elevRisk==='HIGH'||elevRisk==='MODERATE'?'var(--amber)':'var(--green)'}">${elevRisk}</strong></div>
+        <div class="oracle-risk-bar" style="margin-top:12px">
+          <div class="oracle-risk-fill" style="width:${elevPct}%;background:${riskColor(elevPct)}"></div>
+        </div>
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">Below 5m ASL</span><span class="ov ${elev!==null&&elev<5?'red':'green'}">${elev!==null&&elev<5?'YES ⚠':'NO ✓'}</span></div>
+          <div class="oracle-row"><span class="ok">Below 10m ASL</span><span class="ov ${elev!==null&&elev<10?'amber':'green'}">${elev!==null&&elev<10?'YES':'NO'}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${d.elevation?.latency_ms ?? '—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEATHER CARD -->
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${windPct>60?'var(--red)':windPct>30?'var(--amber)':'var(--green)'}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🌤</div>
+          <div>
+            <div class="oracle-source-name">Open-Meteo</div>
+            <div class="oracle-source-type">BOM / NOAA forecast</div>
+          </div>
+        </div>
+        <div class="oracle-metric-label">Wind Speed (Current)</div>
+        <div class="oracle-metric-value">${wind !== undefined ? wind : '—'}<span style="font-size:14px;color:var(--muted)"> km/h</span></div>
+        <div class="oracle-risk-bar" style="margin-top:8px">
+          <div class="oracle-risk-fill" style="width:${windPct}%;background:${riskColor(windPct)}"></div>
+        </div>
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">Wind Gusts</span><span class="ov">${gust ?? '—'} km/h</span></div>
+          <div class="oracle-row"><span class="ok">Precip Probability</span><span class="ov ${precip>60?'red':precip>30?'amber':'green'}">${precip}%</span></div>
+          <div class="oracle-row"><span class="ok">Daily Precip</span><span class="ov">${precipMm !== null ? precipMm+'mm' : '—'}</span></div>
+          <div class="oracle-row"><span class="ok">Temperature</span><span class="ov">${temp ?? '—'}°C</span></div>
+          <div class="oracle-row"><span class="ok">Humidity</span><span class="ov">${humidity ?? '—'}%</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${d.weather?.latency_ms ?? '—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOOD CARD -->
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${floodTier==='EXTREME'?'var(--red)':floodTier==='HIGH'?'var(--red)':floodTier==='MODERATE'?'var(--amber)':'var(--green)'}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🌊</div>
+          <div>
+            <div class="oracle-source-name">Open-Meteo Flood</div>
+            <div class="oracle-source-type">GloFAS River Model</div>
+          </div>
+        </div>
+        <div class="oracle-metric-label">River Discharge</div>
+        <div class="oracle-metric-value">${discharge.toFixed(1)}<span style="font-size:13px;color:var(--muted)"> m³/s</span></div>
+        <div class="oracle-metric-unit">Flood tier: <strong style="color:${floodTier==='EXTREME'||floodTier==='HIGH'?'var(--red)':floodTier==='MODERATE'?'var(--amber)':'var(--green)'}">${floodTier}</strong></div>
+        <div class="oracle-risk-bar" style="margin-top:10px">
+          <div class="oracle-risk-fill" style="width:${floodPct}%;background:${riskColor(floodPct)}"></div>
+        </div>
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">Max Discharge</span><span class="ov">${dischargeMax.toFixed(1)} m³/s</span></div>
+          <div class="oracle-row"><span class="ok">Discharge &gt; 500</span><span class="ov ${discharge>500?'red':'green'}">${discharge>500?'YES ⚠':'NO ✓'}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${d.flood?.latency_ms ?? '—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- AIR QUALITY / FIRE CARD -->
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${firePct>40?'var(--red)':firePct>15?'var(--amber)':'var(--green)'}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🔥</div>
+          <div>
+            <div class="oracle-source-name">Open-Meteo AQ</div>
+            <div class="oracle-source-type">CAMS Fire Index</div>
+          </div>
+        </div>
+        <div class="oracle-metric-label">Fire Radiative Power</div>
+        <div class="oracle-metric-value">${frp.toFixed(1)}<span style="font-size:13px;color:var(--muted)"> MW/km²</span></div>
+        <div class="oracle-metric-unit">Fire risk: <strong style="color:${firePct>40?'var(--red)':firePct>15?'var(--amber)':'var(--green)'}">${fireRisk}</strong></div>
+        <div class="oracle-risk-bar" style="margin-top:10px">
+          <div class="oracle-risk-fill" style="width:${firePct}%;background:${riskColor(firePct)}"></div>
+        </div>
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">US AQI</span><span class="ov ${aqi>150?'red':aqi>100?'amber':'green'}">${aqi}</span></div>
+          <div class="oracle-row"><span class="ok">PM10</span><span class="ov">${d.airquality?.pm10 ?? '—'} µg/m³</span></div>
+          <div class="oracle-row"><span class="ok">PM2.5</span><span class="ov">${d.airquality?.pm2_5 ?? '—'} µg/m³</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${d.airquality?.latency_ms ?? '—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOCALITY CARD -->
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:var(--blue)"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">📍</div>
+          <div>
+            <div class="oracle-source-name">BigDataCloud</div>
+            <div class="oracle-source-type">Reverse Geocode</div>
+          </div>
+        </div>
+        <div class="oracle-metric-label">Locality</div>
+        <div class="oracle-metric-value" style="font-size:16px;line-height:1.3">${d.locality?.locality ?? d.locality?.city ?? '—'}</div>
+        <div class="oracle-rows" style="margin-top:12px">
+          <div class="oracle-row"><span class="ok">State / Province</span><span class="ov">${d.locality?.principalSubdivision ?? '—'}</span></div>
+          <div class="oracle-row"><span class="ok">Country</span><span class="ov">${d.locality?.countryName ?? '—'}</span></div>
+          <div class="oracle-row"><span class="ok">Postcode</span><span class="ov">${d.locality?.postcode ?? '—'}</span></div>
+          <div class="oracle-row"><span class="ok">Country Code</span><span class="ov">${d.locality?.countryCode ?? '—'}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${d.locality?.latency_ms ?? '—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+  `;
+
+  // JSON panel
+  document.getElementById('json-body').innerHTML = syntaxHighlight(d);
+
+  sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>

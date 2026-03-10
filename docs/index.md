@@ -12,12 +12,15 @@ title: selfdriven Insure
 - Leverage the [selfdriven Network](https://selfdriven.network) interfaces.
 - [Research](/research)
 
+### Human Interfaces (Prototypes)
+- [Feeds Dashboard](/interfaces/human/feeds)
+- [Property](/interfaces/human/property)
+
 ### References
 - [fida.finance](https://fida.finance)
 - [Ecosystem Research](https://github.com/selfdriven-foundation/selfdriven-ai/tree/main/research/use-case-tests/o4-deep-research/insurance)
 
 ### Related
-
 - [selfdriven.id](https://selfdriven.id) - Identity & Trust
 - [skillzeb.io](https://skillzeb.io) - templates
 - [selfdriven.ai](https://selfdriven.ai)
