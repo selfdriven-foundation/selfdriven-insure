@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -377,22 +382,54 @@ function isNonUsVin(vin) {
   return !/^[1-5]/.test(first);
 }
 
-// Decode model year from VIN position 10
+// Decode model year from VIN position 10 (index 9)
+// Letters A-Y (excl I,O,Q,U,Z) cycle: 1980-2000, then 2010-2030
+// Digits 1-9 = 2001-2009
+// Disambiguation: use VIN serial section (positions 12-17) and WMI registration era
+// JMF was registered as a WMI post-2000, so letters A-Y in pos10 = 2010+ cycle
+// General heuristic: if WMI first char is J/W/S/V/Z/etc (non-numeric), and
+// pos10 is a recycled letter, prefer the 2010+ interpretation unless serial
+// digits suggest otherwise (very low serials + old-style WMI = pre-2000)
 function decodeModelYear(vin) {
-  const yearMap = {
-    'A':1980,'B':1981,'C':1982,'D':1983,'E':1984,'F':1985,'G':1986,'H':1987,
-    'J':1988,'K':1989,'L':1990,'M':1991,'N':1992,'P':1993,'R':1994,'S':1995,
-    'T':1996,'V':1997,'W':1998,'X':1999,'Y':2000,
-    '1':2001,'2':2002,'3':2003,'4':2004,'5':2005,'6':2006,'7':2007,'8':2008,'9':2009,
-    'A2':2010,'B2':2011,'C2':2012,'D2':2013,'E2':2014,'F2':2015,'G2':2016,'H2':2017,
-    'J2':2018,'K2':2019,'L2':2020,'M2':2021,'N2':2022,'P2':2023,'R2':2024,'S2':2025
-  };
   const ch = vin[9]?.toUpperCase();
-  // simple single-char lookup (post-2009 reuse letters — good enough for display)
-  for (const [k,v] of Object.entries(yearMap)) {
-    if (k.length === 1 && k === ch) return String(v);
+  if (!ch) return null;
+
+  // Digits unambiguously 2001-2009
+  const digitMap = {'1':2001,'2':2002,'3':2003,'4':2004,'5':2005,'6':2006,'7':2007,'8':2008,'9':2009};
+  if (digitMap[ch]) return String(digitMap[ch]);
+
+  // Letter map — two possible eras
+  const letterFirst = {'A':1980,'B':1981,'C':1982,'D':1983,'E':1984,'F':1985,'G':1986,'H':1987,
+    'J':1988,'K':1989,'L':1990,'M':1991,'N':1992,'P':1993,'R':1994,'S':1995,
+    'T':1996,'V':1997,'W':1998,'X':1999,'Y':2000};
+  const letterSecond = {'A':2010,'B':2011,'C':2012,'D':2013,'E':2014,'F':2015,'G':2016,'H':2017,
+    'J':2018,'K':2019,'L':2020,'M':2021,'N':2022,'P':2023,'R':2024,'S':2025,'T':2026,'V':2027};
+
+  if (!letterFirst[ch]) return null;
+
+  // Disambiguation heuristic:
+  // 1. Extract the serial number (last 6 chars) — very high serials suggest modern production
+  // 2. Check if WMI (first 3 chars) appears in known modern registrations
+  // 3. If the VIN is from a non-US manufacturer, WMIs starting with J (Japan) were
+  //    heavily used post-2000 for export models — prefer 2010+ for ambiguous letters
+  const serial = parseInt(vin.slice(11), 10) || 0;
+  const wmi = vin.slice(0,3).toUpperCase();
+
+  // Known modern WMIs (registered or heavily used post-2005)
+  const modernWmis = ['JMF','JMB','JMY','WBA','WBS','WAU','WAP','WP0','WP1','WDC','WDD',
+    'YV1','YV2','ZAM','ZFF','VF1','VF3','SAL','SAJ'];
+  const isModernWmi = modernWmis.includes(wmi);
+
+  // If serial > 100000 or WMI is in modern list → prefer 2010+ cycle
+  // If serial < 5000 and WMI not in modern list → prefer 1980s cycle
+  if (isModernWmi || serial > 50000) {
+    return letterSecond[ch] ? String(letterSecond[ch]) : String(letterFirst[ch]);
+  } else if (serial < 5000 && !isModernWmi) {
+    return String(letterFirst[ch]);
   }
-  return null;
+
+  // Default for ambiguous cases: prefer 2010+ (most VINs people look up are modern)
+  return letterSecond[ch] ? String(letterSecond[ch]) : String(letterFirst[ch]);
 }
 
 // Decode country from first VIN char
@@ -825,7 +862,10 @@ function renderResults(d) {
           <div class="oracle-row"><span class="ok">Est. Year</span><span class="ov">${vd.ModelYear||'—'}</span></div>
           <div class="oracle-row"><span class="ok">Origin</span><span class="ov">${vd.PlantCountry||decodeCountry(d.vin)}</span></div>
           <div class="oracle-row"><span class="ok">WMI</span><span class="ov" style="font-family:JetBrains Mono,monospace">${d.vin.slice(0,3)}</span></div>
-          <div class="oracle-row"><span class="ok">DB.VIN Record</span><span class="ov amber">Not found</span></div>
+          <div class="oracle-row"><span class="ok">DB.VIN Record</span><span class="ov amber" title="This VIN has no entry in DB.VIN — likely a domestic-market vehicle never registered in a covered region (EU/AUS)">No EU/AUS record</span></div>
+        </div>
+        <div style="margin-top:10px;padding:8px 10px;background:var(--amber-dim);border-radius:8px;font-size:10px;color:var(--amber);line-height:1.5">
+          DB.VIN covers EU & Australian-registered vehicles. A domestic-market vehicle (e.g. Japan-only) with no export history will have no record here — this is expected, not an error.
         </div>
         <div class="oracle-status-row">
           <span class="oracle-tag derived"><div class="oracle-tag-dot"></div>WMI Hint</span>
