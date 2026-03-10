@@ -15,6 +15,7 @@ title: selfdriven Insure
 ### Human Interfaces (Prototypes)
 - [Feeds Dashboard](/interfaces/human/feeds)
 - [Property](/interfaces/human/property)
+- [Motor Vehicle](/interfaces/human/motor-vehicle)
 
 ### References
 - [fida.finance](https://fida.finance)

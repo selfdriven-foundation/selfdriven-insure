@@ -1,0 +1,763 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/property
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png">
+<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<title>Motor Vehicle - selfdriven.insure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f2ed;--surface:#edeae3;--surface2:#e5e1d8;--border:#ddd8ce;
+  --text:#1a1410;--muted:#6b5f52;--muted2:#9e9085;
+  --accent:#c8442f;--accent-dim:rgba(200,68,47,0.10);--accent-strong:rgba(200,68,47,0.18);
+  --card-radius:20px;--shadow:0 4px 24px rgba(0,0,0,0.08);
+  --green:#1a7a4a;--green-dim:rgba(26,122,74,0.12);
+  --amber:#b86800;--amber-dim:rgba(184,104,0,0.12);
+  --red:#c8442f;--red-dim:rgba(200,68,47,0.12);
+  --blue:#1a4a8a;--blue-dim:rgba(26,74,138,0.10);
+  --purple:#5a2a8a;--purple-dim:rgba(90,42,138,0.10);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0a0a0a;--surface:#161616;--surface2:#1e1e1e;--border:#2a2a2a;
+    --text:#f0ede8;--muted:#b0a89e;--muted2:#7a7268;
+    --accent:#e85d4a;--accent-dim:rgba(232,93,74,0.12);--accent-strong:rgba(232,93,74,0.20);
+    --shadow:0 4px 28px rgba(0,0,0,0.5);
+    --green:#2dd47a;--green-dim:rgba(45,212,122,0.12);
+    --amber:#f5a623;--amber-dim:rgba(245,166,35,0.12);
+    --red:#e85d4a;--red-dim:rgba(232,93,74,0.12);
+    --blue:#5b9ef0;--blue-dim:rgba(91,158,240,0.10);
+    --purple:#a07fdc;--purple-dim:rgba(160,127,220,0.10);
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;
+  background:color-mix(in srgb,var(--bg) 85%,transparent);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-logo{width:30px;height:30px;border-radius:8px;overflow:hidden;flex-shrink:0;}
+.nav-logo img{width:100%;height:100%;display:block;}
+.nav-title{font-size:15px;font-weight:700;letter-spacing:-0.02em;}
+.nav-title span{color:var(--accent);}
+.nav-meta{display:flex;align-items:center;gap:14px;}
+.live-badge{
+  display:flex;align-items:center;gap:6px;padding:4px 12px;
+  background:var(--green-dim);border:1px solid var(--green);border-radius:999px;
+  font-size:11px;font-weight:600;color:var(--green);font-family:JetBrains Mono,monospace;
+}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.keri-btn{
+  display:flex;align-items:center;gap:6px;padding:5px 14px;
+  background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  font-family:JetBrains Mono,monospace;font-size:11px;font-weight:600;color:var(--muted);
+  cursor:pointer;transition:all 0.15s;
+}
+.keri-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+.container{max-width:1200px;margin:0 auto;padding:32px 24px 60px;}
+
+.search-hero{text-align:center;margin-bottom:36px;}
+.search-hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.search-hero h1{font-size:36px;font-weight:900;letter-spacing:-0.04em;color:var(--text);line-height:1.15;margin-bottom:8px;}
+.search-hero h1 em{color:var(--accent);font-style:normal;}
+.search-hero p{font-size:14px;color:var(--muted);max-width:540px;margin:0 auto 28px;line-height:1.7;}
+
+.search-box{
+  display:flex;max-width:680px;margin:0 auto;
+  background:var(--surface);border:2px solid var(--border);border-radius:16px;
+  overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s;
+}
+.search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-dim);}
+.search-input{
+  flex:1;padding:16px 20px;background:transparent;border:none;outline:none;
+  font-family:Poppins,sans-serif;font-size:15px;color:var(--text);
+  text-transform:uppercase;letter-spacing:0.05em;
+}
+.search-input::placeholder{color:var(--muted2);text-transform:none;letter-spacing:normal;}
+.search-btn{
+  padding:12px 28px;background:var(--accent);border:none;border-radius:12px;margin:6px;
+  font-family:Poppins,sans-serif;font-size:14px;font-weight:700;color:white;
+  cursor:pointer;transition:all 0.15s;white-space:nowrap;
+}
+.search-btn:hover:not(:disabled){opacity:0.88;transform:scale(0.98);}
+.search-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+.example-addresses{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
+.example-label{font-size:11px;color:var(--muted2);}
+.example-chip{
+  padding:4px 12px;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  font-size:11px;color:var(--muted);cursor:pointer;transition:all 0.15s;
+}
+.example-chip:hover{border-color:var(--accent);color:var(--accent);}
+
+.progress-section{display:none;max-width:680px;margin:0 auto 32px;}
+.progress-section.visible{display:block;}
+.progress-steps{
+  display:flex;flex-direction:column;gap:6px;
+  padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:16px;
+}
+.progress-step{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);transition:color 0.2s;}
+.progress-step.active{color:var(--text);font-weight:600;}
+.progress-step.done{color:var(--green);}
+.progress-step.error{color:var(--red);}
+.step-icon{
+  width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;background:var(--surface2);color:var(--muted);
+}
+.progress-step.active .step-icon{background:var(--accent-dim);color:var(--accent);animation:spinPulse 1s ease infinite;}
+@keyframes spinPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.progress-step.done .step-icon{background:var(--green-dim);color:var(--green);}
+.progress-step.error .step-icon{background:var(--red-dim);color:var(--red);}
+
+.results-section{display:none;}
+.results-section.visible{display:block;}
+
+.result-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;}
+.result-address .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+.result-address h2{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.2;}
+.result-address .sub{font-size:13px;color:var(--muted);font-family:JetBrains Mono,monospace;margin-top:4px;}
+.result-score-badge{
+  flex-shrink:0;width:80px;height:80px;border-radius:18px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:JetBrains Mono,monospace;border:2px solid;
+}
+.result-score-badge .score-num{font-size:28px;font-weight:700;line-height:1;}
+.result-score-badge .score-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;}
+.score-low{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.score-med{background:var(--amber-dim);border-color:var(--amber);color:var(--amber);}
+.score-high{background:var(--red-dim);border-color:var(--red);color:var(--red);}
+
+.vin-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:20px;}
+.vin-hero-top{height:4px;background:var(--accent);}
+.vin-hero-body{padding:20px 24px;}
+.vin-decoded-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+.vin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:4px;}
+@media(max-width:700px){.vin-grid{grid-template-columns:1fr 1fr;}}
+.vin-field .vf-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.vin-field .vf-value{font-size:14px;font-weight:700;color:var(--text);line-height:1.2;}
+
+.oracle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+@media(max-width:780px){.oracle-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.oracle-grid{grid-template-columns:1fr;}}
+
+.oracle-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--card-radius);overflow:hidden;
+  transition:box-shadow 0.2s,transform 0.2s;
+}
+.oracle-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.oracle-card-top{height:4px;background:var(--accent);}
+.oracle-card-body{padding:16px 18px;}
+.oracle-source{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.oracle-source-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--surface2);}
+.oracle-source-name{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+.oracle-source-type{font-size:11px;color:var(--muted);}
+.oracle-metric-label{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500;}
+.oracle-metric-value{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.1;}
+.oracle-risk-bar{margin-top:10px;height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;}
+.oracle-risk-fill{height:100%;border-radius:3px;transition:width 1s ease;}
+.oracle-rows{margin-top:10px;}
+.oracle-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.oracle-row:last-child{border-bottom:none;}
+.oracle-row .ok{color:var(--muted);font-weight:500;flex-shrink:0;margin-right:8px;}
+.oracle-row .ov{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--text);text-align:right;word-break:break-word;}
+.oracle-row .ov.green{color:var(--green);}
+.oracle-row .ov.amber{color:var(--amber);}
+.oracle-row .ov.red{color:var(--red);}
+.oracle-status-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);}
+.oracle-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;}
+.oracle-tag.live{background:var(--green-dim);color:var(--green);}
+.oracle-tag.derived{background:var(--blue-dim);color:var(--blue);}
+.oracle-tag-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.oracle-latency{font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted2);}
+
+.recall-alert{
+  display:none;margin-bottom:20px;padding:16px 20px;
+  background:var(--red-dim);border:1px solid var(--red);border-radius:16px;
+}
+.recall-alert.visible{display:block;}
+.recall-alert-title{font-size:14px;font-weight:700;color:var(--red);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.recall-item{font-size:12px;color:var(--text);padding:8px 0;border-bottom:1px solid var(--border);line-height:1.5;}
+.recall-item:last-child{border-bottom:none;}
+.recall-item strong{color:var(--red);}
+
+.bottom-grid{display:grid;grid-template-columns:1fr 380px;gap:16px;}
+@media(max-width:780px){.bottom-grid{grid-template-columns:1fr;}}
+
+.json-panel,.kel-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;}
+.panel-hdr{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.panel-hdr-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.copy-btn{
+  padding:4px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);
+  font-family:Poppins,sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s;
+}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+.json-body{
+  padding:16px 18px;font-family:JetBrains Mono,monospace;font-size:11px;line-height:1.8;
+  max-height:380px;overflow-y:auto;color:var(--text);white-space:pre-wrap;word-break:break-word;
+}
+.json-body .jk{color:var(--accent);}
+.json-body .js{color:var(--green);}
+.json-body .jn{color:var(--blue);}
+.json-body .jb{color:var(--amber);}
+
+.kel-event{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:11px;}
+.kel-event:last-child{border-bottom:none;}
+.kel-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.kel-dot.icp{background:var(--accent);}
+.kel-dot.ixn{background:var(--green);}
+.kel-type{font-family:JetBrains Mono,monospace;font-weight:700;color:var(--accent);font-size:10px;}
+.kel-desc{color:var(--muted);margin-top:1px;line-height:1.4;}
+.kel-digest{font-family:JetBrains Mono,monospace;font-size:9px;color:var(--muted2);margin-top:3px;word-break:break-all;}
+.kel-time{margin-left:auto;flex-shrink:0;font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted2);}
+
+.error-banner{
+  display:none;padding:14px 18px;background:var(--red-dim);
+  border:1px solid var(--red);border-radius:14px;color:var(--red);
+  font-size:13px;font-weight:500;margin-bottom:20px;
+}
+.error-banner.visible{display:block;}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo"><img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAMgAyADASIAAhEBAxEB/8QAHAABAQEBAAMBAQAAAAAAAAAAAAIBBwUGCAQD/8QAPBABAAIBAwIDAwgLAAICAwAAAAECAwQFEQZRITFhB0GyEiI1NnF0gZMTFhcjMlNVYnPR8DORFUJSobH/xAAbAQEAAwEBAQEAAAAAAAAAAAAAAQUGAgQDB//EADQRAQABAgMDCAoDAQEAAAAAAAABAhEDBAUxUeESEyEyQXGxwQYVFiIzUmGBkaEjNEJDFP/aAAwDAQACEQMRAD8A/kA/On7cAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADxu/btg2rTfKtxfNaP3ePnz9Z9H69vy2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" alt="selfdriven"></div>
+    <span class="nav-title">selfdriven<span>.insure</span></span>
+  </div>
+  <div class="nav-meta">
+    <div class="live-badge"><div class="live-dot"></div>Live Oracle Feed</div>
+    <div class="keri-btn">🔐 EKE4g…kqt</div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="search-hero">
+    <div class="eyebrow">Motor Vehicle Risk Intelligence</div>
+    <h1>Real-time oracle lookup<br>for any <em>VIN</em></h1>
+    <p>Decodes any 17-character VIN against NHTSA vPIC (130+ fields), pulls live safety recalls, owner complaint counts, and NCAP crash ratings — anchored to your KERI identity.</p>
+
+    <div class="search-box">
+      <input class="search-input" id="vin-input" type="text" maxlength="17"
+        placeholder="Enter 17-character VIN (e.g. 1HGBH41JXMN109186)"
+        oninput="this.value=this.value.toUpperCase()"
+        onkeydown="if(event.key==='Enter')lookupVin()" />
+      <button class="search-btn" id="search-btn" onclick="lookupVin()">
+        <span id="search-btn-label">◈ Analyse</span>
+      </button>
+    </div>
+
+    <div class="example-addresses">
+      <span class="example-label">Try:</span>
+      <span class="example-chip" onclick="fillAndRun('1HGBH41JXMN109186')">Honda Civic</span>
+      <span class="example-chip" onclick="fillAndRun('1FA6P8TH5J5100001')">Ford Mustang</span>
+      <span class="example-chip" onclick="fillAndRun('5YJ3E1EA7JF006239')">Tesla Model 3</span>
+      <span class="example-chip" onclick="fillAndRun('WBA3A5C51CF256651')">BMW 3 Series</span>
+      <span class="example-chip" onclick="fillAndRun('1FTEW1EF3GKE12345')">Ford F-150</span>
+      <span class="example-chip" onclick="fillAndRun('JTDKARFP5J3083618')">Toyota Prius</span>
+    </div>
+  </div>
+
+  <div class="error-banner" id="error-banner"></div>
+
+  <div class="progress-section" id="progress-section">
+    <div class="progress-steps">
+      <div class="progress-step" id="step-vin">
+        <div class="step-icon" id="si-vin">1</div>
+        <span>Decoding VIN via NHTSA vPIC — 130+ vehicle variables…</span>
+      </div>
+      <div class="progress-step" id="step-recalls">
+        <div class="step-icon" id="si-recalls">2</div>
+        <span>Checking live safety recalls — NHTSA ODI database…</span>
+      </div>
+      <div class="progress-step" id="step-complaints">
+        <div class="step-icon" id="si-complaints">3</div>
+        <span>Fetching owner complaints — NHTSA VOQ database…</span>
+      </div>
+      <div class="progress-step" id="step-ratings">
+        <div class="step-icon" id="si-ratings">4</div>
+        <span>Looking up NCAP crash safety ratings — NHTSA…</span>
+      </div>
+      <div class="progress-step" id="step-keri">
+        <div class="step-icon" id="si-keri">5</div>
+        <span>Logging KERI interaction event to KEL…</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-section" id="results-section">
+
+    <div class="result-header">
+      <div class="result-address">
+        <div class="eyebrow">Motor Vehicle Risk Report</div>
+        <h2 id="res-vehicle-line">—</h2>
+        <div class="sub" id="res-vin-line">—</div>
+      </div>
+      <div class="result-score-badge" id="res-score-badge">
+        <div class="score-num" id="res-score-num">—</div>
+        <div class="score-label">Risk Score</div>
+      </div>
+    </div>
+
+    <div class="vin-hero">
+      <div class="vin-hero-top"></div>
+      <div class="vin-hero-body">
+        <div class="vin-decoded-label">VIN Decoded — NHTSA vPIC</div>
+        <div class="vin-grid" id="vin-grid"></div>
+      </div>
+    </div>
+
+    <div class="recall-alert" id="recall-alert">
+      <div class="recall-alert-title">⚠ Active Safety Recalls</div>
+      <div id="recall-list"></div>
+    </div>
+
+    <div class="oracle-grid" id="oracle-grid"></div>
+
+    <div class="bottom-grid">
+      <div class="json-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">◈ Composite Oracle Response</div>
+          <button class="copy-btn" onclick="copyJson()">Copy JSON</button>
+        </div>
+        <div class="json-body" id="json-body">—</div>
+      </div>
+      <div class="kel-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">🔐 Key Event Log (KEL)</div>
+        </div>
+        <div id="kel-events">
+          <div class="kel-event">
+            <div class="kel-dot icp"></div>
+            <div>
+              <div class="kel-type">icp — Inception</div>
+              <div class="kel-desc">AID established · 3 witnesses · sn:0</div>
+              <div class="kel-digest">sha256·a3f8c9d1e4b2770f92ab34cd56ef78</div>
+            </div>
+            <div class="kel-time">session</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let keriSn = 1, currentJson = null;
+
+function setStep(id, state) {
+  document.getElementById('step-' + id).className = 'progress-step ' + state;
+  const icon = document.getElementById('si-' + id);
+  if (state === 'done')  icon.textContent = '✓';
+  if (state === 'error') icon.textContent = '✕';
+  if (state === 'active') icon.textContent = '⟳';
+}
+
+function showError(msg) {
+  document.getElementById('error-banner').textContent = '⚠ ' + msg;
+  document.getElementById('error-banner').classList.add('visible');
+  document.getElementById('search-btn').disabled = false;
+  document.getElementById('search-btn-label').textContent = '◈ Analyse';
+  document.getElementById('progress-section').classList.remove('visible');
+}
+
+function syntaxHighlight(obj) {
+  const json = JSON.stringify(obj, null, 2);
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m => {
+    let cls = 'jn';
+    if (/^"/.test(m)) cls = /:$/.test(m) ? 'jk' : 'js';
+    else if (/true|false/.test(m)) cls = 'jb';
+    return `<span class="${cls}">${m}</span>`;
+  });
+}
+
+function addKelEvent(desc, digest) {
+  const time = new Date().toTimeString().slice(0,8);
+  const events = document.getElementById('kel-events');
+  const el = document.createElement('div');
+  el.className = 'kel-event';
+  el.innerHTML = `
+    <div class="kel-dot ixn"></div>
+    <div>
+      <div class="kel-type">ixn — Interaction · sn:${keriSn}</div>
+      <div class="kel-desc">${desc}</div>
+      <div class="kel-digest">${digest}</div>
+    </div>
+    <div class="kel-time">${time}</div>`;
+  events.insertBefore(el, events.firstChild);
+  keriSn++;
+}
+
+function riskClass(s) { return s < 33 ? 'score-low' : s < 66 ? 'score-med' : 'score-high'; }
+function riskColor(p) { return p < 33 ? 'var(--green)' : p < 66 ? 'var(--amber)' : 'var(--red)'; }
+
+function copyJson() {
+  if (!currentJson) return;
+  navigator.clipboard.writeText(JSON.stringify(currentJson, null, 2))
+    .then(() => { const b = document.querySelector('.copy-btn'); b.textContent = 'Copied!'; setTimeout(() => b.textContent = 'Copy JSON', 1500); });
+}
+
+function fillAndRun(vin) {
+  document.getElementById('vin-input').value = vin;
+  lookupVin();
+}
+
+function computeRiskScore(d) {
+  let score = 20;
+  score += Math.min(40, (d.recalls?.Count ?? 0) * 8);
+  score += Math.min(20, Math.round((d.complaints?.Count ?? 0) / 5));
+  const yr = d.vin_decoded?.ModelYear ? parseInt(d.vin_decoded.ModelYear) : 0;
+  if (yr > 0) score += Math.min(15, new Date().getFullYear() - yr);
+  if (d.vin_decoded?.FuelTypePrimary?.toLowerCase().includes('electric')) score -= 5;
+  return Math.min(99, Math.max(5, Math.round(score)));
+}
+
+async function lookupVin() {
+  const vin = document.getElementById('vin-input').value.trim().toUpperCase();
+  if (vin.length < 11) { showError('Please enter at least 11 characters of a valid VIN.'); return; }
+
+  document.getElementById('error-banner').classList.remove('visible');
+  document.getElementById('progress-section').classList.add('visible');
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('recall-alert').classList.remove('visible');
+  document.getElementById('search-btn').disabled = true;
+  document.getElementById('search-btn-label').textContent = '⏳ Querying…';
+  ['vin','recalls','complaints','ratings','keri'].forEach((s,i) => {
+    document.getElementById('step-'+s).className = 'progress-step';
+    document.getElementById('si-'+s).textContent = String(i+1);
+  });
+
+  const result = { vin, timestamp: new Date().toISOString() };
+
+  // ── 1: VIN Decode ──
+  setStep('vin','active');
+  let make='', model='', year='';
+  try {
+    const t0 = Date.now();
+    const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`);
+    const data = await res.json();
+    const r = data.Results?.[0] ?? {};
+    make = r.Make || ''; model = r.Model || ''; year = r.ModelYear || '';
+    result.vin_decoded = {
+      oracle:'NHTSA vPIC', VIN:vin,
+      Make:r.Make||null, Model:r.Model||null, ModelYear:r.ModelYear||null,
+      VehicleType:r.VehicleType||null, BodyClass:r.BodyClass||null,
+      DriveType:r.DriveType||null, EngineCylinders:r.EngineCylinders||null,
+      EngineDisplacementL:r.DisplacementL||null, FuelTypePrimary:r.FuelTypePrimary||null,
+      TransmissionStyle:r.TransmissionStyle||null, Doors:r.Doors||null,
+      Seats:r.Seats||null, GVWR:r.GVWR||null,
+      PlantCity:r.PlantCity||null, PlantCountry:r.PlantCountry||null,
+      Manufacturer:r.Manufacturer||null, Series:r.Series||null, Trim:r.Trim||null,
+      ErrorText:r.ErrorText||null, latency_ms:Date.now()-t0
+    };
+    setStep('vin','done');
+  } catch(e) { setStep('vin','error'); return showError('VIN decode failed: ' + e.message); }
+
+  // ── 2: Recalls ──
+  setStep('recalls','active');
+  try {
+    const t0 = Date.now();
+    const res = await fetch(`https://api.nhtsa.gov/recalls/recallsByVehicle?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}&modelYear=${year}`);
+    const data = await res.json();
+    const recalls = data.results ?? [];
+    result.recalls = {
+      oracle:'NHTSA ODI Recalls', Count:recalls.length,
+      Items:recalls.slice(0,6).map(r => ({
+        NHTSACampaignNumber:r.NHTSACampaignNumber,
+        Component:r.Component,
+        Summary:(r.Summary||'').slice(0,200),
+        Consequence:(r.Consequence||'').slice(0,150),
+        RemedyDescription:(r.RemedyDescription||'').slice(0,150),
+        ReportReceivedDate:r.ReportReceivedDate
+      })),
+      latency_ms:Date.now()-t0
+    };
+    setStep('recalls','done');
+  } catch(e) { result.recalls={oracle:'NHTSA ODI',Count:0,error:e.message}; setStep('recalls','error'); }
+
+  // ── 3: Complaints ──
+  setStep('complaints','active');
+  try {
+    const t0 = Date.now();
+    const res = await fetch(`https://api.nhtsa.gov/complaints/complaintsByVehicle?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}&modelYear=${year}`);
+    const data = await res.json();
+    const complaints = data.results ?? [];
+    const byComp = {};
+    complaints.forEach(c => { const k = c.components||'Unknown'; byComp[k]=(byComp[k]||0)+1; });
+    result.complaints = {
+      oracle:'NHTSA VOQ Complaints', Count:complaints.length,
+      TopComponents:Object.entries(byComp).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k,v])=>({component:k,count:v})),
+      latency_ms:Date.now()-t0
+    };
+    setStep('complaints','done');
+  } catch(e) { result.complaints={oracle:'NHTSA VOQ',Count:0,error:e.message}; setStep('complaints','error'); }
+
+  // ── 4: NCAP Ratings ──
+  setStep('ratings','active');
+  try {
+    const t0 = Date.now();
+    const res = await fetch(`https://api.nhtsa.gov/SafetyRatings/modelyear/${year}/make/${encodeURIComponent(make)}/model/${encodeURIComponent(model)}`);
+    const data = await res.json();
+    const vehicles = data.Results ?? [];
+    let ratings = null;
+    if (vehicles.length > 0) {
+      const vid = vehicles[0].VehicleId;
+      const rRes = await fetch(`https://api.nhtsa.gov/SafetyRatings/VehicleId/${vid}`);
+      const rData = await rRes.json();
+      const r = rData.Results?.[0] ?? {};
+      ratings = {
+        VehicleId:vid, VehicleDescription:r.VehicleDescription,
+        OverallRating:r.OverallRating, OverallFrontCrashRating:r.OverallFrontCrashRating,
+        OverallSideCrashRating:r.OverallSideCrashRating, RolloverRating:r.RolloverRating,
+        NHTSAElectronicStabilityControl:r.NHTSAElectronicStabilityControl,
+        NHTSAForwardCollisionWarning:r.NHTSAForwardCollisionWarning,
+        NHTSALaneDepartureWarning:r.NHTSALaneDepartureWarning
+      };
+    }
+    result.ncap_ratings = { oracle:'NHTSA NCAP', available:ratings!==null, data:ratings, latency_ms:Date.now()-t0 };
+    setStep('ratings','done');
+  } catch(e) { result.ncap_ratings={oracle:'NHTSA NCAP',available:false,error:e.message}; setStep('ratings','error'); }
+
+  // ── 5: KERI ──
+  setStep('keri','active');
+  await new Promise(r=>setTimeout(r,250));
+  const digest = 'sha256·' + Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,10);
+  result.keriEvent = { type:'ixn', aid:'EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt', sn:keriSn, digest, timestamp:new Date().toISOString() };
+  addKelEvent(`Motor vehicle oracle query · ${vin}`, digest);
+  setStep('keri','done');
+
+  await new Promise(r=>setTimeout(r,200));
+  document.getElementById('progress-section').classList.remove('visible');
+  currentJson = result;
+  renderResults(result);
+  document.getElementById('search-btn').disabled = false;
+  document.getElementById('search-btn-label').textContent = '◈ Analyse';
+}
+
+function renderResults(d) {
+  document.getElementById('results-section').classList.add('visible');
+  const vd = d.vin_decoded || {};
+  const label = [vd.ModelYear, vd.Make, vd.Model].filter(Boolean).join(' ') || d.vin;
+  document.getElementById('res-vehicle-line').textContent = label;
+  document.getElementById('res-vin-line').textContent = `VIN: ${d.vin} · ${vd.Manufacturer||''}`;
+
+  const score = computeRiskScore(d);
+  const badge = document.getElementById('res-score-badge');
+  badge.className = 'result-score-badge ' + riskClass(score);
+  document.getElementById('res-score-num').textContent = score;
+
+  // VIN fields
+  const vinFields = [
+    {label:'Make', value:vd.Make}, {label:'Model', value:vd.Model},
+    {label:'Year', value:vd.ModelYear}, {label:'Body Class', value:vd.BodyClass},
+    {label:'Vehicle Type', value:vd.VehicleType}, {label:'Drive Type', value:vd.DriveType},
+    {label:'Fuel Type', value:vd.FuelTypePrimary},
+    {label:'Engine', value:vd.EngineCylinders ? `${vd.EngineCylinders} cyl · ${vd.EngineDisplacementL||'?'}L` : null},
+    {label:'Transmission', value:vd.TransmissionStyle}, {label:'Doors', value:vd.Doors},
+    {label:'Assembly', value:vd.PlantCity ? `${vd.PlantCity}, ${vd.PlantCountry||''}` : null},
+    {label:'Series / Trim', value:[vd.Series,vd.Trim].filter(Boolean).join(' / ')||null},
+  ].filter(f=>f.value);
+  document.getElementById('vin-grid').innerHTML = vinFields.map(f =>
+    `<div class="vin-field"><div class="vf-label">${f.label}</div><div class="vf-value">${f.value}</div></div>`
+  ).join('');
+
+  // Recalls
+  const recalls = d.recalls?.Items ?? [];
+  if (recalls.length > 0) {
+    document.getElementById('recall-alert').classList.add('visible');
+    document.getElementById('recall-list').innerHTML = recalls.map(r =>
+      `<div class="recall-item"><strong>${r.NHTSACampaignNumber}</strong> — ${r.Component}<br>
+       <span style="font-size:11px;color:var(--muted)">${r.Summary||''}</span></div>`
+    ).join('');
+  }
+
+  const recallCount = d.recalls?.Count ?? 0;
+  const complaintCount = d.complaints?.Count ?? 0;
+  const topComps = d.complaints?.TopComponents ?? [];
+  const ncap = d.ncap_ratings?.data;
+  const ratingNum = parseInt(ncap?.OverallRating) || 0;
+  const ratingPct = ratingNum ? (ratingNum/5)*100 : 0;
+  const recallPct = Math.min(100, recallCount*12);
+  const complaintPct = Math.min(100, (complaintCount/200)*100);
+  const thisScore = computeRiskScore(d);
+  const agePenalty = vd.ModelYear ? Math.min(15, new Date().getFullYear()-parseInt(vd.ModelYear)) : 0;
+  const isEV = vd.FuelTypePrimary?.toLowerCase().includes('electric');
+  const tier = thisScore<33?'PREFERRED':thisScore<55?'STANDARD':thisScore<75?'RATED':'NON-STANDARD';
+  const tierColor = thisScore<33?'green':thisScore<55?'amber':'red';
+
+  document.getElementById('oracle-grid').innerHTML = `
+
+    <div class="oracle-card">
+      <div class="oracle-card-top"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🔍</div>
+          <div><div class="oracle-source-name">NHTSA vPIC</div><div class="oracle-source-type">VIN Decoder · 130+ fields</div></div>
+        </div>
+        <div class="oracle-metric-label">Decode Status</div>
+        <div class="oracle-metric-value" style="font-size:16px;color:${vd.ErrorText?.includes('0 - VIN decoded clean')?'var(--green)':'var(--amber)'}">
+          ${vd.ErrorText?.includes('0 - VIN decoded clean')?'✓ Clean':'⚠ Partial'}
+        </div>
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">Manufacturer</span><span class="ov">${(vd.Manufacturer||'—').slice(0,26)}</span></div>
+          <div class="oracle-row"><span class="ok">GVWR Class</span><span class="ov">${vd.GVWR||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Seats</span><span class="ov">${vd.Seats||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Plant Country</span><span class="ov">${vd.PlantCountry||'—'}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${vd.latency_ms||'—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${recallCount>3?'var(--red)':recallCount>0?'var(--amber)':'var(--green)'}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">⚠</div>
+          <div><div class="oracle-source-name">NHTSA ODI</div><div class="oracle-source-type">Safety Recalls</div></div>
+        </div>
+        <div class="oracle-metric-label">Active Recalls</div>
+        <div class="oracle-metric-value" style="color:${recallCount>3?'var(--red)':recallCount>0?'var(--amber)':'var(--green)'}">
+          ${recallCount}<span style="font-size:14px;color:var(--muted)"> recall${recallCount!==1?'s':''}</span>
+        </div>
+        <div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${recallPct}%;background:${riskColor(recallPct)}"></div></div>
+        <div class="oracle-rows" style="margin-top:10px">
+          ${recalls.slice(0,3).map(r=>`
+            <div class="oracle-row">
+              <span class="ok" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px">${(r.Component||'—').slice(0,28)}</span>
+              <span class="ov red">${r.NHTSACampaignNumber}</span>
+            </div>`).join('')||'<div class="oracle-row"><span class="ok">Status</span><span class="ov green">No open recalls ✓</span></div>'}
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${d.recalls?.latency_ms||'—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${complaintCount>100?'var(--red)':complaintCount>20?'var(--amber)':'var(--green)'}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">📋</div>
+          <div><div class="oracle-source-name">NHTSA VOQ</div><div class="oracle-source-type">Owner Complaints</div></div>
+        </div>
+        <div class="oracle-metric-label">Total Complaints</div>
+        <div class="oracle-metric-value" style="color:${complaintCount>100?'var(--red)':complaintCount>20?'var(--amber)':'var(--green)'}">
+          ${complaintCount.toLocaleString()}
+        </div>
+        <div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${complaintPct}%;background:${riskColor(complaintPct)}"></div></div>
+        <div class="oracle-rows" style="margin-top:8px">
+          ${topComps.slice(0,4).map(c=>`
+            <div class="oracle-row">
+              <span class="ok" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px;font-size:11px">${c.component.slice(0,28)}</span>
+              <span class="ov">${c.count}</span>
+            </div>`).join('')||'<div class="oracle-row"><span class="ok">Status</span><span class="ov green">No complaints ✓</span></div>'}
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${d.complaints?.latency_ms||'—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${ratingNum>=4?'var(--green)':ratingNum>=3?'var(--amber)':ratingNum>0?'var(--red)':'var(--border)'}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">⭐</div>
+          <div><div class="oracle-source-name">NHTSA NCAP</div><div class="oracle-source-type">Crash Safety Ratings</div></div>
+        </div>
+        <div class="oracle-metric-label">Overall Safety Rating</div>
+        <div class="oracle-metric-value" style="color:${ratingNum>=4?'var(--green)':ratingNum>=3?'var(--amber)':ratingNum>0?'var(--red)':'var(--muted)'}">
+          ${ratingNum>0?ratingNum+'/5 ★':'N/A'}
+        </div>
+        ${ratingNum>0?`<div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${ratingPct}%;background:${ratingNum>=4?'var(--green)':ratingNum>=3?'var(--amber)':'var(--red)'}"></div></div>`:''}
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">Front Crash</span><span class="ov">${ncap?.OverallFrontCrashRating||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Side Crash</span><span class="ov">${ncap?.OverallSideCrashRating||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Rollover</span><span class="ov">${ncap?.RolloverRating||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">ESC</span>
+            <span class="ov ${ncap?.NHTSAElectronicStabilityControl==='Standard'?'green':'amber'}">${ncap?.NHTSAElectronicStabilityControl||'—'}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${d.ncap_ratings?.latency_ms||'—'}ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${riskColor(thisScore)}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">📊</div>
+          <div><div class="oracle-source-name">selfdriven.insure</div><div class="oracle-source-type">Composite Risk Model</div></div>
+        </div>
+        <div class="oracle-metric-label">Insurance Risk Score</div>
+        <div class="oracle-metric-value" style="color:${riskColor(thisScore)}">${thisScore}<span style="font-size:13px;color:var(--muted)">/100</span></div>
+        <div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${thisScore}%;background:${riskColor(thisScore)}"></div></div>
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">Recall Penalty</span><span class="ov ${recallCount>0?'red':'green'}">${recallCount>0?'+'+Math.min(40,recallCount*8):'0'} pts</span></div>
+          <div class="oracle-row"><span class="ok">Complaint Penalty</span><span class="ov">${Math.min(20,Math.round(complaintCount/5))} pts</span></div>
+          <div class="oracle-row"><span class="ok">Age Penalty</span><span class="ov">${agePenalty} pts</span></div>
+          <div class="oracle-row"><span class="ok">Risk Tier</span><span class="ov ${tierColor}">${tier}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag derived"><div class="oracle-tag-dot"></div>Derived</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:var(--purple)"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🔐</div>
+          <div><div class="oracle-source-name">KERI / ACDC</div><div class="oracle-source-type">Identity & Evidence Chain</div></div>
+        </div>
+        <div class="oracle-metric-label">Event Type</div>
+        <div class="oracle-metric-value" style="font-size:18px">ixn · sn:${d.keriEvent?.sn??'—'}</div>
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">AID</span><span class="ov" style="font-family:JetBrains Mono,monospace;font-size:10px">EKE4g…kqt</span></div>
+          <div class="oracle-row"><span class="ok">Oracles Queried</span><span class="ov">4</span></div>
+          <div class="oracle-row"><span class="ok">Digest</span><span class="ov" style="font-family:JetBrains Mono,monospace;font-size:9px">${(d.keriEvent?.digest||'—').slice(0,22)}…</span></div>
+          <div class="oracle-row"><span class="ok">Anchored</span><span class="ov green">${new Date().toISOString().slice(11,19)} UTC</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Signed</span>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById('json-body').innerHTML = syntaxHighlight(d);
+  document.getElementById('results-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+</body>
+</html>
