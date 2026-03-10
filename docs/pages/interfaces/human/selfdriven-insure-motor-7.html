@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<title>Motor Vehicle - selfdriven.insure - v6</title>
+<title>Motor Vehicle - selfdriven.insure - v7</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -631,7 +636,11 @@ async function lookupVin() {
         try {
           const aiRes = await fetch('https://api.anthropic.com/v1/messages', {
             method:'POST',
-            headers:{'Content-Type':'application/json'},
+            headers:{
+              'Content-Type':'application/json',
+              'anthropic-version':'2023-06-01',
+              'anthropic-dangerous-direct-browser-calls':'true'
+            },
             body: JSON.stringify({
               model: 'claude-sonnet-4-20250514',
               max_tokens: 400,
@@ -695,6 +704,7 @@ Return a JSON object with these fields (use null if genuinely unknown):
           setStep('dbvin','done');
         } catch(aiErr) {
           // Claude call failed — fall back to WMI hints only
+          document.getElementById('step-dbvin-label').textContent = 'Claude AI oracle error: ' + aiErr.message;
           result.dbvin = { oracle:'Claude AI VIN Oracle', error: aiErr.message, latency_ms:Date.now()-t0 };
           if (isPartialDecode(result.vin_decoded)) {
             result.vin_decoded.Make = hintMake;
