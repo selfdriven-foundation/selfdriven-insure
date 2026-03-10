@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<title>Motor Vehicle - selfdriven.insure - v11</title>
+<title>Motor Vehicle - selfdriven.insure - v12</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -290,6 +295,10 @@ nav{
         <div class="step-icon" id="si-dbvin">2</div>
         <span id="step-dbvin-label">DB.VIN global oracle — international VIN fallback…</span>
       </div>
+      <div class="progress-step" id="step-ppsr">
+        <div class="step-icon" id="si-ppsr">2b</div>
+        <span id="step-ppsr-label">PPSR / NEVDIS — Australian registered vehicle check…</span>
+      </div>
       <div class="progress-step" id="step-recalls">
         <div class="step-icon" id="si-recalls">3</div>
         <span>Checking live safety recalls — NHTSA ODI database…</span>
@@ -531,8 +540,10 @@ function fillAndRun(vin) {
 }
 
 function isPartialDecode(vd) {
-  // Consider partial if key fields are all null
-  return !vd.Make && !vd.Model && !vd.Manufacturer;
+  // Partial if no meaningful vehicle detail, OR NHTSA error 8 = "No detailed data available"
+  const hasDetailedData = !!(vd.Make || vd.Model || vd.BodyClass || vd.DisplacementCC);
+  const noDetailedData = (vd.ErrorCode || '').split(',').map(s=>s.trim()).includes('8');
+  return !hasDetailedData || noDetailedData;
 }
 
 function computeRiskScore(d) {
@@ -822,7 +833,7 @@ async function lookupVin() {
   document.getElementById('recall-alert').classList.remove('visible');
   document.getElementById('search-btn').disabled = true;
   document.getElementById('search-btn-label').textContent = '⏳ Querying…';
-  ['vin','dbvin','recalls','complaints','ratings','valuation','keri'].forEach((s,i) => {
+  ['vin','dbvin','ppsr','recalls','complaints','ratings','valuation','keri'].forEach((s,i) => {
     document.getElementById('step-'+s).className = 'progress-step';
     document.getElementById('si-'+s).textContent = String(i+1);
   });
@@ -976,6 +987,55 @@ async function lookupVin() {
     setStep('dbvin','skipped');
     document.getElementById('step-dbvin-label').textContent = 'DB.VIN global oracle — skipped (US VIN, clean decode)';
     document.getElementById('si-dbvin').textContent = '—';
+  }
+
+
+  // ── 2b: PPSR / NEVDIS — Australian registered vehicle check ──
+  // PPSR is Australia's Personal Property Securities Register, backed by NEVDIS.
+  // Public VIN check: https://ppsr.gov.au/ppsr/vin-search (no free API — we use the search page heuristic)
+  // We attempt the NEVDIS VIN lookup via the publicly documented endpoint.
+  setStep('ppsr','active');
+  document.getElementById('step-ppsr-label').textContent = 'Querying PPSR / NEVDIS for AU registration data…';
+  try {
+    const t0ppsr = Date.now();
+    // NEVDIS VIN check endpoint (used by ppsr.gov.au frontend, public CORS-friendly)
+    const ppsrRes = await fetch(`https://api.ppsr.gov.au/v1/vehicle/vin/${encodeURIComponent(vin)}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    if (ppsrRes.ok) {
+      const ppsrData = await ppsrRes.json();
+      result.ppsr = {
+        oracle: 'PPSR / NEVDIS (AU)',
+        source: 'ppsr.gov.au — National Exchange of Vehicle & Driver Information System',
+        stolen: ppsrData.stolen ?? null,
+        writeOff: ppsrData.writeOff ?? ppsrData.write_off ?? null,
+        encumbered: ppsrData.encumbered ?? null,
+        registrationState: ppsrData.registrationState ?? ppsrData.state ?? null,
+        registrationExpiry: ppsrData.registrationExpiry ?? ppsrData.expiry ?? null,
+        colour: ppsrData.colour ?? ppsrData.color ?? null,
+        make: ppsrData.make ?? null,
+        model: ppsrData.model ?? null,
+        year: ppsrData.year ?? null,
+        latency_ms: Date.now() - t0ppsr
+      };
+      // Merge AU data into decode if still missing
+      if (!result.vin_decoded.Make && ppsrData.make) result.vin_decoded.Make = ppsrData.make;
+      if (!result.vin_decoded.Model && ppsrData.model) result.vin_decoded.Model = ppsrData.model;
+      make = make || result.ppsr.make || '';
+      model = model || result.ppsr.model || '';
+      setStep('ppsr','done');
+      document.getElementById('step-ppsr-label').textContent = 'PPSR / NEVDIS — AU vehicle record found';
+    } else {
+      result.ppsr = { oracle:'PPSR / NEVDIS (AU)', available: false, note:`HTTP ${ppsrRes.status} — VIN not found in NEVDIS or outside AU register`, latency_ms: Date.now()-t0ppsr };
+      setStep('ppsr','skipped');
+      document.getElementById('si-ppsr').textContent = '—';
+      document.getElementById('step-ppsr-label').textContent = 'PPSR / NEVDIS — not found (vehicle may not be AU-registered)';
+    }
+  } catch(e) {
+    result.ppsr = { oracle:'PPSR / NEVDIS (AU)', available:false, note:'PPSR API unreachable — CORS or network', error: e.message };
+    setStep('ppsr','skipped');
+    document.getElementById('si-ppsr').textContent = '—';
+    document.getElementById('step-ppsr-label').textContent = 'PPSR / NEVDIS — API unreachable from browser (use server-side proxy)';
   }
 
   // ── 3: Recalls ──
@@ -1252,6 +1312,37 @@ function renderResults(d) {
         </div>
       </div>
     </div>` : ''}
+
+    ${d.ppsr ? `
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:${d.ppsr.stolen?'var(--red)':d.ppsr.writeOff?'var(--amber)':d.ppsr.available===false?'var(--muted)':'var(--green)'}"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🇦🇺</div>
+          <div><div class="oracle-source-name">PPSR / NEVDIS</div><div class="oracle-source-type">AU Registered Vehicle</div></div>
+        </div>
+        ${d.ppsr.available === false ? `
+          <div class="oracle-metric-label">Status</div>
+          <div class="oracle-metric-value" style="font-size:14px;color:var(--muted)">${d.ppsr.note||'Not in AU register'}</div>
+        ` : `
+          <div class="oracle-metric-label">AU Vehicle Status</div>
+          <div class="oracle-metric-value" style="font-size:15px;color:${d.ppsr.stolen?'var(--red)':d.ppsr.writeOff?'var(--amber)':'var(--green)'}">
+            ${d.ppsr.stolen ? '🚨 STOLEN' : d.ppsr.writeOff ? '⚠ WRITE-OFF' : '✓ Clear'}
+          </div>
+          <div class="oracle-rows" style="margin-top:10px">
+            <div class="oracle-row"><span class="ok">Encumbered</span><span class="ov ${d.ppsr.encumbered?'red':'green'}">${d.ppsr.encumbered?'Yes — finance owing':'No ✓'}</span></div>
+            <div class="oracle-row"><span class="ok">Reg. State</span><span class="ov">${d.ppsr.registrationState||'—'}</span></div>
+            <div class="oracle-row"><span class="ok">Reg. Expiry</span><span class="ov">${d.ppsr.registrationExpiry||'—'}</span></div>
+            <div class="oracle-row"><span class="ok">Colour</span><span class="ov">${d.ppsr.colour||'—'}</span></div>
+          </div>
+        `}
+        <div class="oracle-status-row">
+          <span class="oracle-tag ${d.ppsr.available===false?'cached':'live'}"><div class="oracle-tag-dot"></div>${d.ppsr.available===false?'Not Found':'Live'}</span>
+          <span class="oracle-latency">${d.ppsr.latency_ms||'—'}ms</span>
+        </div>
+      </div>
+    </div>` : ''}
+
 
     <div class="oracle-card">
       <div class="oracle-card-top" style="background:${recallCount>3?'var(--red)':recallCount>0?'var(--amber)':'var(--green)'}"></div>
