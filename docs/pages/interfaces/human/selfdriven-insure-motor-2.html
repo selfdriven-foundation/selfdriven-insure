@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,6 +124,8 @@ nav{
 }
 .progress-step.active .step-icon{background:var(--accent-dim);color:var(--accent);animation:spinPulse 1s ease infinite;}
 @keyframes spinPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.progress-step.skipped{color:var(--muted2);}
+.progress-step.skipped .step-icon{background:var(--surface2);color:var(--muted2);}
 .progress-step.done .step-icon{background:var(--green-dim);color:var(--green);}
 .progress-step.error .step-icon{background:var(--red-dim);color:var(--red);}
 
@@ -282,22 +289,26 @@ nav{
     <div class="progress-steps">
       <div class="progress-step" id="step-vin">
         <div class="step-icon" id="si-vin">1</div>
-        <span>Decoding VIN via NHTSA vPIC — 130+ vehicle variables…</span>
+        <span id="step-vin-label">Decoding VIN via NHTSA vPIC — 130+ vehicle variables…</span>
+      </div>
+      <div class="progress-step" id="step-dbvin">
+        <div class="step-icon" id="si-dbvin">2</div>
+        <span id="step-dbvin-label">DB.VIN global oracle — international VIN fallback…</span>
       </div>
       <div class="progress-step" id="step-recalls">
-        <div class="step-icon" id="si-recalls">2</div>
+        <div class="step-icon" id="si-recalls">3</div>
         <span>Checking live safety recalls — NHTSA ODI database…</span>
       </div>
       <div class="progress-step" id="step-complaints">
-        <div class="step-icon" id="si-complaints">3</div>
+        <div class="step-icon" id="si-complaints">4</div>
         <span>Fetching owner complaints — NHTSA VOQ database…</span>
       </div>
       <div class="progress-step" id="step-ratings">
-        <div class="step-icon" id="si-ratings">4</div>
+        <div class="step-icon" id="si-ratings">5</div>
         <span>Looking up NCAP crash safety ratings — NHTSA…</span>
       </div>
       <div class="progress-step" id="step-keri">
-        <div class="step-icon" id="si-keri">5</div>
+        <div class="step-icon" id="si-keri">6</div>
         <span>Logging KERI interaction event to KEL…</span>
       </div>
     </div>
@@ -363,11 +374,74 @@ nav{
 <script>
 let keriSn = 1, currentJson = null;
 
+// Detect if a VIN is likely non-US market based on WMI first character
+// J = Japan, W = Germany, S = UK/Sweden, V = France/Spain, Z = Italy, etc.
+// US/Canada = 1-5
+function isNonUsVin(vin) {
+  const first = vin[0].toUpperCase();
+  return !/^[1-5]/.test(first);
+}
+
+// Decode model year from VIN position 10
+function decodeModelYear(vin) {
+  const yearMap = {
+    'A':1980,'B':1981,'C':1982,'D':1983,'E':1984,'F':1985,'G':1986,'H':1987,
+    'J':1988,'K':1989,'L':1990,'M':1991,'N':1992,'P':1993,'R':1994,'S':1995,
+    'T':1996,'V':1997,'W':1998,'X':1999,'Y':2000,
+    '1':2001,'2':2002,'3':2003,'4':2004,'5':2005,'6':2006,'7':2007,'8':2008,'9':2009,
+    'A2':2010,'B2':2011,'C2':2012,'D2':2013,'E2':2014,'F2':2015,'G2':2016,'H2':2017,
+    'J2':2018,'K2':2019,'L2':2020,'M2':2021,'N2':2022,'P2':2023,'R2':2024,'S2':2025
+  };
+  const ch = vin[9]?.toUpperCase();
+  // simple single-char lookup (post-2009 reuse letters — good enough for display)
+  for (const [k,v] of Object.entries(yearMap)) {
+    if (k.length === 1 && k === ch) return String(v);
+  }
+  return null;
+}
+
+// Decode country from first VIN char
+function decodeCountry(vin) {
+  const map = {
+    'A':'South Africa','B':'Angola/Kenya/Tanzania','C':'Benin/Madagascar',
+    'D':'Egypt','E':'Ethiopia','F':'Ghana','G':'Nigeria','H':'Mozambique',
+    'J':'Japan','K':'South Korea','L':'China','M':'India','N':'Turkey','P':'Philippines',
+    'R':'Taiwan','S':'United Kingdom / Sweden','T':'Switzerland','U':'Denmark/Finland',
+    'V':'France / Spain','W':'Germany','X':'Russia','Y':'Norway / Belgium','Z':'Italy',
+    '1':'United States','2':'Canada','3':'Mexico','4':'United States','5':'United States',
+    '6':'Australia / New Zealand','7':'New Zealand','8':'Argentina','9':'Brazil'
+  };
+  return map[vin[0]?.toUpperCase()] || 'Unknown';
+}
+
+// WMI brand hints for common non-US prefixes
+function wmiHint(vin) {
+  const wmi = vin.slice(0,3).toUpperCase();
+  const hints = {
+    'JMF':'Mitsubishi','JMB':'Mitsubishi','JMY':'Mitsubishi','JMZ':'Mazda',
+    'JT':'Toyota','JH':'Honda','JN':'Nissan','JS':'Suzuki','JA3':'Mitsubishi',
+    'JA4':'Mitsubishi','WBA':'BMW','WBS':'BMW M','WDB':'Mercedes-Benz',
+    'WDC':'Mercedes-Benz','WDD':'Mercedes-Benz','WF0':'Ford Europe',
+    'WVW':'Volkswagen','WV1':'Volkswagen','WV2':'Volkswagen',
+    'WAU':'Audi','WAP':'Porsche','WP0':'Porsche','WP1':'Porsche',
+    'ZAM':'Maserati','ZAR':'Alfa Romeo','ZFF':'Ferrari','ZLA':'Lamborghini',
+    'SAJ':'Jaguar','SAL':'Land Rover','SAR':'Rover','SAD':'Aston Martin',
+    'VF1':'Renault','VF3':'Peugeot','VF7':'Citroën','VNK':'Toyota France',
+    'XTA':'Lada/AvtoVAZ','YV1':'Volvo','YV2':'Volvo','YK1':'Saab',
+    'MAT':'Tata','MA1':'Mahindra','MA3':'Suzuki India','MBH':'Honda India',
+    'NM0':'Ford India','TW1':'Toyota Taiwan',
+    'SHH':'Honda UK','SCC':'Lotus','SCF':'Aston Martin',
+  };
+  // try 3-char then 2-char
+  return hints[wmi] || hints[wmi.slice(0,2)] || null;
+}
+
 function setStep(id, state) {
   document.getElementById('step-' + id).className = 'progress-step ' + state;
   const icon = document.getElementById('si-' + id);
   if (state === 'done')  icon.textContent = '✓';
   if (state === 'error') icon.textContent = '✕';
+  if (state === 'skipped') icon.textContent = '—';
   if (state === 'active') icon.textContent = '⟳';
 }
 
@@ -420,13 +494,20 @@ function fillAndRun(vin) {
   lookupVin();
 }
 
+function isPartialDecode(vd) {
+  // Consider partial if key fields are all null
+  return !vd.Make && !vd.Model && !vd.Manufacturer;
+}
+
 function computeRiskScore(d) {
   let score = 20;
   score += Math.min(40, (d.recalls?.Count ?? 0) * 8);
   score += Math.min(20, Math.round((d.complaints?.Count ?? 0) / 5));
-  const yr = d.vin_decoded?.ModelYear ? parseInt(d.vin_decoded.ModelYear) : 0;
+  const vd = d.vin_decoded || {};
+  const yr = vd.ModelYear ? parseInt(vd.ModelYear) : 0;
   if (yr > 0) score += Math.min(15, new Date().getFullYear() - yr);
-  if (d.vin_decoded?.FuelTypePrimary?.toLowerCase().includes('electric')) score -= 5;
+  const fuel = (vd.FuelTypePrimary || vd.fuelType || '').toLowerCase();
+  if (fuel.includes('electric')) score -= 5;
   return Math.min(99, Math.max(5, Math.round(score)));
 }
 
@@ -440,15 +521,17 @@ async function lookupVin() {
   document.getElementById('recall-alert').classList.remove('visible');
   document.getElementById('search-btn').disabled = true;
   document.getElementById('search-btn-label').textContent = '⏳ Querying…';
-  ['vin','recalls','complaints','ratings','keri'].forEach((s,i) => {
+  ['vin','dbvin','recalls','complaints','ratings','keri'].forEach((s,i) => {
     document.getElementById('step-'+s).className = 'progress-step';
     document.getElementById('si-'+s).textContent = String(i+1);
   });
 
   const result = { vin, timestamp: new Date().toISOString() };
+  const nonUs = isNonUsVin(vin);
 
-  // ── 1: VIN Decode ──
+  // ── 1: NHTSA vPIC VIN Decode ──
   setStep('vin','active');
+  document.getElementById('step-vin-label').textContent = 'Decoding VIN via NHTSA vPIC — 130+ vehicle variables…';
   let make='', model='', year='';
   try {
     const t0 = Date.now();
@@ -471,7 +554,84 @@ async function lookupVin() {
     setStep('vin','done');
   } catch(e) { setStep('vin','error'); return showError('VIN decode failed: ' + e.message); }
 
-  // ── 2: Recalls ──
+  // ── 2: DB.VIN fallback (always try for non-US, or if NHTSA returned partial) ──
+  const needsFallback = nonUs || isPartialDecode(result.vin_decoded);
+  if (needsFallback) {
+    setStep('dbvin','active');
+    document.getElementById('step-dbvin-label').textContent = needsFallback
+      ? 'Non-US VIN detected — querying DB.VIN global oracle…'
+      : 'Enriching with DB.VIN global oracle…';
+    try {
+      const t0 = Date.now();
+      const res = await fetch(`https://db.vin/${vin}`);
+      const dbdata = await res.json();
+      if (dbdata && !dbdata.error) {
+        result.dbvin = {
+          oracle: 'DB.VIN (Global)',
+          brand: dbdata.brand || null,
+          model: dbdata.model || null,
+          year: dbdata.year || null,
+          fuelType: dbdata.fuelType || null,
+          color: dbdata.color || null,
+          bodyType: dbdata.bodyType || null,
+          version: dbdata.version || null,
+          mileage: dbdata.mileage || null,
+          registrationCountry: dbdata.registrationCountry || null,
+          vehicleHistory: dbdata.vehicleHistory || null,
+          latency_ms: Date.now() - t0
+        };
+        // Merge into vin_decoded if NHTSA was partial
+        if (isPartialDecode(result.vin_decoded)) {
+          result.vin_decoded.Make = result.vin_decoded.Make || dbdata.brand || wmiHint(vin);
+          result.vin_decoded.Model = result.vin_decoded.Model || dbdata.model;
+          result.vin_decoded.ModelYear = result.vin_decoded.ModelYear || String(dbdata.year || decodeModelYear(vin) || '');
+          result.vin_decoded.BodyClass = result.vin_decoded.BodyClass || dbdata.bodyType;
+          result.vin_decoded.FuelTypePrimary = result.vin_decoded.FuelTypePrimary || dbdata.fuelType;
+          result.vin_decoded.PlantCountry = result.vin_decoded.PlantCountry || decodeCountry(vin);
+          result.vin_decoded._mergedFromDbVin = true;
+        }
+        // Update make/model/year for downstream queries
+        make = make || result.vin_decoded.Make || '';
+        model = model || result.vin_decoded.Model || '';
+        year = year || result.vin_decoded.ModelYear || '';
+        setStep('dbvin','done');
+      } else {
+        // DB.VIN had no data — use WMI hints + VIN position decoding
+        result.dbvin = { oracle:'DB.VIN (Global)', note:'No record found', latency_ms:Date.now()-t0 };
+        const hintMake = wmiHint(vin);
+        const hintYear = decodeModelYear(vin);
+        const hintCountry = decodeCountry(vin);
+        if (isPartialDecode(result.vin_decoded)) {
+          result.vin_decoded.Make = hintMake;
+          result.vin_decoded.ModelYear = hintYear;
+          result.vin_decoded.PlantCountry = hintCountry;
+          result.vin_decoded._mergedFromWmiHints = true;
+          make = hintMake || ''; year = hintYear || '';
+        }
+        setStep('dbvin','done');
+      }
+    } catch(e) {
+      // Graceful: use WMI hints even if DB.VIN fails
+      const hintMake = wmiHint(vin);
+      const hintYear = decodeModelYear(vin);
+      if (isPartialDecode(result.vin_decoded)) {
+        result.vin_decoded.Make = hintMake;
+        result.vin_decoded.ModelYear = hintYear;
+        result.vin_decoded.PlantCountry = decodeCountry(vin);
+        result.vin_decoded._mergedFromWmiHints = true;
+        make = hintMake || ''; year = hintYear || '';
+      }
+      result.dbvin = { oracle:'DB.VIN (Global)', error: e.message };
+      setStep('dbvin','error');
+    }
+  } else {
+    // US VIN with clean decode — skip DB.VIN
+    setStep('dbvin','skipped');
+    document.getElementById('step-dbvin-label').textContent = 'DB.VIN global oracle — skipped (US VIN, clean decode)';
+    document.getElementById('si-dbvin').textContent = '—';
+  }
+
+  // ── 3: Recalls ──
   setStep('recalls','active');
   try {
     const t0 = Date.now();
@@ -480,6 +640,7 @@ async function lookupVin() {
     const recalls = data.results ?? [];
     result.recalls = {
       oracle:'NHTSA ODI Recalls', Count:recalls.length,
+      note: !make ? 'Make unavailable — recall search skipped' : undefined,
       Items:recalls.slice(0,6).map(r => ({
         NHTSACampaignNumber:r.NHTSACampaignNumber,
         Component:r.Component,
@@ -493,7 +654,7 @@ async function lookupVin() {
     setStep('recalls','done');
   } catch(e) { result.recalls={oracle:'NHTSA ODI',Count:0,error:e.message}; setStep('recalls','error'); }
 
-  // ── 3: Complaints ──
+  // ── 4: Complaints ──
   setStep('complaints','active');
   try {
     const t0 = Date.now();
@@ -510,7 +671,7 @@ async function lookupVin() {
     setStep('complaints','done');
   } catch(e) { result.complaints={oracle:'NHTSA VOQ',Count:0,error:e.message}; setStep('complaints','error'); }
 
-  // ── 4: NCAP Ratings ──
+  // ── 5: NCAP Ratings ──
   setStep('ratings','active');
   try {
     const t0 = Date.now();
@@ -536,12 +697,12 @@ async function lookupVin() {
     setStep('ratings','done');
   } catch(e) { result.ncap_ratings={oracle:'NHTSA NCAP',available:false,error:e.message}; setStep('ratings','error'); }
 
-  // ── 5: KERI ──
+  // ── 6: KERI ──
   setStep('keri','active');
   await new Promise(r=>setTimeout(r,250));
   const digest = 'sha256·' + Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,10);
   result.keriEvent = { type:'ixn', aid:'EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt', sn:keriSn, digest, timestamp:new Date().toISOString() };
-  addKelEvent(`Motor vehicle oracle query · ${vin}`, digest);
+  addKelEvent(`Motor vehicle oracle query · ${vin}${needsFallback?' [global]':''}`, digest);
   setStep('keri','done');
 
   await new Promise(r=>setTimeout(r,200));
@@ -606,28 +767,77 @@ function renderResults(d) {
   document.getElementById('oracle-grid').innerHTML = `
 
     <div class="oracle-card">
-      <div class="oracle-card-top"></div>
+      <div class="oracle-card-top" style="background:${vd._mergedFromDbVin||vd._mergedFromWmiHints?'var(--blue)':'var(--accent)'}"></div>
       <div class="oracle-card-body">
         <div class="oracle-source">
           <div class="oracle-source-icon">🔍</div>
-          <div><div class="oracle-source-name">NHTSA vPIC</div><div class="oracle-source-type">VIN Decoder · 130+ fields</div></div>
+          <div>
+            <div class="oracle-source-name">NHTSA vPIC${vd._mergedFromDbVin?' + DB.VIN':vd._mergedFromWmiHints?' + WMI Hints':''}</div>
+            <div class="oracle-source-type">VIN Decoder${vd._mergedFromDbVin?' · Global fallback applied':vd._mergedFromWmiHints?' · WMI-decoded':' · 130+ fields'}</div>
+          </div>
         </div>
         <div class="oracle-metric-label">Decode Status</div>
-        <div class="oracle-metric-value" style="font-size:16px;color:${vd.ErrorText?.includes('0 - VIN decoded clean')?'var(--green)':'var(--amber)'}">
-          ${vd.ErrorText?.includes('0 - VIN decoded clean')?'✓ Clean':'⚠ Partial'}
+        <div class="oracle-metric-value" style="font-size:15px;color:${vd._mergedFromDbVin||vd._mergedFromWmiHints?'var(--blue)':vd.ErrorText?.includes('0 - VIN decoded clean')?'var(--green)':'var(--amber)'}">
+          ${vd._mergedFromDbVin?'✓ Global merge':vd._mergedFromWmiHints?'✓ WMI decoded':vd.ErrorText?.includes('0 - VIN decoded clean')?'✓ Clean':'⚠ Partial'}
         </div>
         <div class="oracle-rows" style="margin-top:10px">
-          <div class="oracle-row"><span class="ok">Manufacturer</span><span class="ov">${(vd.Manufacturer||'—').slice(0,26)}</span></div>
+          <div class="oracle-row"><span class="ok">Manufacturer</span><span class="ov">${(vd.Manufacturer||vd.Make||'—').slice(0,26)}</span></div>
           <div class="oracle-row"><span class="ok">GVWR Class</span><span class="ov">${vd.GVWR||'—'}</span></div>
           <div class="oracle-row"><span class="ok">Seats</span><span class="ov">${vd.Seats||'—'}</span></div>
           <div class="oracle-row"><span class="ok">Plant Country</span><span class="ov">${vd.PlantCountry||'—'}</span></div>
         </div>
         <div class="oracle-status-row">
-          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-tag ${vd._mergedFromDbVin||vd._mergedFromWmiHints?'derived':'live'}">
+            <div class="oracle-tag-dot"></div>${vd._mergedFromDbVin?'Merged':'Live'}
+          </span>
           <span class="oracle-latency">${vd.latency_ms||'—'}ms</span>
         </div>
       </div>
     </div>
+
+    ${d.dbvin && d.dbvin.brand ? `
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:var(--blue)"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🌏</div>
+          <div><div class="oracle-source-name">DB.VIN</div><div class="oracle-source-type">Global Vehicle Registry</div></div>
+        </div>
+        <div class="oracle-metric-label">Global Record</div>
+        <div class="oracle-metric-value" style="font-size:16px;color:var(--blue)">${d.dbvin.brand||'—'} ${d.dbvin.model||''}</div>
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">Year</span><span class="ov">${d.dbvin.year||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Body Type</span><span class="ov">${d.dbvin.bodyType||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Fuel Type</span><span class="ov">${d.dbvin.fuelType||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Reg. Country</span><span class="ov">${d.dbvin.registrationCountry||'—'}</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag live"><div class="oracle-tag-dot"></div>Live</span>
+          <span class="oracle-latency">${d.dbvin.latency_ms||'—'}ms</span>
+        </div>
+      </div>
+    </div>` : d.dbvin ? `
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:var(--blue)"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">🌏</div>
+          <div><div class="oracle-source-name">DB.VIN</div><div class="oracle-source-type">Global Vehicle Registry</div></div>
+        </div>
+        <div class="oracle-metric-label">WMI Decoded</div>
+        <div class="oracle-metric-value" style="font-size:15px;color:var(--blue)">${vd.Make||'Unknown make'}</div>
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">Est. Year</span><span class="ov">${vd.ModelYear||'—'}</span></div>
+          <div class="oracle-row"><span class="ok">Origin</span><span class="ov">${vd.PlantCountry||decodeCountry(d.vin)}</span></div>
+          <div class="oracle-row"><span class="ok">WMI</span><span class="ov" style="font-family:JetBrains Mono,monospace">${d.vin.slice(0,3)}</span></div>
+          <div class="oracle-row"><span class="ok">DB.VIN Record</span><span class="ov amber">Not found</span></div>
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag derived"><div class="oracle-tag-dot"></div>WMI Hint</span>
+          <span class="oracle-latency">${d.dbvin.latency_ms||'—'}ms</span>
+        </div>
+      </div>
+    </div>` : ''}
 
     <div class="oracle-card">
       <div class="oracle-card-top" style="background:${recallCount>3?'var(--red)':recallCount>0?'var(--amber)':'var(--green)'}"></div>
