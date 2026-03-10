@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<title>Motor Vehicle - selfdriven.insure - v7</title>
+<title>Motor Vehicle - selfdriven.insure - v8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -302,8 +307,12 @@ nav{
         <div class="step-icon" id="si-ratings">5</div>
         <span>Looking up NCAP crash safety ratings — NHTSA…</span>
       </div>
+      <div class="progress-step" id="step-valuation">
+        <div class="step-icon" id="si-valuation">6</div>
+        <span id="step-valuation-label">Querying Australian market valuation oracle…</span>
+      </div>
       <div class="progress-step" id="step-keri">
-        <div class="step-icon" id="si-keri">6</div>
+        <div class="step-icon" id="si-keri">7</div>
         <span>Logging KERI interaction event to KEL…</span>
       </div>
     </div>
@@ -548,7 +557,7 @@ async function lookupVin() {
   document.getElementById('recall-alert').classList.remove('visible');
   document.getElementById('search-btn').disabled = true;
   document.getElementById('search-btn-label').textContent = '⏳ Querying…';
-  ['vin','dbvin','recalls','complaints','ratings','keri'].forEach((s,i) => {
+  ['vin','dbvin','recalls','complaints','ratings','valuation','keri'].forEach((s,i) => {
     document.getElementById('step-'+s).className = 'progress-step';
     document.getElementById('si-'+s).textContent = String(i+1);
   });
@@ -798,7 +807,92 @@ Return a JSON object with these fields (use null if genuinely unknown):
     setStep('ratings','done');
   } catch(e) { result.ncap_ratings={oracle:'NHTSA NCAP',available:false,error:e.message}; setStep('ratings','error'); }
 
-  // ── 6: KERI ──
+  // ── 6: AU Market Valuation (Claude AI Oracle) ──
+  setStep('valuation','active');
+  document.getElementById('step-valuation-label').textContent = 'Querying Claude AI for Australian market valuation…';
+  const valMake = result.vin_decoded?.Make || '';
+  const valModel = result.vin_decoded?.Model || result.dbvin?.model || '';
+  const valYear = result.vin_decoded?.ModelYear || result.dbvin?.year || '';
+  const valBody = result.vin_decoded?.BodyClass || result.dbvin?.bodyType || '';
+  const valEngine = result.vin_decoded?.EngineDisplacementL ? result.vin_decoded.EngineDisplacementL + 'L' : '';
+  const valFuel = result.vin_decoded?.FuelTypePrimary || result.dbvin?.fuelType || '';
+  const valCountry = result.vin_decoded?.PlantCountry || 'Japan';
+  try {
+    const t0val = Date.now();
+    const valRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-calls': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 500,
+        system: 'You are an expert Australian automotive market analyst with deep knowledge of used car prices in the Australian market. You have knowledge of RedBook valuations, carsales.com.au pricing trends, and insurance replacement values. Respond ONLY with a valid JSON object — no markdown, no backticks, no explanation.',
+        messages: [{ role: 'user', content:
+          `Estimate the current Australian market value (AUD) for this vehicle as of 2025/2026:
+Make: ${valMake || 'Mitsubishi'}
+Model: ${valModel || 'unknown'}
+Year: ${valYear}
+Body: ${valBody}
+Engine: ${valEngine}
+Fuel: ${valFuel}
+Origin: ${valCountry}
+Recalls: ${result.recalls?.Count ?? 0}
+NHTSA Complaints: ${result.complaints?.Count ?? 0}
+
+Consider: right-hand drive compatibility with Australia, grey import status if Japan-origin, age depreciation, current AUD market conditions, and typical carsales.com.au / RedBook valuation ranges.
+
+Return JSON with exactly these fields:
+{
+  "privateSaleLow": number (AUD, no currency symbol),
+  "privateSaleMid": number,
+  "privateSaleHigh": number,
+  "dealerRetailLow": number,
+  "dealerRetailHigh": number,
+  "insuranceReplacementValue": number,
+  "currency": "AUD",
+  "marketCondition": "strong"|"normal"|"soft",
+  "rhd": true|false,
+  "greyImport": true|false,
+  "confidence": "high"|"medium"|"low",
+  "valuationBasis": string (1-2 sentences explaining your methodology and key factors),
+  "redBookReference": string (brief RedBook range reference if applicable)
+}`
+        }]
+      })
+    });
+    const valData = await valRes.json();
+    const rawVal = valData.content?.find(b => b.type === 'text')?.text || '{}';
+    const cleanVal = rawVal.replace(/```json|```/g, '').trim();
+    const val = JSON.parse(cleanVal);
+    result.valuation = {
+      oracle: 'Claude AI Market Oracle',
+      source: 'Anthropic Claude (AU market analysis)',
+      currency: 'AUD',
+      privateSaleLow: val.privateSaleLow,
+      privateSaleMid: val.privateSaleMid,
+      privateSaleHigh: val.privateSaleHigh,
+      dealerRetailLow: val.dealerRetailLow,
+      dealerRetailHigh: val.dealerRetailHigh,
+      insuranceReplacementValue: val.insuranceReplacementValue,
+      marketCondition: val.marketCondition,
+      rhd: val.rhd,
+      greyImport: val.greyImport,
+      confidence: val.confidence,
+      valuationBasis: val.valuationBasis,
+      redBookReference: val.redBookReference,
+      latency_ms: Date.now() - t0val
+    };
+    setStep('valuation', 'done');
+  } catch(valErr) {
+    document.getElementById('step-valuation-label').textContent = 'Valuation oracle error: ' + valErr.message;
+    result.valuation = { oracle: 'Claude AI Market Oracle', error: valErr.message };
+    setStep('valuation', 'error');
+  }
+
+  // ── 7: KERI ──
   setStep('keri','active');
   await new Promise(r=>setTimeout(r,250));
   const digest = 'sha256·' + Math.random().toString(36).slice(2,10) + Math.random().toString(36).slice(2,10);
@@ -1044,6 +1138,41 @@ function renderResults(d) {
         </div>
       </div>
     </div>
+
+    ${d.valuation && !d.valuation.error ? `
+    <div class="oracle-card">
+      <div class="oracle-card-top" style="background:var(--green)"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">💰</div>
+          <div>
+            <div class="oracle-source-name">AU Market Valuation</div>
+            <div class="oracle-source-type">Claude AI · RedBook-referenced · AUD</div>
+          </div>
+        </div>
+        <div class="oracle-metric-label">Private Sale Estimate</div>
+        <div class="oracle-metric-value" style="color:var(--green);font-size:15px">
+          $${d.valuation.privateSaleLow?.toLocaleString()} – $${d.valuation.privateSaleHigh?.toLocaleString()}
+          <span style="font-size:12px;color:var(--muted)"> AUD</span>
+        </div>
+        <div class="oracle-rows" style="margin-top:10px">
+          <div class="oracle-row"><span class="ok">Private Mid</span><span class="ov green">$${d.valuation.privateSaleMid?.toLocaleString()}</span></div>
+          <div class="oracle-row"><span class="ok">Dealer Retail</span><span class="ov">$${d.valuation.dealerRetailLow?.toLocaleString()} – $${d.valuation.dealerRetailHigh?.toLocaleString()}</span></div>
+          <div class="oracle-row"><span class="ok">Insurance IRV</span><span class="ov amber">$${d.valuation.insuranceReplacementValue?.toLocaleString()}</span></div>
+          <div class="oracle-row"><span class="ok">Market</span><span class="ov ${d.valuation.marketCondition==='strong'?'green':d.valuation.marketCondition==='soft'?'amber':''}">
+            ${(d.valuation.marketCondition||'—').toUpperCase()}</span></div>
+          <div class="oracle-row"><span class="ok">RHD</span><span class="ov ${d.valuation.rhd?'green':'red'}">${d.valuation.rhd?'Yes ✓':'No'}</span></div>
+          ${d.valuation.greyImport?'<div class="oracle-row"><span class="ok">Grey Import</span><span class="ov amber">Yes — AU import duty applies</span></div>':''}
+          <div class="oracle-row"><span class="ok">Confidence</span><span class="ov ${d.valuation.confidence==='high'?'green':d.valuation.confidence==='medium'?'amber':'red'}">${(d.valuation.confidence||'—').toUpperCase()}</span></div>
+        </div>
+        ${d.valuation.valuationBasis?`<div style="margin-top:10px;padding:8px 10px;background:rgba(34,197,94,0.07);border-radius:8px;font-size:10px;color:var(--muted);line-height:1.5;font-style:italic">${d.valuation.valuationBasis}</div>`:''}
+        ${d.valuation.redBookReference?`<div style="margin-top:6px;padding:6px 10px;background:rgba(200,68,47,0.06);border-radius:8px;font-size:10px;color:var(--accent)">📖 RedBook: ${d.valuation.redBookReference}</div>`:''}
+        <div class="oracle-status-row">
+          <span class="oracle-tag derived"><div class="oracle-tag-dot" style="background:var(--green)"></div>AI Oracle</span>
+          <span class="oracle-latency">${d.valuation.latency_ms||'—'}ms</span>
+        </div>
+      </div>
+    </div>` : ''}
 
     <div class="oracle-card">
       <div class="oracle-card-top" style="background:var(--purple)"></div>
