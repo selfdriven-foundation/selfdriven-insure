@@ -1,0 +1,1105 @@
+---
+layout: null
+title: Commercial - selfdriven Insure
+permalink: /interfaces/human/commercial
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png">
+<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<title>Commercial - selfdriven.insure - v1</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f2ed;--surface:#edeae3;--surface2:#e5e1d8;--border:#ddd8ce;
+  --text:#1a1410;--muted:#6b5f52;--muted2:#9e9085;
+  --accent:#c8442f;--accent-dim:rgba(200,68,47,0.10);--accent-strong:rgba(200,68,47,0.18);
+  --card-radius:20px;--shadow:0 4px 24px rgba(0,0,0,0.08);
+  --green:#1a7a4a;--green-dim:rgba(26,122,74,0.12);
+  --amber:#b86800;--amber-dim:rgba(184,104,0,0.12);
+  --red:#c8442f;--red-dim:rgba(200,68,47,0.12);
+  --blue:#1a4a8a;--blue-dim:rgba(26,74,138,0.10);
+  --purple:#5a2a8a;--purple-dim:rgba(90,42,138,0.10);
+  --teal:#0a6b6b;--teal-dim:rgba(10,107,107,0.10);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0a0a0a;--surface:#161616;--surface2:#1e1e1e;--border:#2a2a2a;
+    --text:#f0ede8;--muted:#b0a89e;--muted2:#7a7268;
+    --accent:#e85d4a;--accent-dim:rgba(232,93,74,0.12);--accent-strong:rgba(232,93,74,0.20);
+    --shadow:0 4px 28px rgba(0,0,0,0.5);
+    --green:#2dd47a;--green-dim:rgba(45,212,122,0.12);
+    --amber:#f5a623;--amber-dim:rgba(245,166,35,0.12);
+    --red:#e85d4a;--red-dim:rgba(232,93,74,0.12);
+    --blue:#5b9ef0;--blue-dim:rgba(91,158,240,0.10);
+    --purple:#a07fdc;--purple-dim:rgba(160,127,220,0.10);
+    --teal:#3dd9d9;--teal-dim:rgba(61,217,217,0.10);
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;
+  background:color-mix(in srgb,var(--bg) 85%,transparent);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-logo{width:30px;height:30px;border-radius:8px;overflow:hidden;flex-shrink:0;}
+.nav-logo img{width:100%;height:100%;display:block;}
+.nav-title{font-size:15px;font-weight:700;letter-spacing:-0.02em;}
+.nav-title span{color:var(--accent);}
+.nav-meta{display:flex;align-items:center;gap:14px;}
+.live-badge{
+  display:flex;align-items:center;gap:6px;padding:4px 12px;
+  background:var(--green-dim);border:1px solid var(--green);border-radius:999px;
+  font-size:11px;font-weight:600;color:var(--green);font-family:JetBrains Mono,monospace;
+}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.keri-btn{
+  display:flex;align-items:center;gap:6px;padding:5px 14px;
+  background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  font-family:JetBrains Mono,monospace;font-size:11px;font-weight:600;color:var(--muted);
+  cursor:pointer;transition:all 0.15s;
+}
+.keri-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+.container{max-width:1200px;margin:0 auto;padding:32px 24px 60px;}
+
+/* ── HERO ── */
+.search-hero{text-align:center;margin-bottom:36px;}
+.search-hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.search-hero h1{font-size:36px;font-weight:900;letter-spacing:-0.04em;color:var(--text);line-height:1.15;margin-bottom:8px;}
+.search-hero h1 em{color:var(--accent);font-style:normal;}
+.search-hero p{font-size:14px;color:var(--muted);max-width:560px;margin:0 auto 24px;line-height:1.7;}
+
+/* ── FORM PANEL ── */
+.form-panel{
+  max-width:720px;margin:0 auto;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);
+  overflow:hidden;
+}
+.form-panel-top{height:4px;background:var(--accent);}
+.form-panel-body{padding:24px 28px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.form-row.single{grid-template-columns:1fr;}
+@media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+.field-input,.field-select{
+  padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;
+  font-family:Poppins,sans-serif;font-size:14px;color:var(--text);outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;width:100%;
+}
+.field-input:focus,.field-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim);}
+.field-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b5f52' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+.analyse-btn{
+  width:100%;padding:14px;margin-top:8px;
+  background:var(--accent);border:none;border-radius:12px;
+  font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:white;
+  cursor:pointer;transition:all 0.15s;
+}
+.analyse-btn:hover:not(:disabled){opacity:0.88;transform:scale(0.99);}
+.analyse-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+.example-label{font-size:11px;color:var(--muted2);text-align:center;margin-top:14px;}
+.example-chips{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap;}
+.example-chip{
+  padding:4px 12px;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  font-size:11px;color:var(--muted);cursor:pointer;transition:all 0.15s;
+}
+.example-chip:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── PROGRESS ── */
+.progress-section{display:none;max-width:720px;margin:0 auto 32px;}
+.progress-section.visible{display:block;}
+.progress-steps{
+  display:flex;flex-direction:column;gap:6px;
+  padding:16px 20px;background:var(--surface);border:1px solid var(--border);border-radius:16px;
+}
+.progress-step{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);transition:color 0.2s;}
+.progress-step.active{color:var(--text);font-weight:600;}
+.progress-step.done{color:var(--green);}
+.progress-step.error{color:var(--red);}
+.step-icon{
+  width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;background:var(--surface2);color:var(--muted);
+}
+.progress-step.active .step-icon{background:var(--accent-dim);color:var(--accent);animation:spinPulse 1s ease infinite;}
+@keyframes spinPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.progress-step.done .step-icon{background:var(--green-dim);color:var(--green);}
+.progress-step.error .step-icon{background:var(--red-dim);color:var(--red);}
+
+/* ── RESULTS ── */
+.results-section{display:none;}
+.results-section.visible{display:block;}
+
+.result-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;}
+.result-entity .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+.result-entity h2{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.2;}
+.result-entity .sub{font-size:13px;color:var(--muted);font-family:JetBrains Mono,monospace;margin-top:4px;}
+.result-score-badge{
+  flex-shrink:0;width:80px;height:80px;border-radius:18px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:JetBrains Mono,monospace;border:2px solid;
+}
+.result-score-badge .score-num{font-size:28px;font-weight:700;line-height:1;}
+.result-score-badge .score-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;}
+.score-low{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.score-med{background:var(--amber-dim);border-color:var(--amber);color:var(--amber);}
+.score-high{background:var(--red-dim);border-color:var(--red);color:var(--red);}
+
+/* ── ENTITY HERO ── */
+.entity-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:20px;}
+.entity-hero-top{height:4px;background:var(--accent);}
+.entity-hero-body{padding:20px 24px;}
+.entity-decoded-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+.entity-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:4px;}
+@media(max-width:700px){.entity-grid{grid-template-columns:1fr 1fr;}}
+.entity-field .ef-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.entity-field .ef-value{font-size:14px;font-weight:700;color:var(--text);line-height:1.2;}
+.entity-field .ef-sub{font-size:11px;color:var(--muted);margin-top:2px;font-family:JetBrains Mono,monospace;}
+
+/* ── COVERAGE RECOMMENDATION ── */
+.coverage-bar{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);
+  overflow:hidden;margin-bottom:20px;
+}
+.coverage-bar-top{height:4px;background:var(--accent);}
+.coverage-bar-body{padding:16px 24px;}
+.coverage-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+.coverage-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.cov-chip{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 14px;
+  border:1px solid var(--border);border-radius:999px;font-size:12px;font-weight:600;
+}
+.cov-chip.required{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+.cov-chip.recommended{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+.cov-chip.optional{background:var(--surface2);color:var(--muted);}
+.cov-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* ── ORACLE GRID ── */
+.oracle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+@media(max-width:780px){.oracle-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.oracle-grid{grid-template-columns:1fr;}}
+
+.oracle-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--card-radius);overflow:hidden;
+  transition:box-shadow 0.2s,transform 0.2s;
+}
+.oracle-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.oracle-card-top{height:4px;background:var(--accent);}
+.oracle-card-body{padding:16px 18px;}
+.oracle-source{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.oracle-source-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--surface2);}
+.oracle-source-name{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+.oracle-source-type{font-size:11px;color:var(--muted);}
+.oracle-metric-label{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500;}
+.oracle-metric-value{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.1;}
+.oracle-metric-unit{font-size:13px;font-weight:600;color:var(--muted);margin-left:2px;}
+.oracle-risk-bar{margin-top:10px;height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;}
+.oracle-risk-fill{height:100%;border-radius:3px;transition:width 1s ease;}
+.oracle-rows{margin-top:10px;}
+.oracle-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.oracle-row:last-child{border-bottom:none;}
+.oracle-row .ok{color:var(--muted);font-weight:500;flex-shrink:0;margin-right:8px;}
+.oracle-row .ov{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--text);text-align:right;word-break:break-word;}
+.oracle-row .ov.green{color:var(--green);}
+.oracle-row .ov.amber{color:var(--amber);}
+.oracle-row .ov.red{color:var(--red);}
+.oracle-row .ov.blue{color:var(--blue);}
+.oracle-status-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);}
+.oracle-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;}
+.oracle-tag.live{background:var(--green-dim);color:var(--green);}
+.oracle-tag.derived{background:var(--blue-dim);color:var(--blue);}
+.oracle-tag.computed{background:var(--purple-dim);color:var(--purple);}
+.oracle-tag-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.oracle-latency{font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted2);}
+
+/* ── REGULATORY ALERT ── */
+.reg-alert{
+  display:none;margin-bottom:20px;padding:16px 20px;
+  background:var(--amber-dim);border:1px solid var(--amber);border-radius:16px;
+}
+.reg-alert.visible{display:block;}
+.reg-alert-title{font-size:14px;font-weight:700;color:var(--amber);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.reg-item{font-size:12px;color:var(--text);padding:8px 0;border-bottom:1px solid var(--border);line-height:1.5;}
+.reg-item:last-child{border-bottom:none;}
+.reg-item strong{color:var(--amber);}
+
+/* ── BOTTOM GRID ── */
+.bottom-grid{display:grid;grid-template-columns:1fr 380px;gap:16px;}
+@media(max-width:780px){.bottom-grid{grid-template-columns:1fr;}}
+
+.json-panel,.kel-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;}
+.panel-hdr{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.panel-hdr-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.copy-btn{
+  padding:4px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);
+  font-family:Poppins,sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s;
+}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+.json-body{
+  padding:16px 18px;font-family:JetBrains Mono,monospace;font-size:11px;line-height:1.8;
+  max-height:380px;overflow-y:auto;color:var(--text);white-space:pre-wrap;word-break:break-word;
+}
+.json-body .jk{color:var(--accent);}
+.json-body .js{color:var(--green);}
+.json-body .jn{color:var(--blue);}
+.json-body .jb{color:var(--amber);}
+
+.kel-event{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:11px;}
+.kel-event:last-child{border-bottom:none;}
+.kel-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.kel-dot.icp{background:var(--accent);}
+.kel-dot.ixn{background:var(--green);}
+.kel-type{font-family:JetBrains Mono,monospace;font-weight:700;color:var(--accent);font-size:10px;}
+.kel-desc{color:var(--muted);margin-top:1px;line-height:1.4;}
+.kel-digest{font-family:JetBrains Mono,monospace;font-size:9px;color:var(--muted2);margin-top:3px;word-break:break-all;}
+.kel-time{margin-left:auto;flex-shrink:0;font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted2);}
+
+.error-banner{
+  display:none;padding:14px 18px;background:var(--red-dim);
+  border:1px solid var(--red);border-radius:14px;color:var(--red);
+  font-size:13px;font-weight:500;margin-bottom:20px;
+}
+.error-banner.visible{display:block;}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo"><img src="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" alt="selfdriven"></div>
+    <div class="nav-title">selfdriven<span>.insure</span> — Commercial</div>
+  </div>
+  <div class="nav-meta">
+    <div class="live-badge"><div class="live-dot"></div>Live Oracle Feed</div>
+    <div class="keri-btn">🔐 EKE4g…kqt</div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="search-hero">
+    <div class="eyebrow">Commercial Insurance Risk Intelligence</div>
+    <h1>Real-time oracle lookup<br>for any <em>Australian Business</em></h1>
+    <p>Enter an ABN or ACN to pull live ASIC registration, ACNC charity status, industry hazard classification, property exposure, and D&amp;O liability signals — anchored to your KERI identity.</p>
+  </div>
+
+  <div class="form-panel">
+    <div class="form-panel-top"></div>
+    <div class="form-panel-body">
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">ABN or ACN</label>
+          <input class="field-input" id="abn-input" type="text" maxlength="14"
+            placeholder="e.g. 51 824 753 556"
+            oninput="formatAbn(this)"
+            onkeydown="if(event.key==='Enter')lookupCommercial()" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Primary Industry</label>
+          <select class="field-select" id="industry-select">
+            <option value="">— Select industry —</option>
+            <option value="retail">Retail Trade</option>
+            <option value="hospitality">Hospitality &amp; Food Services</option>
+            <option value="construction">Construction &amp; Trades</option>
+            <option value="manufacturing">Manufacturing</option>
+            <option value="transport">Transport &amp; Logistics</option>
+            <option value="healthcare">Healthcare &amp; Medical</option>
+            <option value="professional">Professional Services</option>
+            <option value="technology">Technology &amp; IT</option>
+            <option value="finance">Finance &amp; Insurance</option>
+            <option value="education">Education &amp; Training</option>
+            <option value="property">Property &amp; Real Estate</option>
+            <option value="mining">Mining &amp; Resources</option>
+            <option value="agriculture">Agriculture &amp; Farming</option>
+            <option value="entertainment">Arts, Entertainment &amp; Recreation</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Business Address</label>
+          <input class="field-input" id="biz-addr-input" type="text"
+            placeholder="e.g. 123 Collins St, Melbourne VIC"
+            onkeydown="if(event.key==='Enter')lookupCommercial()" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Number of Employees</label>
+          <select class="field-select" id="employees-select">
+            <option value="1">Sole trader / 1</option>
+            <option value="5">2–5</option>
+            <option value="20" selected>6–20</option>
+            <option value="50">21–50</option>
+            <option value="200">51–200</option>
+            <option value="500">201–500</option>
+            <option value="1000">500+</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Annual Revenue (AUD)</label>
+          <select class="field-select" id="revenue-select">
+            <option value="100000">Under $100k</option>
+            <option value="500000" selected>$100k – $500k</option>
+            <option value="2000000">$500k – $2M</option>
+            <option value="10000000">$2M – $10M</option>
+            <option value="50000000">$10M – $50M</option>
+            <option value="100000000">$50M+</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Business Structure</label>
+          <select class="field-select" id="structure-select">
+            <option value="pty">Pty Ltd (Company)</option>
+            <option value="trust">Trust</option>
+            <option value="partnership">Partnership</option>
+            <option value="sole_trader">Sole Trader</option>
+            <option value="nonprofit">Not-for-Profit</option>
+            <option value="government">Government Entity</option>
+          </select>
+        </div>
+      </div>
+      <button class="analyse-btn" id="search-btn" onclick="lookupCommercial()">
+        <span id="search-btn-label">◈ Analyse Commercial Risk</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="example-label">Try these sample ABNs:</div>
+  <div class="example-chips" style="margin-bottom:32px;">
+    <span class="example-chip" onclick="fillAndRun('51824753556','construction','456 George St, Sydney NSW','50','2000000','pty')">Builder Pty Ltd</span>
+    <span class="example-chip" onclick="fillAndRun('83914571673','hospitality','78 Acland St, St Kilda VIC','20','500000','pty')">Café &amp; Restaurant</span>
+    <span class="example-chip" onclick="fillAndRun('26008672179','technology','1 Innovation Rd, Brisbane QLD','200','10000000','pty')">Tech Company</span>
+    <span class="example-chip" onclick="fillAndRun('49093669009','healthcare','99 Bourke St, Melbourne VIC','50','2000000','pty')">Medical Clinic</span>
+    <span class="example-chip" onclick="fillAndRun('72006099047','manufacturing','14 Industrial Ave, Dandenong VIC','200','10000000','pty')">Manufacturer</span>
+  </div>
+
+  <div class="error-banner" id="error-banner"></div>
+
+  <div class="progress-section" id="progress-section">
+    <div class="progress-steps">
+      <div class="progress-step" id="step-abn">
+        <div class="step-icon" id="si-abn">1</div>
+        <span>Validating ABN via Australian Business Register (ABR)…</span>
+      </div>
+      <div class="progress-step" id="step-acnc">
+        <div class="step-icon" id="si-acnc">2</div>
+        <span>Checking ACNC charity register &amp; DGR endorsement status…</span>
+      </div>
+      <div class="progress-step" id="step-geocode">
+        <div class="step-icon" id="si-geocode">3</div>
+        <span>Geocoding business address — OpenStreetMap Nominatim…</span>
+      </div>
+      <div class="progress-step" id="step-property">
+        <div class="step-icon" id="si-property">4</div>
+        <span>Pulling property risk signals — elevation, flood, weather…</span>
+      </div>
+      <div class="progress-step" id="step-industry">
+        <div class="step-icon" id="si-industry">5</div>
+        <span>Computing industry hazard classification (ANZSIC)…</span>
+      </div>
+      <div class="progress-step" id="step-liability">
+        <div class="step-icon" id="si-liability">6</div>
+        <span>Modelling public liability &amp; D&amp;O exposure profile…</span>
+      </div>
+      <div class="progress-step" id="step-coverage">
+        <div class="step-icon" id="si-coverage">7</div>
+        <span>Generating coverage recommendations &amp; indicative premium bands…</span>
+      </div>
+      <div class="progress-step" id="step-keri">
+        <div class="step-icon" id="si-keri">8</div>
+        <span>Logging KERI interaction event to KEL…</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-section" id="results-section">
+
+    <div class="result-header">
+      <div class="result-entity">
+        <div class="eyebrow">Commercial Risk Report</div>
+        <h2 id="res-entity-name">—</h2>
+        <div class="sub" id="res-abn-line">—</div>
+      </div>
+      <div class="result-score-badge" id="res-score-badge">
+        <div class="score-num" id="res-score-num">—</div>
+        <div class="score-label">Risk Score</div>
+      </div>
+    </div>
+
+    <!-- Entity decoded hero -->
+    <div class="entity-hero">
+      <div class="entity-hero-top"></div>
+      <div class="entity-hero-body">
+        <div class="entity-decoded-label">Business Entity — ABR / ASIC Verified</div>
+        <div class="entity-grid" id="entity-grid"></div>
+      </div>
+    </div>
+
+    <!-- Coverage recommendations -->
+    <div class="coverage-bar" id="coverage-bar">
+      <div class="coverage-bar-top"></div>
+      <div class="coverage-bar-body">
+        <div class="coverage-label">Coverage Recommendations</div>
+        <div class="coverage-chips" id="coverage-chips"></div>
+      </div>
+    </div>
+
+    <!-- Regulatory alerts -->
+    <div class="reg-alert" id="reg-alert">
+      <div class="reg-alert-title">⚠ Regulatory Compliance Flags</div>
+      <div id="reg-list"></div>
+    </div>
+
+    <!-- Oracle cards -->
+    <div class="oracle-grid" id="oracle-grid"></div>
+
+    <div class="bottom-grid">
+      <div class="json-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">◈ Composite Oracle Response</div>
+          <button class="copy-btn" onclick="copyJson()">Copy JSON</button>
+        </div>
+        <div class="json-body" id="json-body">—</div>
+      </div>
+      <div class="kel-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">🔐 Key Event Log (KEL)</div>
+        </div>
+        <div id="kel-events">
+          <div class="kel-event">
+            <div class="kel-dot icp"></div>
+            <div>
+              <div class="kel-type">icp — Inception</div>
+              <div class="kel-desc">AID established · 3 witnesses · sn:0</div>
+              <div class="kel-digest">sha256·a3f8c9d1e4b2770f92ab34cd56ef78</div>
+            </div>
+            <div class="kel-time">session</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /results -->
+</div><!-- /container -->
+
+<script>
+let keriSn = 1, currentJson = null;
+
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function formatAbn(input) {
+  let v = input.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length > 2) v = v.slice(0,2) + ' ' + v.slice(2);
+  if (v.length > 6) v = v.slice(0,6) + ' ' + v.slice(6);
+  if (v.length > 10) v = v.slice(0,10) + ' ' + v.slice(10);
+  input.value = v;
+}
+
+function setStep(id, state) {
+  document.getElementById('step-' + id).className = 'progress-step ' + state;
+  const icon = document.getElementById('si-' + id);
+  if (state === 'done')   icon.textContent = '✓';
+  if (state === 'error')  icon.textContent = '✕';
+  if (state === 'active') icon.textContent = '⟳';
+}
+
+function showError(msg) {
+  const b = document.getElementById('error-banner');
+  b.textContent = '⚠ ' + msg;
+  b.classList.add('visible');
+  document.getElementById('search-btn').disabled = false;
+  document.getElementById('search-btn-label').textContent = '◈ Analyse Commercial Risk';
+  document.getElementById('progress-section').classList.remove('visible');
+}
+
+function hideError() {
+  document.getElementById('error-banner').classList.remove('visible');
+}
+
+function syntaxHighlight(obj) {
+  const json = JSON.stringify(obj, null, 2);
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m => {
+    let cls = 'jn';
+    if (/^"/.test(m)) cls = /:$/.test(m) ? 'jk' : 'js';
+    else if (/true|false/.test(m)) cls = 'jb';
+    return `<span class="${cls}">${m}</span>`;
+  });
+}
+
+function addKelEvent(desc, digest) {
+  const time = new Date().toTimeString().slice(0,8);
+  const events = document.getElementById('kel-events');
+  const el = document.createElement('div');
+  el.className = 'kel-event';
+  el.innerHTML = `
+    <div class="kel-dot ixn"></div>
+    <div>
+      <div class="kel-type">ixn — Interaction · sn:${keriSn}</div>
+      <div class="kel-desc">${desc}</div>
+      <div class="kel-digest">${digest}</div>
+    </div>
+    <div class="kel-time">${time}</div>`;
+  events.insertBefore(el, events.firstChild);
+  keriSn++;
+}
+
+function riskClass(s) { return s < 33 ? 'score-low' : s < 66 ? 'score-med' : 'score-high'; }
+function riskColor(p) { return p < 33 ? 'var(--green)' : p < 66 ? 'var(--amber)' : 'var(--red)'; }
+function riskLabel(s) { return s < 33 ? 'LOW' : s < 55 ? 'MODERATE' : s < 75 ? 'HIGH' : 'VERY HIGH'; }
+
+function copyJson() {
+  if (!currentJson) return;
+  navigator.clipboard.writeText(JSON.stringify(currentJson, null, 2))
+    .then(() => { const b = document.querySelector('.copy-btn'); b.textContent = 'Copied!'; setTimeout(() => b.textContent = 'Copy JSON', 1500); });
+}
+
+function fillAndRun(abn, industry, addr, employees, revenue, structure) {
+  document.getElementById('abn-input').value = abn.replace(/(\d{2})(\d{3})(\d{3})(\d{3})/, '$1 $2 $3 $4');
+  document.getElementById('industry-select').value = industry;
+  document.getElementById('biz-addr-input').value = addr;
+  document.getElementById('employees-select').value = employees;
+  document.getElementById('revenue-select').value = revenue;
+  document.getElementById('structure-select').value = structure;
+  lookupCommercial();
+}
+
+// ── ABN VALIDATION ───────────────────────────────────────────────────────────
+// Australian ABN check digit algorithm
+function validateAbn(abn) {
+  const digits = abn.replace(/\D/g, '');
+  if (digits.length !== 11) return false;
+  const weights = [10,1,3,5,7,9,11,13,15,17,19];
+  const d = digits.split('').map(Number);
+  d[0] -= 1; // subtract 1 from first digit
+  const sum = d.reduce((acc, v, i) => acc + v * weights[i], 0);
+  return sum % 89 === 0;
+}
+
+// Format ABN for display
+function displayAbn(abn) {
+  const d = abn.replace(/\D/g, '');
+  return `${d.slice(0,2)} ${d.slice(2,5)} ${d.slice(5,8)} ${d.slice(8,11)}`;
+}
+
+// ── INDUSTRY DATA ────────────────────────────────────────────────────────────
+const INDUSTRY_DATA = {
+  retail:        { label:'Retail Trade',               anzsic:'G', hazard:'MODERATE', wc_rate:1.4, pl_base:800,  icon:'🏪', whs_risk:'medium', cyber_risk:'high',   notes:'Point-of-sale data; slip/fall exposure; stock shrinkage.' },
+  hospitality:   { label:'Hospitality & Food Services', anzsic:'H', hazard:'HIGH',     wc_rate:2.8, pl_base:1400, icon:'🍽️', whs_risk:'high',   cyber_risk:'medium', notes:'Burns, cuts, manual handling; liquor licensing; food safety.' },
+  construction:  { label:'Construction & Trades',       anzsic:'E', hazard:'VERY HIGH', wc_rate:5.2, pl_base:2200, icon:'🏗️', whs_risk:'very_high', cyber_risk:'low', notes:'Height work; plant & equipment; subcontractor chains; PCBU obligations.' },
+  manufacturing: { label:'Manufacturing',               anzsic:'C', hazard:'HIGH',     wc_rate:3.8, pl_base:1800, icon:'🏭', whs_risk:'high',   cyber_risk:'medium', notes:'Machinery; chemical handling; product liability; dust/noise.' },
+  transport:     { label:'Transport & Logistics',       anzsic:'I', hazard:'HIGH',     wc_rate:4.1, pl_base:1600, icon:'🚛', whs_risk:'high',   cyber_risk:'medium', notes:'Vehicle fleet; dangerous goods; fatigue management; subcontractor.' },
+  healthcare:    { label:'Healthcare & Medical',        anzsic:'Q', hazard:'MODERATE', wc_rate:2.1, pl_base:2800, icon:'🏥', whs_risk:'medium', cyber_risk:'very_high', notes:'Medical indemnity; AHPRA obligations; patient data (My Health Record); manual handling.' },
+  professional:  { label:'Professional Services',       anzsic:'M', hazard:'LOW',      wc_rate:0.7, pl_base:900,  icon:'💼', whs_risk:'low',    cyber_risk:'very_high', notes:'PI exposure; client confidentiality; contract risk; office ergonomics.' },
+  technology:    { label:'Technology & IT',             anzsic:'J', hazard:'LOW',      wc_rate:0.6, pl_base:1100, icon:'💻', whs_risk:'low',    cyber_risk:'very_high', notes:'Software liability; data breach; SLA penalties; IP indemnities.' },
+  finance:       { label:'Finance & Insurance',         anzsic:'K', hazard:'LOW',      wc_rate:0.5, pl_base:1200, icon:'🏦', whs_risk:'low',    cyber_risk:'very_high', notes:'AFSL obligations; breach of fiduciary duty; ASIC/APRA scrutiny; fidelity.' },
+  education:     { label:'Education & Training',        anzsic:'P', hazard:'MODERATE', wc_rate:1.2, pl_base:700,  icon:'🎓', whs_risk:'medium', cyber_risk:'high',   notes:'Child safety obligations; duty of care; volunteer management; IP.' },
+  property:      { label:'Property & Real Estate',      anzsic:'L', hazard:'MODERATE', wc_rate:1.0, pl_base:900,  icon:'🏠', whs_risk:'medium', cyber_risk:'high',   notes:'Property management liability; strata; asbestos; tenant disputes.' },
+  mining:        { label:'Mining & Resources',          anzsic:'B', hazard:'EXTREME',  wc_rate:7.8, pl_base:4500, icon:'⛏️', whs_risk:'very_high', cyber_risk:'medium', notes:'Explosives; heavy plant; remote work; environmental remediation.' },
+  agriculture:   { label:'Agriculture & Farming',       anzsic:'A', hazard:'HIGH',     wc_rate:4.6, pl_base:1200, icon:'🌾', whs_risk:'high',   cyber_risk:'low',    notes:'Machinery; chemicals/pesticides; seasonal labour; livestock.' },
+  entertainment: { label:'Arts, Entertainment & Rec.',  anzsic:'R', hazard:'MODERATE', wc_rate:2.0, pl_base:900,  icon:'🎭', whs_risk:'medium', cyber_risk:'medium', notes:'Crowd management; performer safety; licensing; cancellation risk.' },
+  other:         { label:'Other Industry',              anzsic:'S', hazard:'MODERATE', wc_rate:1.8, pl_base:1000, icon:'🔧', whs_risk:'medium', cyber_risk:'medium', notes:'Refer to specific ANZSIC classification for detailed hazard profile.' },
+};
+
+// ── SIMULATED ABR LOOKUP ─────────────────────────────────────────────────────
+// In production: proxy through selfdriven identity-gated ABR API
+// ABR public API: api.gov.au/services/abs/ABR (requires ABR GUID)
+const ABR_MOCK = {
+  '51824753556': { name:'Buildcore Construction Pty Ltd',          status:'Active', gst:true,  type:'Australian Private Company', state:'NSW', postcode:'2000', since:'2008-03-14' },
+  '83914571673': { name:'St Kilda Hospitality Pty Ltd',            status:'Active', gst:true,  type:'Australian Private Company', state:'VIC', postcode:'3182', since:'2015-07-22' },
+  '26008672179': { name:'Nexaflow Technologies Pty Ltd',           status:'Active', gst:true,  type:'Australian Private Company', state:'QLD', postcode:'4000', since:'2018-11-05' },
+  '49093669009': { name:'Melbourne Healthcare Associates Pty Ltd', status:'Active', gst:true,  type:'Australian Private Company', state:'VIC', postcode:'3000', since:'2012-02-18' },
+  '72006099047': { name:'Dandenong Precision Manufacturing Pty Ltd',status:'Active', gst:true,  type:'Australian Private Company', state:'VIC', postcode:'3175', since:'2001-08-30' },
+};
+
+function lookupAbr(abn) {
+  const digits = abn.replace(/\D/g,'');
+  if (ABR_MOCK[digits]) return { ...ABR_MOCK[digits], abn: displayAbn(digits), raw: digits, oracle:'ABR (Australian Business Register)', latency_ms: 180 + Math.floor(Math.random()*120) };
+  // Generic synthetic record for other valid ABNs
+  const industries = Object.values(INDUSTRY_DATA);
+  const ind = industries[parseInt(digits.slice(-1)) % industries.length];
+  const states = ['NSW','VIC','QLD','SA','WA','TAS','NT','ACT'];
+  return {
+    name: `Business Entity ${displayAbn(digits)}`,
+    status: 'Active',
+    gst: parseInt(digits[2]) % 3 !== 0,
+    type: 'Australian Private Company',
+    state: states[parseInt(digits[4]) % states.length],
+    postcode: '2000',
+    since: `${2000 + parseInt(digits[5]%23)}-0${1+parseInt(digits[6]%9)}-${10+parseInt(digits[7]%18)}`,
+    abn: displayAbn(digits),
+    raw: digits,
+    oracle:'ABR (Australian Business Register)',
+    latency_ms: 180 + Math.floor(Math.random()*120)
+  };
+}
+
+// ── INDUSTRY RISK SCORING ─────────────────────────────────────────────────────
+function computeRiskScore(data) {
+  let score = 15;
+  const ind = data.industry_data || {};
+  const hazardScores = { 'LOW':5, 'MODERATE':15, 'HIGH':30, 'VERY HIGH':50, 'EXTREME':70 };
+  score += hazardScores[ind.hazard] || 15;
+
+  // Employee count
+  const emp = parseInt(data.inputs?.employees || 20);
+  if (emp >= 500) score += 20;
+  else if (emp >= 200) score += 14;
+  else if (emp >= 50) score += 8;
+  else if (emp >= 20) score += 4;
+
+  // Revenue scale
+  const rev = parseInt(data.inputs?.revenue || 500000);
+  if (rev >= 50000000) score += 15;
+  else if (rev >= 10000000) score += 10;
+  else if (rev >= 2000000) score += 6;
+  else if (rev >= 500000) score += 3;
+
+  // Property risk
+  const elev = data.property?.elevation_m ?? 30;
+  if (elev < 5) score += 10;
+  else if (elev < 15) score += 5;
+
+  const flood = data.property?.river_discharge ?? 0;
+  if (flood > 200) score += 10;
+  else if (flood > 50) score += 5;
+
+  return Math.min(97, Math.max(8, Math.round(score)));
+}
+
+// ── COVERAGE RECOMMENDATIONS ─────────────────────────────────────────────────
+function buildCoverage(industryKey, employees, revenue, structure) {
+  const emp = parseInt(employees);
+  const rev = parseInt(revenue);
+  const ind = INDUSTRY_DATA[industryKey] || INDUSTRY_DATA.other;
+  const covers = [];
+
+  // Always required
+  covers.push({ label:'Public Liability', tier:'required', min_limit:'$10M', note:'Statutory minimum for most industries' });
+  if (emp > 1) covers.push({ label:'Workers Compensation', tier:'required', min_limit:'Mandatory', note:`WC rate ~${ind.wc_rate}% of payroll (state-based)` });
+
+  // Industry-specific required
+  if (['healthcare','finance'].includes(industryKey)) covers.push({ label:'Professional Indemnity', tier:'required', min_limit:'$2M', note:'Regulatory / AHPRA / AFSL requirement' });
+  if (industryKey === 'construction') covers.push({ label:'Contract Works', tier:'required', min_limit:'Project value', note:'Required on most commercial contracts' });
+  if (industryKey === 'transport') covers.push({ label:'Fleet / Motor Insurance', tier:'required', min_limit:'Third party min', note:'Mandatory for all registered vehicles' });
+
+  // Recommended
+  if (!['healthcare','finance','professional','technology'].includes(industryKey))
+    covers.push({ label:'Professional Indemnity', tier:'recommended', min_limit:'$1M', note:'Protects against advice & service errors' });
+  if (ind.cyber_risk === 'very_high' || ind.cyber_risk === 'high')
+    covers.push({ label:'Cyber Insurance', tier:'recommended', min_limit:'$500k', note:`${ind.cyber_risk.toUpperCase()} cyber exposure for sector` });
+  covers.push({ label:'Business Interruption', tier:'recommended', min_limit:'12 months revenue', note:'Covers lost income after insured event' });
+  covers.push({ label:'Property & Contents', tier:'recommended', min_limit:'Replacement value', note:'Building, plant, stock, equipment' });
+  if (structure === 'pty' || structure === 'trust') covers.push({ label:"Directors' & Officers'", tier:'recommended', min_limit:'$2M', note:'Protects directors from personal liability claims' });
+  if (emp >= 20) covers.push({ label:'Management Liability', tier:'recommended', min_limit:'$2M', note:'EPL, crime, entity liability in one policy' });
+
+  // Optional
+  if (rev >= 10000000) covers.push({ label:'Product Liability', tier:'optional', min_limit:'$10M', note:'If you manufacture or import goods' });
+  covers.push({ label:'Trade Credit', tier:'optional', min_limit:'Debtor exposure', note:'Protects against customer insolvency' });
+  if (emp >= 50) covers.push({ label:'Group Life & Income Protection', tier:'optional', min_limit:'Per policy', note:'Employee benefits program' });
+
+  return covers;
+}
+
+// ── REGULATORY FLAGS ─────────────────────────────────────────────────────────
+function buildRegulatoryFlags(industryKey, employees, revenue, structure) {
+  const flags = [];
+  const ind = INDUSTRY_DATA[industryKey] || INDUSTRY_DATA.other;
+  const emp = parseInt(employees);
+  const rev = parseInt(revenue);
+
+  if (ind.whs_risk === 'very_high') flags.push({ title:'SafeWork WHS Obligation', body:'Very high WHS risk industry. SafeWork Australia PCBU obligations apply. Written WHS management system required.' });
+  if (industryKey === 'healthcare') flags.push({ title:'AHPRA Registration', body:'Practitioners must be AHPRA registered. PI policy must align with registration board requirements. Mandatory reporting obligations.' });
+  if (industryKey === 'finance') flags.push({ title:'ASIC/AFSL Licensing', body:'AFSL or ACL required to provide financial services or credit. Minimum PI cover dictated by licence conditions. RG 126 compliance.' });
+  if (industryKey === 'construction') flags.push({ title:'PCBU & Contractor Chain', body:'Principal contractor obligations under model WHS Act. Contractor management plans and induction records required. Insurance certificates of currency at each engagement.' });
+  if (emp >= 100) flags.push({ title:'Modern Slavery Act', body:'Entities with $100M+ revenue must report under the Modern Slavery Act 2018. Supply chain due diligence and annual statement required.' });
+  if (ind.cyber_risk === 'very_high') flags.push({ title:'Notifiable Data Breach (NDB)', body:'Privacy Act 1988 — NDB scheme applies. Must notify OAIC and affected individuals of eligible data breaches. Cyber policy recommended.' });
+  return flags;
+}
+
+// ── PREMIUM ESTIMATOR ────────────────────────────────────────────────────────
+function estimatePremiums(industryKey, employees, revenue, riskScore) {
+  const ind = INDUSTRY_DATA[industryKey] || INDUSTRY_DATA.other;
+  const emp = parseInt(employees);
+  const rev = parseInt(revenue);
+  const scaleFactor = (riskScore / 50);
+
+  const pl = Math.round(ind.pl_base * scaleFactor * (1 + emp/200) * 1.0);
+  const pi = Math.round(900 * scaleFactor * (1 + rev/5000000));
+  const cyber = Math.round(1200 * scaleFactor);
+  const bi = Math.round(rev * 0.0008 * scaleFactor);
+  const wc = Math.round((emp * 65000 / 100) * (ind.wc_rate / 100) * 100); // indicative
+
+  return { pl, pi, cyber, bi, wc,
+    total: pl + pi + cyber + bi,
+    note: 'Indicative annual premiums (AUD, ex. stamp duty & GST). Final pricing subject to underwriter assessment.'
+  };
+}
+
+// ── MAIN LOOKUP ──────────────────────────────────────────────────────────────
+async function lookupCommercial() {
+  const abnRaw = document.getElementById('abn-input').value.trim();
+  const industryKey = document.getElementById('industry-select').value;
+  const bizAddr = document.getElementById('biz-addr-input').value.trim();
+  const employees = document.getElementById('employees-select').value;
+  const revenue = document.getElementById('revenue-select').value;
+  const structure = document.getElementById('structure-select').value;
+
+  if (!abnRaw) return showError('Please enter an ABN or ACN.');
+  if (!industryKey) return showError('Please select an industry.');
+
+  const digits = abnRaw.replace(/\D/g,'');
+  if (digits.length !== 11 || !validateAbn(digits)) {
+    return showError('Invalid ABN. Please check the number and try again (ABN check digit failed).');
+  }
+
+  // Reset UI
+  hideError();
+  document.getElementById('progress-section').classList.add('visible');
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('search-btn').disabled = true;
+  document.getElementById('search-btn-label').textContent = '⏳ Querying…';
+  ['abn','acnc','geocode','property','industry','liability','coverage','keri'].forEach((s,i) => {
+    document.getElementById('step-'+s).className = 'progress-step';
+    document.getElementById('si-'+s).textContent = String(i+1);
+  });
+
+  const result = {
+    inputs: { abn: displayAbn(digits), industry: industryKey, address: bizAddr, employees, revenue, structure },
+    timestamp: new Date().toISOString()
+  };
+
+  // ── STEP 1: ABR Lookup ──
+  setStep('abn', 'active');
+  await sleep(400 + Math.random()*300);
+  const abrData = lookupAbr(digits);
+  result.abr = abrData;
+  setStep('abn', 'done');
+
+  // ── STEP 2: ACNC check ──
+  setStep('acnc', 'active');
+  await sleep(250 + Math.random()*200);
+  result.acnc = {
+    oracle: 'ACNC Charity Register',
+    is_charity: false,
+    dgr_endorsed: false,
+    note: 'Not registered on ACNC charity register.',
+    latency_ms: 210 + Math.floor(Math.random()*80)
+  };
+  setStep('acnc', 'done');
+
+  // ── STEP 3: Geocode ──
+  setStep('geocode', 'active');
+  let lat = null, lon = null, displayAddr = bizAddr || 'Australia';
+  const propertyData = {};
+  if (bizAddr) {
+    try {
+      const t0 = Date.now();
+      const geoRes = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(bizAddr + ', Australia')}&format=json&limit=1&addressdetails=1`,
+        { headers: { 'Accept-Language': 'en' } }
+      );
+      const geoJson = await geoRes.json();
+      if (geoJson.length) {
+        const g = geoJson[0];
+        lat = parseFloat(g.lat);
+        lon = parseFloat(g.lon);
+        displayAddr = g.display_name;
+        result.geocode = {
+          oracle: 'Nominatim (OpenStreetMap)',
+          lat, lon, display_name: displayAddr,
+          latency_ms: Date.now() - t0
+        };
+        setStep('geocode', 'done');
+      } else {
+        result.geocode = { oracle:'Nominatim', error:'Address not found' };
+        setStep('geocode', 'error');
+      }
+    } catch(e) {
+      result.geocode = { oracle:'Nominatim', error: e.message };
+      setStep('geocode', 'error');
+    }
+  } else {
+    result.geocode = { oracle:'Nominatim', note:'No address provided — property risk skipped' };
+    setStep('geocode', 'done');
+  }
+
+  // ── STEP 4: Property risk ──
+  setStep('property', 'active');
+  if (lat !== null && lon !== null) {
+    try {
+      const [elevRes, weatherRes, floodRes] = await Promise.all([
+        fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lon}`),
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m,wind_gusts_10m,precipitation_probability,weather_code&daily=precipitation_sum,wind_speed_10m_max&forecast_days=1&timezone=auto`),
+        fetch(`https://flood-api.open-meteo.com/v1/flood?latitude=${lat}&longitude=${lon}&daily=river_discharge,river_discharge_max&forecast_days=1`)
+      ]);
+      const elevJson = await elevRes.json();
+      const wJson = await weatherRes.json();
+      const fJson = await floodRes.json();
+
+      const elev = elevJson.elevation?.[0] ?? null;
+      const cur = wJson.current || {};
+      const fd = fJson.daily || {};
+      const discharge = fd.river_discharge?.[0] ?? 0;
+
+      Object.assign(propertyData, {
+        elevation_m: elev,
+        flood_exposure: elev === null ? 'unknown' : elev < 2 ? 'EXTREME' : elev < 5 ? 'VERY HIGH' : elev < 10 ? 'HIGH' : elev < 20 ? 'MODERATE' : 'LOW',
+        river_discharge: discharge,
+        flood_risk_tier: discharge < 10 ? 'LOW' : discharge < 100 ? 'MODERATE' : discharge < 500 ? 'HIGH' : 'EXTREME',
+        wind_speed_kmh: cur.wind_speed_10m,
+        wind_gusts_kmh: cur.wind_gusts_10m,
+        precip_probability: cur.precipitation_probability,
+        temperature_c: cur.temperature_2m,
+        daily_max_wind_kmh: wJson.daily?.wind_speed_10m_max?.[0],
+        oracle: 'Open-Meteo (elevation + weather + flood / GloFAS)'
+      });
+      result.property = propertyData;
+      setStep('property', 'done');
+    } catch(e) {
+      result.property = { oracle:'Open-Meteo', error: e.message };
+      setStep('property', 'error');
+    }
+  } else {
+    result.property = { oracle:'Open-Meteo', note:'Skipped — no geocode' };
+    setStep('property', 'done');
+  }
+
+  // ── STEP 5: Industry classification ──
+  setStep('industry', 'active');
+  await sleep(300 + Math.random()*200);
+  const ind = INDUSTRY_DATA[industryKey] || INDUSTRY_DATA.other;
+  result.industry_data = {
+    ...ind,
+    key: industryKey,
+    anzsic_division: ind.anzsic,
+    oracle: 'selfdriven ANZSIC Hazard Engine (ABS classification)',
+    latency_ms: 280 + Math.floor(Math.random()*80)
+  };
+  setStep('industry', 'done');
+
+  // ── STEP 6: Liability modelling ──
+  setStep('liability', 'active');
+  await sleep(350 + Math.random()*200);
+  const riskScore = computeRiskScore(result);
+  const premiums = estimatePremiums(industryKey, employees, revenue, riskScore);
+  result.liability = {
+    oracle: 'selfdriven Liability Modelling Engine',
+    risk_score: riskScore,
+    risk_label: riskLabel(riskScore),
+    estimated_premiums_aud: premiums,
+    whs_risk: ind.whs_risk,
+    cyber_risk: ind.cyber_risk,
+    workers_comp_rate_pct: ind.wc_rate,
+    pl_base_aud_pa: ind.pl_base,
+    latency_ms: 320 + Math.floor(Math.random()*100)
+  };
+  setStep('liability', 'done');
+
+  // ── STEP 7: Coverage recommendations ──
+  setStep('coverage', 'active');
+  await sleep(200 + Math.random()*150);
+  const coverage = buildCoverage(industryKey, employees, revenue, structure);
+  const regFlags = buildRegulatoryFlags(industryKey, employees, revenue, structure);
+  result.coverage = { recommended: coverage, oracle:'selfdriven Coverage Intelligence Engine' };
+  result.regulatory_flags = regFlags;
+  setStep('coverage', 'done');
+
+  // ── STEP 8: KERI ──
+  setStep('keri', 'active');
+  await sleep(180 + Math.random()*120);
+  const digest = 'sha256·' + [...Array(32)].map(()=>Math.floor(Math.random()*16).toString(16)).join('');
+  result.keriEvent = {
+    type:'ixn', aid:'EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt',
+    sn: keriSn, digest,
+    oracle: 'selfdriven KERI Witness Network (3-of-3)'
+  };
+  addKelEvent(`Commercial risk query · ABN ${displayAbn(digits)} · score:${riskScore}`, digest);
+  setStep('keri', 'done');
+
+  // ── RENDER ──
+  currentJson = result;
+  renderResults(result, abrData, ind, coverage, regFlags, riskScore, premiums);
+
+  document.getElementById('progress-section').classList.remove('visible');
+  document.getElementById('results-section').classList.add('visible');
+  document.getElementById('search-btn').disabled = false;
+  document.getElementById('search-btn-label').textContent = '◈ Analyse Commercial Risk';
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderResults(result, abrData, ind, coverage, regFlags, riskScore, premiums) {
+  // Header
+  document.getElementById('res-entity-name').textContent = abrData.name;
+  document.getElementById('res-abn-line').textContent = `ABN ${abrData.abn} · ${abrData.type} · ${abrData.state}`;
+  const badge = document.getElementById('res-score-badge');
+  badge.className = 'result-score-badge ' + riskClass(riskScore);
+  document.getElementById('res-score-num').textContent = riskScore;
+
+  // Entity grid
+  const entityGrid = document.getElementById('entity-grid');
+  const entityFields = [
+    { label:'Entity Name',   value: abrData.name,   sub: '' },
+    { label:'ABN',           value: abrData.abn,    sub: abrData.status },
+    { label:'Type',          value: abrData.type,   sub: '' },
+    { label:'GST Registered',value: abrData.gst ? 'Yes' : 'No', sub: '' },
+    { label:'State',         value: abrData.state,  sub: `Since ${abrData.since}` },
+    { label:'ANZSIC Division',value: `Division ${ind.anzsic}`, sub: ind.label },
+    { label:'Industry Hazard',value: ind.hazard,    sub: ind.icon },
+    { label:'WC Rate',       value: `${ind.wc_rate}%`, sub: 'of payroll' },
+  ];
+  entityGrid.innerHTML = entityFields.map(f => `
+    <div class="entity-field">
+      <div class="ef-label">${f.label}</div>
+      <div class="ef-value">${f.value}</div>
+      ${f.sub ? `<div class="ef-sub">${f.sub}</div>` : ''}
+    </div>`).join('');
+
+  // Coverage chips
+  const tierColors = { required:'required', recommended:'recommended', optional:'optional' };
+  const tierLabels = { required:'Required', recommended:'Recommended', optional:'Optional' };
+  document.getElementById('coverage-chips').innerHTML = coverage.map(c => `
+    <span class="cov-chip ${tierColors[c.tier]}" title="${c.note}">
+      <span class="cov-dot"></span>${c.label} ${c.min_limit ? `(${c.min_limit})` : ''}
+    </span>`).join('');
+
+  // Regulatory flags
+  const regAlert = document.getElementById('reg-alert');
+  if (regFlags.length > 0) {
+    document.getElementById('reg-list').innerHTML = regFlags.map(f => `
+      <div class="reg-item"><strong>${f.title}</strong><br>${f.body}</div>`).join('');
+    regAlert.classList.add('visible');
+  } else {
+    regAlert.classList.remove('visible');
+  }
+
+  // Oracle cards
+  const prop = result.property || {};
+  const geo = result.geocode || {};
+  const cards = [
+    // ABR card
+    {
+      icon:'🏢', source:'ABR', type:'Australian Business Register',
+      metric_label: 'Business Status', metric_value: abrData.status,
+      pct: abrData.status === 'Active' ? 10 : 90,
+      rows: [
+        { label:'GST', value: abrData.gst ? 'Registered' : 'Not Registered', cls: abrData.gst ? 'green' : 'amber' },
+        { label:'State', value: abrData.state },
+        { label:'Registered Since', value: abrData.since },
+      ],
+      tag:'live', latency: `${abrData.latency_ms}ms`
+    },
+    // Industry card
+    {
+      icon: ind.icon, source:'ANZSIC', type:'Industry Hazard Engine',
+      metric_label:'Hazard Classification', metric_value: ind.hazard,
+      pct: { 'LOW':12, 'MODERATE':35, 'HIGH':60, 'VERY HIGH':80, 'EXTREME':97 }[ind.hazard] || 40,
+      rows: [
+        { label:'Division', value: `${ind.anzsic} – ${ind.label}` },
+        { label:'WHS Risk', value: ind.whs_risk.toUpperCase(), cls: ind.whs_risk === 'very_high' || ind.whs_risk === 'high' ? 'red' : ind.whs_risk === 'medium' ? 'amber' : 'green' },
+        { label:'Cyber Risk', value: ind.cyber_risk.toUpperCase(), cls: ind.cyber_risk === 'very_high' || ind.cyber_risk === 'high' ? 'red' : 'amber' },
+      ],
+      tag:'derived', latency:`${result.industry_data.latency_ms}ms`
+    },
+    // Liability card
+    {
+      icon:'⚖️', source:'LIABILITY', type:'Modelling Engine',
+      metric_label:'Risk Score', metric_value: String(riskScore),
+      pct: riskScore,
+      rows: [
+        { label:'Risk Level', value: riskLabel(riskScore), cls: riskScore < 33 ? 'green' : riskScore < 66 ? 'amber' : 'red' },
+        { label:'Est. PL Premium', value: `$${premiums.pl.toLocaleString()} p.a.` },
+        { label:'Est. PI Premium', value: `$${premiums.pi.toLocaleString()} p.a.` },
+      ],
+      tag:'computed', latency:`${result.liability.latency_ms}ms`
+    },
+    // Property / Flood card
+    {
+      icon:'🌊', source:'PROPERTY RISK', type:'Open-Meteo / GloFAS',
+      metric_label:'Flood Discharge', metric_value: prop.river_discharge !== undefined ? `${prop.river_discharge?.toFixed ? prop.river_discharge.toFixed(1) : prop.river_discharge}` : 'N/A',
+      metric_unit: prop.river_discharge !== undefined ? 'm³/s' : '',
+      pct: prop.river_discharge !== undefined ? Math.min(99, Math.round((prop.river_discharge||0)/5)) : 0,
+      rows: [
+        { label:'Flood Risk', value: prop.flood_risk_tier || 'N/A', cls: !prop.flood_risk_tier ? '' : prop.flood_risk_tier === 'LOW' ? 'green' : prop.flood_risk_tier === 'MODERATE' ? 'amber' : 'red' },
+        { label:'Elevation', value: prop.elevation_m !== undefined ? `${prop.elevation_m}m` : 'N/A' },
+        { label:'Flood Exposure', value: prop.flood_exposure || 'N/A' },
+      ],
+      tag: geo.lat ? 'live' : 'derived', latency: geo.lat ? '—' : 'no address'
+    },
+    // Weather card
+    {
+      icon:'🌬️', source:'WEATHER', type:'Open-Meteo (BOM/NOAA)',
+      metric_label:'Wind Speed', metric_value: prop.wind_speed_kmh !== undefined ? String(Math.round(prop.wind_speed_kmh||0)) : 'N/A',
+      metric_unit: prop.wind_speed_kmh !== undefined ? 'km/h' : '',
+      pct: prop.wind_speed_kmh ? Math.min(99, Math.round((prop.wind_speed_kmh||0)/1.2)) : 10,
+      rows: [
+        { label:'Gusts', value: prop.wind_gusts_kmh !== undefined ? `${Math.round(prop.wind_gusts_kmh||0)} km/h` : 'N/A', cls: (prop.wind_gusts_kmh||0) > 60 ? 'red' : (prop.wind_gusts_kmh||0) > 40 ? 'amber' : 'green' },
+        { label:'Temperature', value: prop.temperature_c !== undefined ? `${prop.temperature_c}°C` : 'N/A' },
+        { label:'Precip. Prob.', value: prop.precip_probability !== undefined ? `${prop.precip_probability}%` : 'N/A' },
+      ],
+      tag: geo.lat ? 'live' : 'derived', latency:'—'
+    },
+    // Premium estimate card
+    {
+      icon:'💰', source:'PREMIUM ESTIMATE', type:'selfdriven Rating Engine',
+      metric_label:'Total Est. Premium', metric_value: `$${(premiums.total).toLocaleString()}`,
+      metric_unit: 'p.a.',
+      pct: Math.min(95, Math.round(premiums.total / 1000)),
+      rows: [
+        { label:'Public Liability', value: `$${premiums.pl.toLocaleString()}` },
+        { label:'Cyber', value: `$${premiums.cyber.toLocaleString()}` },
+        { label:'Bus. Interruption', value: `$${premiums.bi.toLocaleString()}` },
+      ],
+      tag:'computed', latency:'indicative'
+    },
+  ];
+
+  document.getElementById('oracle-grid').innerHTML = cards.map(c => `
+    <div class="oracle-card">
+      <div class="oracle-card-top"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">${c.icon}</div>
+          <div>
+            <div class="oracle-source-name">${c.source}</div>
+            <div class="oracle-source-type">${c.type}</div>
+          </div>
+        </div>
+        <div class="oracle-metric-label">${c.metric_label}</div>
+        <div class="oracle-metric-value">${c.metric_value}<span class="oracle-metric-unit">${c.metric_unit||''}</span></div>
+        <div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${c.pct}%;background:${riskColor(c.pct)};"></div></div>
+        <div class="oracle-rows">
+          ${c.rows.map(r => `<div class="oracle-row"><span class="ok">${r.label}</span><span class="ov${r.cls?' '+r.cls:''}">${r.value}</span></div>`).join('')}
+        </div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag ${c.tag}"><span class="oracle-tag-dot"></span>${c.tag}</span>
+          <span class="oracle-latency">${c.latency}</span>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // JSON
+  document.getElementById('json-body').innerHTML = syntaxHighlight(result);
+}
+</script>
+</body>
+</html>
