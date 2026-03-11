@@ -1,3 +1,8 @@
+---
+layout: null
+title: Commercial - selfdriven Insure
+permalink: /interfaces/human/commercial
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<title>Commercial - selfdriven.insure - v3</title>
+<title>Commercial - selfdriven.insure - v4</title>
 <style>
 :root {
   --bg:#f5f2ed;--surface:#edeae3;--surface2:#e5e1d8;--border:#ddd8ce;
@@ -531,7 +536,8 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 <script>
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let keriSn = 1, currentJson = null;
-let ABR_GUID = localStorage.getItem('sd_abr_guid') || 'dd0305c0-768a-40a0-aa54-78acd28cebeb';
+let ABR_GUID = 'dd0305c0-768a-40a0-aa54-78acd28cebeb';
+try { ABR_GUID = localStorage.getItem('sd_abr_guid') || ABR_GUID; } catch(e) {}
 
 // ── GUID ──────────────────────────────────────────────────────────────────────
 function initGuid() {
@@ -546,11 +552,11 @@ function saveGuid() {
   const val = document.getElementById('guid-field').value.trim();
   ABR_GUID = val;
   if (val) {
-    localStorage.setItem('sd_abr_guid', val);
+    try { localStorage.setItem('sd_abr_guid', val); } catch(e) {}
     document.getElementById('guid-status').textContent = '✓ GUID saved';
     document.getElementById('guid-status').className = 'guid-status ok';
   } else {
-    localStorage.removeItem('sd_abr_guid');
+    try { localStorage.removeItem('sd_abr_guid'); } catch(e) {}
     document.getElementById('guid-status').textContent = '— no GUID';
     document.getElementById('guid-status').className = 'guid-status none';
   }
