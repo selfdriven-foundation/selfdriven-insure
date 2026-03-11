@@ -1,3 +1,8 @@
+---
+layout: null
+title: Commercial - selfdriven Insure
+permalink: /interfaces/human/commercial
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<title>Commercial - selfdriven.insure - v4</title>
+<title>Commercial - selfdriven.insure - v5</title>
 <style>
 :root {
   --bg:#f5f2ed;--surface:#edeae3;--surface2:#e5e1d8;--border:#ddd8ce;
@@ -653,28 +658,26 @@ function lookupAbrLive(abn) {
       delete window[cbName];
       script.remove();
       const latency = Date.now() - t0;
-      if (!data || data.Message) return reject(new Error(data?.Message || 'ABR error'));
-      // Parse ABR JSONP response
-      const e = data.ABRPayloadSearchResults?.response?.businessEntity201408 || 
-                data.ABRPayloadSearchResults?.response?.businessEntity201205 ||
-                data.ABRPayloadSearchResults?.response?.businessEntity;
-      if (!e) return reject(new Error('no_entity'));
 
-      const nameObj = e.mainName || e.legalName || e.businessName?.[0] || {};
-      const name = nameObj.organisationName || 
-                   ((nameObj.givenName || '') + ' ' + (nameObj.familyName || '')).trim() ||
+      // ABR JSON endpoint returns a flat object:
+      // { Abn, AbnStatus, EntityName, EntityTypeCode, EntityTypeName,
+      //   Gst, AddressState, AddressPostcode, AbnStatusEffectiveFrom,
+      //   BusinessName:[], Acn, Message }
+      if (!data) return reject(new Error('No response from ABR'));
+      if (data.Message && data.Message !== '') return reject(new Error(data.Message));
+
+      const name = data.EntityName ||
+                   (data.BusinessName && data.BusinessName.length ? data.BusinessName[0] : null) ||
                    'Unknown Entity';
-      const abnStatus = e.entityStatus?.entityStatusCode || 'Unknown';
-      const gstRegistrations = e.goodsAndServicesTax;
-      const gst = !!(gstRegistrations && gstRegistrations.effectiveFrom && !gstRegistrations.effectiveTo);
-      const entityType = e.entityType?.entityDescription || e.entityType?.entityTypeCode || 'Unknown';
-      const state = e.mainBusinessPhysicalAddress?.stateCode || e.mainBusinessPhysicalAddress?.[0]?.stateCode || '';
-      const postcode = e.mainBusinessPhysicalAddress?.postcode || '';
-      const since = e.entityStatus?.effectiveFrom || '';
-      const acnc = !!(e.charityTaxConcession || e.taxConcession);
-      const dgr = !!(e.DGRFund || e.taxConcession?.DGRFund);
+      const status = data.AbnStatus === 'Active' ? 'Active' : (data.AbnStatus || 'Unknown');
+      const gst = !!(data.Gst && data.Gst !== '');
+      const entityType = data.EntityTypeName || data.EntityTypeCode || 'Unknown';
+      const state = data.AddressState || '';
+      const postcode = data.AddressPostcode || '';
+      const since = data.AbnStatusEffectiveFrom || '';
+      const acnc = false, dgr = false;
 
-      resolve({ name, status: abnStatus === 'ACT' ? 'Active' : abnStatus, gst, entityType, state, postcode, since, acnc, dgr,
+      resolve({ name, status, gst, entityType, state, postcode, since, acnc, dgr,
         abn: displayAbn(digits), raw: digits, source:'ABR Live', latency_ms: latency });
     };
 
