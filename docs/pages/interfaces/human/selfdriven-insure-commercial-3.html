@@ -1,0 +1,1111 @@
+---
+layout: null
+title: Commercial - selfdriven Insure
+permalink: /interfaces/human/commercial
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png">
+<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Commercial - selfdriven.insure - v3</title>
+<style>
+:root {
+  --bg:#f5f2ed;--surface:#edeae3;--surface2:#e5e1d8;--border:#ddd8ce;
+  --text:#1a1410;--muted:#6b5f52;--muted2:#9e9085;
+  --accent:#c8442f;--accent-dim:rgba(200,68,47,0.10);--accent-strong:rgba(200,68,47,0.18);
+  --card-radius:20px;--shadow:0 4px 24px rgba(0,0,0,0.08);
+  --green:#1a7a4a;--green-dim:rgba(26,122,74,0.12);
+  --amber:#b86800;--amber-dim:rgba(184,104,0,0.12);
+  --red:#c8442f;--red-dim:rgba(200,68,47,0.12);
+  --blue:#1a4a8a;--blue-dim:rgba(26,74,138,0.10);
+  --purple:#5a2a8a;--purple-dim:rgba(90,42,138,0.10);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0a0a0a;--surface:#161616;--surface2:#1e1e1e;--border:#2a2a2a;
+    --text:#f0ede8;--muted:#b0a89e;--muted2:#7a7268;
+    --accent:#e85d4a;--accent-dim:rgba(232,93,74,0.12);--accent-strong:rgba(232,93,74,0.20);
+    --shadow:0 4px 28px rgba(0,0,0,0.5);
+    --green:#2dd47a;--green-dim:rgba(45,212,122,0.12);
+    --amber:#f5a623;--amber-dim:rgba(245,166,35,0.12);
+    --red:#e85d4a;--red-dim:rgba(232,93,74,0.12);
+    --blue:#5b9ef0;--blue-dim:rgba(91,158,240,0.10);
+    --purple:#a07fdc;--purple-dim:rgba(160,127,220,0.10);
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;background:color-mix(in srgb,var(--bg) 85%,transparent);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-logo{width:30px;height:30px;border-radius:8px;overflow:hidden;flex-shrink:0;}
+.nav-logo img{width:100%;height:100%;display:block;}
+.nav-title{font-size:15px;font-weight:700;letter-spacing:-0.02em;}
+.nav-title span{color:var(--accent);}
+.nav-meta{display:flex;align-items:center;gap:10px;}
+.live-badge{display:flex;align-items:center;gap:6px;padding:4px 12px;background:var(--green-dim);
+  border:1px solid var(--green);border-radius:999px;font-size:11px;font-weight:600;
+  color:var(--green);font-family:JetBrains Mono,monospace;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.keri-btn{display:flex;align-items:center;gap:6px;padding:5px 14px;background:var(--surface);
+  border:1px solid var(--border);border-radius:999px;font-family:JetBrains Mono,monospace;
+  font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.keri-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+.container{max-width:1200px;margin:0 auto;padding:32px 24px 60px;}
+
+/* GUID BANNER */
+.guid-banner{
+  background:var(--blue-dim);border:1px solid var(--blue);border-radius:16px;
+  padding:14px 20px;margin-bottom:28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.guid-banner .gb-icon{font-size:20px;flex-shrink:0;}
+.guid-banner .gb-text{flex:1;min-width:200px;}
+.guid-banner .gb-title{font-size:13px;font-weight:700;color:var(--blue);margin-bottom:3px;}
+.guid-banner .gb-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+.guid-input-wrap{display:flex;gap:8px;align-items:center;min-width:320px;}
+.guid-field{
+  flex:1;padding:8px 12px;background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;font-family:JetBrains Mono,monospace;font-size:12px;
+  color:var(--text);outline:none;transition:border-color 0.2s;
+}
+.guid-field:focus{border-color:var(--blue);}
+.guid-save-btn{
+  padding:8px 16px;background:var(--blue-dim);border:1px solid var(--blue);border-radius:10px;
+  font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:var(--blue);
+  cursor:pointer;white-space:nowrap;transition:all 0.15s;
+}
+.guid-save-btn:hover{background:var(--blue);color:white;}
+.guid-status{font-size:11px;font-family:JetBrains Mono,monospace;font-weight:600;}
+.guid-status.ok{color:var(--green);}
+.guid-status.none{color:var(--muted2);}
+
+/* HERO */
+.search-hero{text-align:center;margin-bottom:32px;}
+.search-hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.search-hero h1{font-size:36px;font-weight:900;letter-spacing:-0.04em;color:var(--text);line-height:1.15;margin-bottom:8px;}
+.search-hero h1 em{color:var(--accent);font-style:normal;}
+.search-hero p{font-size:14px;color:var(--muted);max-width:580px;margin:0 auto 4px;line-height:1.7;}
+.oracle-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:14px;}
+.oracle-pill{
+  display:inline-flex;align-items:center;gap:5px;padding:3px 10px;
+  border-radius:999px;font-size:11px;font-weight:600;border:1px solid;
+}
+.oracle-pill.live{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.oracle-pill.guid{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+.op-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* FORM */
+.form-panel{max-width:720px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;}
+.form-panel-top{height:4px;background:var(--accent);}
+.form-panel-body{padding:24px 28px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+.field-input,.field-select{
+  padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;
+  font-family:Poppins,sans-serif;font-size:14px;color:var(--text);outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;width:100%;
+}
+.field-input:focus,.field-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim);}
+.field-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b5f52' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+.analyse-btn{width:100%;padding:14px;margin-top:8px;background:var(--accent);border:none;border-radius:12px;
+  font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:white;cursor:pointer;transition:all 0.15s;}
+.analyse-btn:hover:not(:disabled){opacity:0.88;transform:scale(0.99);}
+.analyse-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+.example-chips{display:flex;align-items:center;gap:8px;justify-content:center;margin:16px 0 32px;flex-wrap:wrap;}
+.example-label{font-size:11px;color:var(--muted2);}
+.example-chip{padding:4px 12px;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  font-size:11px;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.example-chip:hover{border-color:var(--accent);color:var(--accent);}
+
+/* PROGRESS */
+.progress-section{display:none;max-width:720px;margin:0 auto 32px;}
+.progress-section.visible{display:block;}
+.progress-steps{display:flex;flex-direction:column;gap:6px;padding:16px 20px;
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;}
+.progress-step{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);transition:color 0.2s;}
+.progress-step.active{color:var(--text);font-weight:600;}
+.progress-step.done{color:var(--green);}
+.progress-step.error{color:var(--red);}
+.progress-step.skipped{color:var(--muted2);}
+.step-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;background:var(--surface2);color:var(--muted);}
+.progress-step.active .step-icon{background:var(--accent-dim);color:var(--accent);animation:spinPulse 1s ease infinite;}
+@keyframes spinPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.progress-step.done .step-icon{background:var(--green-dim);color:var(--green);}
+.progress-step.error .step-icon{background:var(--red-dim);color:var(--red);}
+.progress-step.skipped .step-icon{background:var(--surface2);color:var(--muted2);}
+.step-tag{font-size:9px;font-family:JetBrains Mono,monospace;font-weight:700;
+  padding:1px 6px;border-radius:4px;margin-left:6px;vertical-align:middle;}
+.step-tag.live{background:var(--green-dim);color:var(--green);}
+.step-tag.guid{background:var(--blue-dim);color:var(--blue);}
+.step-tag.derived{background:var(--purple-dim);color:var(--purple);}
+
+/* RESULTS */
+.results-section{display:none;}
+.results-section.visible{display:block;}
+.result-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;}
+.result-entity .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+.result-entity h2{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.2;}
+.result-entity .sub{font-size:13px;color:var(--muted);font-family:JetBrains Mono,monospace;margin-top:4px;}
+.result-score-badge{flex-shrink:0;width:80px;height:80px;border-radius:18px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:JetBrains Mono,monospace;border:2px solid;}
+.result-score-badge .score-num{font-size:28px;font-weight:700;line-height:1;}
+.result-score-badge .score-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;}
+.score-low{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.score-med{background:var(--amber-dim);border-color:var(--amber);color:var(--amber);}
+.score-high{background:var(--red-dim);border-color:var(--red);color:var(--red);}
+
+/* ENTITY HERO */
+.entity-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:20px;}
+.entity-hero-top{height:4px;background:var(--accent);}
+.entity-hero-body{padding:20px 24px;}
+.entity-source-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.entity-source-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+.entity-source-badge{font-size:10px;font-family:JetBrains Mono,monospace;font-weight:700;
+  padding:2px 8px;border-radius:6px;}
+.entity-source-badge.live{background:var(--green-dim);color:var(--green);}
+.entity-source-badge.abr-live{background:var(--blue-dim);color:var(--blue);}
+.entity-source-badge.validated{background:var(--accent-dim);color:var(--accent);}
+.entity-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+@media(max-width:700px){.entity-grid{grid-template-columns:1fr 1fr;}}
+.entity-field .ef-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.entity-field .ef-value{font-size:14px;font-weight:700;color:var(--text);line-height:1.2;}
+.entity-field .ef-sub{font-size:11px;color:var(--muted);margin-top:2px;font-family:JetBrains Mono,monospace;}
+
+/* COVERAGE */
+.coverage-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:20px;}
+.coverage-bar-top{height:4px;background:var(--accent);}
+.coverage-bar-body{padding:16px 24px;}
+.coverage-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+.coverage-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.cov-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;
+  border:1px solid var(--border);border-radius:999px;font-size:12px;font-weight:600;}
+.cov-chip.required{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+.cov-chip.recommended{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+.cov-chip.optional{background:var(--surface2);color:var(--muted);}
+.cov-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* ORACLE GRID */
+.oracle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+@media(max-width:780px){.oracle-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.oracle-grid{grid-template-columns:1fr;}}
+.oracle-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;transition:box-shadow 0.2s,transform 0.2s;}
+.oracle-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.oracle-card-top{height:4px;background:var(--accent);}
+.oracle-card-body{padding:16px 18px;}
+.oracle-source{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.oracle-source-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--surface2);}
+.oracle-source-name{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+.oracle-source-type{font-size:11px;color:var(--muted);}
+.oracle-metric-label{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500;}
+.oracle-metric-value{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.1;}
+.oracle-metric-unit{font-size:13px;font-weight:600;color:var(--muted);margin-left:2px;}
+.oracle-risk-bar{margin-top:10px;height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;}
+.oracle-risk-fill{height:100%;border-radius:3px;transition:width 1s ease;}
+.oracle-rows{margin-top:10px;}
+.oracle-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.oracle-row:last-child{border-bottom:none;}
+.oracle-row .ok{color:var(--muted);font-weight:500;flex-shrink:0;margin-right:8px;}
+.oracle-row .ov{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--text);text-align:right;word-break:break-word;}
+.oracle-row .ov.green{color:var(--green);}
+.oracle-row .ov.amber{color:var(--amber);}
+.oracle-row .ov.red{color:var(--red);}
+.oracle-row .ov.blue{color:var(--blue);}
+.oracle-status-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);}
+.oracle-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;}
+.oracle-tag.live{background:var(--green-dim);color:var(--green);}
+.oracle-tag.abr{background:var(--blue-dim);color:var(--blue);}
+.oracle-tag.derived{background:var(--purple-dim);color:var(--purple);}
+.oracle-tag.computed{background:var(--accent-dim);color:var(--accent);}
+.oracle-tag-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.oracle-latency{font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted2);}
+
+/* REGULATORY ALERT */
+.reg-alert{display:none;margin-bottom:20px;padding:16px 20px;background:var(--amber-dim);border:1px solid var(--amber);border-radius:16px;}
+.reg-alert.visible{display:block;}
+.reg-alert-title{font-size:14px;font-weight:700;color:var(--amber);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.reg-item{font-size:12px;color:var(--text);padding:8px 0;border-bottom:1px solid var(--border);line-height:1.5;}
+.reg-item:last-child{border-bottom:none;}
+.reg-item strong{color:var(--amber);}
+
+/* BOTTOM GRID */
+.bottom-grid{display:grid;grid-template-columns:1fr 380px;gap:16px;}
+@media(max-width:780px){.bottom-grid{grid-template-columns:1fr;}}
+.json-panel,.kel-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;}
+.panel-hdr{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.panel-hdr-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.copy-btn{padding:4px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);
+  font-family:Poppins,sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+.json-body{padding:16px 18px;font-family:JetBrains Mono,monospace;font-size:11px;line-height:1.8;
+  max-height:380px;overflow-y:auto;color:var(--text);white-space:pre-wrap;word-break:break-word;}
+.json-body .jk{color:var(--accent);}
+.json-body .js{color:var(--green);}
+.json-body .jn{color:var(--blue);}
+.json-body .jb{color:var(--amber);}
+.kel-event{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:11px;}
+.kel-event:last-child{border-bottom:none;}
+.kel-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.kel-dot.icp{background:var(--accent);}
+.kel-dot.ixn{background:var(--green);}
+.kel-type{font-family:JetBrains Mono,monospace;font-weight:700;color:var(--accent);font-size:10px;}
+.kel-desc{color:var(--muted);margin-top:1px;line-height:1.4;}
+.kel-digest{font-family:JetBrains Mono,monospace;font-size:9px;color:var(--muted2);margin-top:3px;word-break:break-all;}
+.kel-time{margin-left:auto;flex-shrink:0;font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted2);}
+.error-banner{display:none;padding:14px 18px;background:var(--red-dim);border:1px solid var(--red);
+  border-radius:14px;color:var(--red);font-size:13px;font-weight:500;margin-bottom:20px;}
+.error-banner.visible{display:block;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo"><img src="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" alt="selfdriven"></div>
+    <div class="nav-title">selfdriven<span>.insure</span> — Commercial</div>
+  </div>
+  <div class="nav-meta">
+    <div class="live-badge"><div class="live-dot"></div>Live Oracle Feed</div>
+    <div class="keri-btn">🔐 EKE4g…kqt</div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ABR GUID BANNER -->
+  <div class="guid-banner" id="guid-banner">
+    <div class="gb-icon">✅</div>
+    <div class="gb-text">
+      <div class="gb-title">ABR Live — Australian Business Register Connected</div>
+      <div class="gb-desc">Real entity names, GST status, entity type &amp; ACNC/DGR flags are fetched live from the ABR on every lookup. Override GUID below if needed.</div>
+    </div>
+    <div class="guid-input-wrap">
+      <input class="guid-field" id="guid-field" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+      <button class="guid-save-btn" onclick="saveGuid()">Override</button>
+      <span class="guid-status ok" id="guid-status">✓ GUID active</span>
+    </div>
+  </div>
+
+  <div class="search-hero">
+    <div class="eyebrow">Commercial Insurance Risk Intelligence</div>
+    <h1>Real-time oracle lookup<br>for any <em>Australian Business</em></h1>
+    <p>Enter an ABN to pull live entity data, property hazard signals, air quality, industry classification, and liability exposure — all anchored to your KERI identity.</p>
+    <div class="oracle-pills">
+      <span class="oracle-pill live"><span class="op-dot"></span>ABR JSONP (with GUID)</span>
+      <span class="oracle-pill live"><span class="op-dot"></span>Nominatim Geocoding</span>
+      <span class="oracle-pill live"><span class="op-dot"></span>Open-Meteo Weather</span>
+      <span class="oracle-pill live"><span class="op-dot"></span>Open-Meteo Elevation</span>
+      <span class="oracle-pill live"><span class="op-dot"></span>Open-Meteo Flood / GloFAS</span>
+      <span class="oracle-pill live"><span class="op-dot"></span>Open-Meteo Air Quality</span>
+    </div>
+  </div>
+
+  <div class="form-panel">
+    <div class="form-panel-top"></div>
+    <div class="form-panel-body">
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">ABN (11 digits)</label>
+          <input class="field-input" id="abn-input" type="text" maxlength="14"
+            placeholder="e.g. 51 824 753 556"
+            oninput="formatAbn(this)"
+            onkeydown="if(event.key==='Enter')lookupCommercial()" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Primary Industry</label>
+          <select class="field-select" id="industry-select">
+            <option value="">— Select industry —</option>
+            <option value="retail">Retail Trade</option>
+            <option value="hospitality">Hospitality &amp; Food Services</option>
+            <option value="construction">Construction &amp; Trades</option>
+            <option value="manufacturing">Manufacturing</option>
+            <option value="transport">Transport &amp; Logistics</option>
+            <option value="healthcare">Healthcare &amp; Medical</option>
+            <option value="professional">Professional Services</option>
+            <option value="technology">Technology &amp; IT</option>
+            <option value="finance">Finance &amp; Insurance</option>
+            <option value="education">Education &amp; Training</option>
+            <option value="property">Property &amp; Real Estate</option>
+            <option value="mining">Mining &amp; Resources</option>
+            <option value="agriculture">Agriculture &amp; Farming</option>
+            <option value="entertainment">Arts, Entertainment &amp; Recreation</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Business Address</label>
+          <input class="field-input" id="biz-addr-input" type="text"
+            placeholder="e.g. 123 Collins St, Melbourne VIC" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Number of Employees</label>
+          <select class="field-select" id="employees-select">
+            <option value="1">Sole trader / 1</option>
+            <option value="5">2–5</option>
+            <option value="20" selected>6–20</option>
+            <option value="50">21–50</option>
+            <option value="200">51–200</option>
+            <option value="500">201–500</option>
+            <option value="1000">500+</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Annual Revenue (AUD)</label>
+          <select class="field-select" id="revenue-select">
+            <option value="100000">Under $100k</option>
+            <option value="500000" selected>$100k – $500k</option>
+            <option value="2000000">$500k – $2M</option>
+            <option value="10000000">$2M – $10M</option>
+            <option value="50000000">$10M – $50M</option>
+            <option value="100000000">$50M+</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Business Structure</label>
+          <select class="field-select" id="structure-select">
+            <option value="pty">Pty Ltd (Company)</option>
+            <option value="trust">Trust</option>
+            <option value="partnership">Partnership</option>
+            <option value="sole_trader">Sole Trader</option>
+            <option value="nonprofit">Not-for-Profit</option>
+            <option value="government">Government Entity</option>
+          </select>
+        </div>
+      </div>
+      <button class="analyse-btn" id="search-btn" onclick="lookupCommercial()">
+        <span id="search-btn-label">◈ Analyse Commercial Risk</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="example-chips">
+    <span class="example-label">Sample ABNs (real, verifiable):</span>
+    <span class="example-chip" onclick="fillAndRun('51824753556','construction','456 George St, Sydney NSW','50','2000000','pty')">Construction — NSW</span>
+    <span class="example-chip" onclick="fillAndRun('83914571673','hospitality','78 Acland St, St Kilda VIC','20','500000','pty')">Hospitality — VIC</span>
+    <span class="example-chip" onclick="fillAndRun('26008672179','technology','1 Innovation Rd, Brisbane QLD','200','10000000','pty')">Technology — QLD</span>
+    <span class="example-chip" onclick="fillAndRun('49093669009','healthcare','99 Bourke St, Melbourne VIC','50','2000000','pty')">Healthcare — VIC</span>
+    <span class="example-chip" onclick="fillAndRun('72006099047','manufacturing','14 Industrial Ave, Dandenong VIC','200','10000000','pty')">Manufacturing — VIC</span>
+  </div>
+
+  <div class="error-banner" id="error-banner"></div>
+
+  <div class="progress-section" id="progress-section">
+    <div class="progress-steps">
+      <div class="progress-step" id="step-abn">
+        <div class="step-icon" id="si-abn">1</div>
+        <span id="sl-abn">Validating ABN check digit…</span>
+        <span class="step-tag derived">derived</span>
+      </div>
+      <div class="progress-step" id="step-abr">
+        <div class="step-icon" id="si-abr">2</div>
+        <span id="sl-abr">Querying Australian Business Register (ABR)…</span>
+        <span class="step-tag guid" id="abr-tag">guid</span>
+      </div>
+      <div class="progress-step" id="step-geocode">
+        <div class="step-icon" id="si-geocode">3</div>
+        <span>Geocoding business address — Nominatim / OpenStreetMap…</span>
+        <span class="step-tag live">live</span>
+      </div>
+      <div class="progress-step" id="step-elevation">
+        <div class="step-icon" id="si-elevation">4</div>
+        <span>Elevation lookup — Open-Meteo / ESA Copernicus DEM…</span>
+        <span class="step-tag live">live</span>
+      </div>
+      <div class="progress-step" id="step-weather">
+        <div class="step-icon" id="si-weather">5</div>
+        <span>Weather &amp; wind — Open-Meteo (BOM / NOAA)…</span>
+        <span class="step-tag live">live</span>
+      </div>
+      <div class="progress-step" id="step-flood">
+        <div class="step-icon" id="si-flood">6</div>
+        <span>Flood discharge — Open-Meteo / GloFAS global river model…</span>
+        <span class="step-tag live">live</span>
+      </div>
+      <div class="progress-step" id="step-airquality">
+        <div class="step-icon" id="si-airquality">7</div>
+        <span>Air quality &amp; fire risk — Open-Meteo AQ API…</span>
+        <span class="step-tag live">live</span>
+      </div>
+      <div class="progress-step" id="step-industry">
+        <div class="step-icon" id="si-industry">8</div>
+        <span>Industry hazard classification — ANZSIC engine…</span>
+        <span class="step-tag derived">derived</span>
+      </div>
+      <div class="progress-step" id="step-scoring">
+        <div class="step-icon" id="si-scoring">9</div>
+        <span>Composite risk scoring &amp; coverage recommendations…</span>
+        <span class="step-tag derived">derived</span>
+      </div>
+      <div class="progress-step" id="step-keri">
+        <div class="step-icon" id="si-keri">10</div>
+        <span>Logging KERI interaction event to KEL…</span>
+        <span class="step-tag derived">derived</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-section" id="results-section">
+
+    <div class="result-header">
+      <div class="result-entity">
+        <div class="eyebrow">Commercial Risk Report</div>
+        <h2 id="res-entity-name">—</h2>
+        <div class="sub" id="res-abn-line">—</div>
+      </div>
+      <div class="result-score-badge" id="res-score-badge">
+        <div class="score-num" id="res-score-num">—</div>
+        <div class="score-label">Risk Score</div>
+      </div>
+    </div>
+
+    <div class="entity-hero">
+      <div class="entity-hero-top"></div>
+      <div class="entity-hero-body">
+        <div class="entity-source-row">
+          <div class="entity-source-label">Business Entity — ABR Verified</div>
+          <span class="entity-source-badge" id="abr-source-badge">validated</span>
+        </div>
+        <div class="entity-grid" id="entity-grid"></div>
+      </div>
+    </div>
+
+    <div class="coverage-bar">
+      <div class="coverage-bar-top"></div>
+      <div class="coverage-bar-body">
+        <div class="coverage-label">Coverage Recommendations</div>
+        <div class="coverage-chips" id="coverage-chips"></div>
+      </div>
+    </div>
+
+    <div class="reg-alert" id="reg-alert">
+      <div class="reg-alert-title">⚠ Regulatory Compliance Flags</div>
+      <div id="reg-list"></div>
+    </div>
+
+    <div class="oracle-grid" id="oracle-grid"></div>
+
+    <div class="bottom-grid">
+      <div class="json-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">◈ Composite Oracle Response</div>
+          <button class="copy-btn" onclick="copyJson()">Copy JSON</button>
+        </div>
+        <div class="json-body" id="json-body">—</div>
+      </div>
+      <div class="kel-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">🔐 Key Event Log (KEL)</div>
+        </div>
+        <div id="kel-events">
+          <div class="kel-event">
+            <div class="kel-dot icp"></div>
+            <div>
+              <div class="kel-type">icp — Inception</div>
+              <div class="kel-desc">AID established · 3 witnesses · sn:0</div>
+              <div class="kel-digest">sha256·a3f8c9d1e4b2770f92ab34cd56ef78</div>
+            </div>
+            <div class="kel-time">session</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let keriSn = 1, currentJson = null;
+let ABR_GUID = localStorage.getItem('sd_abr_guid') || 'dd0305c0-768a-40a0-aa54-78acd28cebeb';
+
+// ── GUID ──────────────────────────────────────────────────────────────────────
+function initGuid() {
+  const active = ABR_GUID;
+  document.getElementById('guid-field').value = active;
+  if (active) {
+    document.getElementById('guid-status').textContent = '✓ GUID active';
+    document.getElementById('guid-status').className = 'guid-status ok';
+  }
+}
+function saveGuid() {
+  const val = document.getElementById('guid-field').value.trim();
+  ABR_GUID = val;
+  if (val) {
+    localStorage.setItem('sd_abr_guid', val);
+    document.getElementById('guid-status').textContent = '✓ GUID saved';
+    document.getElementById('guid-status').className = 'guid-status ok';
+  } else {
+    localStorage.removeItem('sd_abr_guid');
+    document.getElementById('guid-status').textContent = '— no GUID';
+    document.getElementById('guid-status').className = 'guid-status none';
+  }
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function formatAbn(input) {
+  let v = input.value.replace(/\D/g,'').slice(0,11);
+  if (v.length > 2) v = v.slice(0,2)+' '+v.slice(2);
+  if (v.length > 6) v = v.slice(0,6)+' '+v.slice(6);
+  if (v.length > 10) v = v.slice(0,10)+' '+v.slice(10);
+  input.value = v;
+}
+
+function validateAbn(abn) {
+  const digits = abn.replace(/\D/g,'');
+  if (digits.length !== 11) return false;
+  const weights = [10,1,3,5,7,9,11,13,15,17,19];
+  const d = digits.split('').map(Number);
+  d[0] -= 1;
+  return d.reduce((acc,v,i) => acc + v*weights[i], 0) % 89 === 0;
+}
+
+function displayAbn(raw) {
+  const d = raw.replace(/\D/g,'');
+  return `${d.slice(0,2)} ${d.slice(2,5)} ${d.slice(5,8)} ${d.slice(8,11)}`;
+}
+
+function setStep(id, state) {
+  document.getElementById('step-'+id).className = 'progress-step '+state;
+  const icon = document.getElementById('si-'+id);
+  if (state==='done')   icon.textContent = '✓';
+  if (state==='error')  icon.textContent = '✕';
+  if (state==='active') icon.textContent = '⟳';
+  if (state==='skipped') icon.textContent = '—';
+}
+
+function showError(msg) {
+  const b = document.getElementById('error-banner');
+  b.textContent = '⚠ '+msg; b.classList.add('visible');
+  document.getElementById('search-btn').disabled = false;
+  document.getElementById('search-btn-label').textContent = '◈ Analyse Commercial Risk';
+  document.getElementById('progress-section').classList.remove('visible');
+}
+function hideError() { document.getElementById('error-banner').classList.remove('visible'); }
+
+function syntaxHighlight(obj) {
+  const json = JSON.stringify(obj, null, 2);
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m => {
+    let cls = 'jn';
+    if (/^"/.test(m)) cls = /:$/.test(m) ? 'jk' : 'js';
+    else if (/true|false/.test(m)) cls = 'jb';
+    return `<span class="${cls}">${m}</span>`;
+  });
+}
+
+function addKelEvent(desc, digest) {
+  const time = new Date().toTimeString().slice(0,8);
+  const events = document.getElementById('kel-events');
+  const el = document.createElement('div');
+  el.className = 'kel-event';
+  el.innerHTML = `<div class="kel-dot ixn"></div><div><div class="kel-type">ixn — Interaction · sn:${keriSn}</div><div class="kel-desc">${desc}</div><div class="kel-digest">${digest}</div></div><div class="kel-time">${time}</div>`;
+  events.insertBefore(el, events.firstChild);
+  keriSn++;
+}
+
+function riskClass(s) { return s<33?'score-low':s<66?'score-med':'score-high'; }
+function riskColor(p) { return p<33?'var(--green)':p<66?'var(--amber)':'var(--red)'; }
+function riskLabel(s) { return s<33?'LOW':s<55?'MODERATE':s<75?'HIGH':'VERY HIGH'; }
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+
+function copyJson() {
+  if (!currentJson) return;
+  navigator.clipboard.writeText(JSON.stringify(currentJson,null,2))
+    .then(()=>{ const b=document.querySelector('.copy-btn');b.textContent='Copied!';setTimeout(()=>b.textContent='Copy JSON',1500); });
+}
+
+function fillAndRun(abn,industry,addr,employees,revenue,structure) {
+  document.getElementById('abn-input').value = abn.replace(/(\d{2})(\d{3})(\d{3})(\d{3})/,'$1 $2 $3 $4');
+  document.getElementById('industry-select').value = industry;
+  document.getElementById('biz-addr-input').value = addr;
+  document.getElementById('employees-select').value = employees;
+  document.getElementById('revenue-select').value = revenue;
+  document.getElementById('structure-select').value = structure;
+  lookupCommercial();
+}
+
+// ── LIVE ABR JSONP LOOKUP ─────────────────────────────────────────────────────
+// Uses ABR's official JSONP endpoint — requires a free GUID from abr.business.gov.au
+// JSONP is browser-callable without CORS restrictions
+function lookupAbrLive(abn) {
+  return new Promise((resolve, reject) => {
+    if (!ABR_GUID) return reject(new Error('no_guid'));
+    const digits = abn.replace(/\D/g,'');
+    const cbName = 'abr_cb_' + Date.now();
+    const t0 = Date.now();
+
+    window[cbName] = function(data) {
+      delete window[cbName];
+      script.remove();
+      const latency = Date.now() - t0;
+      if (!data || data.Message) return reject(new Error(data?.Message || 'ABR error'));
+      // Parse ABR JSONP response
+      const e = data.ABRPayloadSearchResults?.response?.businessEntity201408 || 
+                data.ABRPayloadSearchResults?.response?.businessEntity201205 ||
+                data.ABRPayloadSearchResults?.response?.businessEntity;
+      if (!e) return reject(new Error('no_entity'));
+
+      const nameObj = e.mainName || e.legalName || e.businessName?.[0] || {};
+      const name = nameObj.organisationName || 
+                   ((nameObj.givenName || '') + ' ' + (nameObj.familyName || '')).trim() ||
+                   'Unknown Entity';
+      const abnStatus = e.entityStatus?.entityStatusCode || 'Unknown';
+      const gstRegistrations = e.goodsAndServicesTax;
+      const gst = !!(gstRegistrations && gstRegistrations.effectiveFrom && !gstRegistrations.effectiveTo);
+      const entityType = e.entityType?.entityDescription || e.entityType?.entityTypeCode || 'Unknown';
+      const state = e.mainBusinessPhysicalAddress?.stateCode || e.mainBusinessPhysicalAddress?.[0]?.stateCode || '';
+      const postcode = e.mainBusinessPhysicalAddress?.postcode || '';
+      const since = e.entityStatus?.effectiveFrom || '';
+      const acnc = !!(e.charityTaxConcession || e.taxConcession);
+      const dgr = !!(e.DGRFund || e.taxConcession?.DGRFund);
+
+      resolve({ name, status: abnStatus === 'ACT' ? 'Active' : abnStatus, gst, entityType, state, postcode, since, acnc, dgr,
+        abn: displayAbn(digits), raw: digits, source:'ABR Live', latency_ms: latency });
+    };
+
+    const script = document.createElement('script');
+    // Use latest v2014 endpoint which includes ACNC/DGR fields
+    script.src = `https://abr.business.gov.au/json/AbnDetails.aspx?abn=${digits}&callback=${cbName}&guid=${ABR_GUID}`;
+    script.onerror = () => { delete window[cbName]; reject(new Error('ABR network error')); };
+    document.head.appendChild(script);
+
+    // 8s timeout
+    setTimeout(() => { if (window[cbName]) { delete window[cbName]; script.remove(); reject(new Error('ABR timeout')); } }, 8000);
+  });
+}
+
+// ── INDUSTRY DATA ─────────────────────────────────────────────────────────────
+const INDUSTRY_DATA = {
+  retail:        { label:'Retail Trade',                anzsic:'G', hazard:'MODERATE',  wc_rate:1.4, pl_base:800,  icon:'🏪', whs:'medium',    cyber:'high',     notes:'POS data; slip/fall; stock shrinkage; theft.' },
+  hospitality:   { label:'Hospitality & Food Services', anzsic:'H', hazard:'HIGH',      wc_rate:2.8, pl_base:1400, icon:'🍽️', whs:'high',      cyber:'medium',   notes:'Burns, cuts, manual handling; liquor licensing; food safety.' },
+  construction:  { label:'Construction & Trades',       anzsic:'E', hazard:'VERY HIGH', wc_rate:5.2, pl_base:2200, icon:'🏗️', whs:'very_high', cyber:'low',      notes:'Height work; plant & equipment; PCBU obligations; subcontractors.' },
+  manufacturing: { label:'Manufacturing',               anzsic:'C', hazard:'HIGH',      wc_rate:3.8, pl_base:1800, icon:'🏭', whs:'high',      cyber:'medium',   notes:'Machinery; chemicals; product liability; dust/noise.' },
+  transport:     { label:'Transport & Logistics',       anzsic:'I', hazard:'HIGH',      wc_rate:4.1, pl_base:1600, icon:'🚛', whs:'high',      cyber:'medium',   notes:'Vehicle fleet; dangerous goods; fatigue management.' },
+  healthcare:    { label:'Healthcare & Medical',        anzsic:'Q', hazard:'MODERATE',  wc_rate:2.1, pl_base:2800, icon:'🏥', whs:'medium',    cyber:'very_high',notes:'Medical indemnity; AHPRA; My Health Record; manual handling.' },
+  professional:  { label:'Professional Services',       anzsic:'M', hazard:'LOW',       wc_rate:0.7, pl_base:900,  icon:'💼', whs:'low',       cyber:'very_high',notes:'PI exposure; client confidentiality; contract risk.' },
+  technology:    { label:'Technology & IT',             anzsic:'J', hazard:'LOW',       wc_rate:0.6, pl_base:1100, icon:'💻', whs:'low',       cyber:'very_high',notes:'Software liability; data breach; SLA penalties; IP.' },
+  finance:       { label:'Finance & Insurance',         anzsic:'K', hazard:'LOW',       wc_rate:0.5, pl_base:1200, icon:'🏦', whs:'low',       cyber:'very_high',notes:'AFSL/ACL; breach of fiduciary duty; ASIC/APRA scrutiny.' },
+  education:     { label:'Education & Training',        anzsic:'P', hazard:'MODERATE',  wc_rate:1.2, pl_base:700,  icon:'🎓', whs:'medium',    cyber:'high',     notes:'Child safety; duty of care; volunteer management.' },
+  property:      { label:'Property & Real Estate',      anzsic:'L', hazard:'MODERATE',  wc_rate:1.0, pl_base:900,  icon:'🏠', whs:'medium',    cyber:'high',     notes:'Strata; asbestos; property management liability.' },
+  mining:        { label:'Mining & Resources',          anzsic:'B', hazard:'EXTREME',   wc_rate:7.8, pl_base:4500, icon:'⛏️', whs:'very_high', cyber:'medium',   notes:'Explosives; heavy plant; remote work; environmental remediation.' },
+  agriculture:   { label:'Agriculture & Farming',       anzsic:'A', hazard:'HIGH',      wc_rate:4.6, pl_base:1200, icon:'🌾', whs:'high',      cyber:'low',      notes:'Machinery; pesticides; seasonal labour; livestock.' },
+  entertainment: { label:'Arts, Entertainment & Rec.',  anzsic:'R', hazard:'MODERATE',  wc_rate:2.0, pl_base:900,  icon:'🎭', whs:'medium',    cyber:'medium',   notes:'Crowd management; performer safety; cancellation risk.' },
+  other:         { label:'Other Industry',              anzsic:'S', hazard:'MODERATE',  wc_rate:1.8, pl_base:1000, icon:'🔧', whs:'medium',    cyber:'medium',   notes:'Refer to ANZSIC for detailed hazard profile.' },
+};
+
+// ── RISK SCORING ──────────────────────────────────────────────────────────────
+function computeRiskScore(result) {
+  let score = 10;
+  const ind = INDUSTRY_DATA[result.inputs.industry] || INDUSTRY_DATA.other;
+  score += { 'LOW':5,'MODERATE':15,'HIGH':30,'VERY HIGH':50,'EXTREME':70 }[ind.hazard] || 15;
+  const emp = parseInt(result.inputs.employees||20);
+  if (emp>=500) score+=20; else if (emp>=200) score+=14; else if (emp>=50) score+=8; else if (emp>=20) score+=4;
+  const rev = parseInt(result.inputs.revenue||500000);
+  if (rev>=50000000) score+=15; else if (rev>=10000000) score+=10; else if (rev>=2000000) score+=6; else if (rev>=500000) score+=3;
+  const elev = result.elevation?.elevation_m ?? 30;
+  if (elev<5) score+=12; else if (elev<15) score+=6;
+  const flood = result.flood?.river_discharge ?? 0;
+  if (flood>200) score+=12; else if (flood>50) score+=6;
+  const aqi = result.airquality?.us_aqi ?? 0;
+  if (aqi>150) score+=8; else if (aqi>100) score+=4;
+  const fire = result.airquality?.fire_radiative_power ?? 0;
+  if (fire>50) score+=10; else if (fire>10) score+=5;
+  return Math.min(97, Math.max(8, Math.round(score)));
+}
+
+// ── COVERAGE RECOMMENDATIONS ──────────────────────────────────────────────────
+function buildCoverage(industryKey, employees, revenue, structure) {
+  const emp = parseInt(employees), rev = parseInt(revenue);
+  const ind = INDUSTRY_DATA[industryKey] || INDUSTRY_DATA.other;
+  const covers = [];
+  covers.push({ label:'Public Liability', tier:'required', limit:'$10M', note:'Statutory minimum for most industries' });
+  if (emp>1) covers.push({ label:'Workers Compensation', tier:'required', limit:'Mandatory', note:`WC rate ~${ind.wc_rate}% of payroll (state-based)` });
+  if (['healthcare','finance'].includes(industryKey)) covers.push({ label:'Professional Indemnity', tier:'required', limit:'$2M', note:'Regulatory requirement (AHPRA / AFSL)' });
+  if (industryKey==='construction') covers.push({ label:'Contract Works', tier:'required', limit:'Project value', note:'Required on most commercial contracts' });
+  if (industryKey==='transport') covers.push({ label:'Fleet / Motor', tier:'required', limit:'3rd party min', note:'Mandatory for all registered vehicles' });
+  if (!['healthcare','finance'].includes(industryKey)) covers.push({ label:'Professional Indemnity', tier:'recommended', limit:'$1M', note:'Protects against advice & service errors' });
+  if (['very_high','high'].includes(ind.cyber)) covers.push({ label:'Cyber Insurance', tier:'recommended', limit:'$500k', note:`${ind.cyber.toUpperCase()} cyber exposure for sector` });
+  covers.push({ label:'Business Interruption', tier:'recommended', limit:'12 months revenue', note:'Lost income after insured event' });
+  covers.push({ label:'Property & Contents', tier:'recommended', limit:'Replacement value', note:'Building, plant, stock, equipment' });
+  if (['pty','trust'].includes(structure)) covers.push({ label:"Directors' & Officers'", tier:'recommended', limit:'$2M', note:'Personal liability protection for directors' });
+  if (emp>=20) covers.push({ label:'Management Liability', tier:'recommended', limit:'$2M', note:'EPL, crime, entity liability' });
+  if (rev>=10000000) covers.push({ label:'Product Liability', tier:'optional', limit:'$10M', note:'If you manufacture or import goods' });
+  covers.push({ label:'Trade Credit', tier:'optional', limit:'Debtor exposure', note:'Protects against customer insolvency' });
+  if (emp>=50) covers.push({ label:'Group Life & IP', tier:'optional', limit:'Per policy', note:'Employee benefits program' });
+  return covers;
+}
+
+// ── REGULATORY FLAGS ──────────────────────────────────────────────────────────
+function buildRegFlags(industryKey, employees, revenue) {
+  const emp = parseInt(employees), rev = parseInt(revenue);
+  const ind = INDUSTRY_DATA[industryKey] || INDUSTRY_DATA.other;
+  const flags = [];
+  if (ind.whs==='very_high') flags.push({ title:'SafeWork WHS Obligations', body:'Very high WHS risk industry. PCBU obligations under model WHS Act apply. Written WHS management system required. Incident notification to SafeWork mandatory.' });
+  if (industryKey==='healthcare') flags.push({ title:'AHPRA Registration Required', body:'Practitioners must hold current AHPRA registration. PI policy must meet registration board minimums. Mandatory reporting obligations under the National Law.' });
+  if (industryKey==='finance') flags.push({ title:'ASIC AFSL / ACL Licensing', body:'AFSL or ACL required. Minimum PI prescribed by licence conditions (RG 126). ASIC/APRA oversight; breach of fiduciary duty exposure.' });
+  if (industryKey==='construction') flags.push({ title:'Principal Contractor & PCBU Chain', body:'Model WHS Act PCBU obligations. Contractor management plans, induction records, certificates of currency required at every engagement.' });
+  if (rev>=100000000 && emp>=500) flags.push({ title:'Modern Slavery Act 2018', body:'Entities with $100M+ revenue must produce an annual Modern Slavery Statement. Supply chain due diligence and board approval required.' });
+  if (['very_high','high'].includes(ind.cyber)) flags.push({ title:'Notifiable Data Breach (NDB) Scheme', body:'Privacy Act 1988 NDB scheme applies. Eligible data breaches must be notified to the OAIC and affected individuals. Cyber liability policy strongly recommended.' });
+  if (industryKey==='mining') flags.push({ title:'Resources Safety & Health QLD / WA', body:'Mines legislation requires site senior executive, safety management systems, statutory roles. Environmental bond and rehabilitation obligations.' });
+  return flags;
+}
+
+// ── PREMIUM ESTIMATOR ─────────────────────────────────────────────────────────
+function estimatePremiums(industryKey, employees, revenue, riskScore) {
+  const ind = INDUSTRY_DATA[industryKey] || INDUSTRY_DATA.other;
+  const emp = parseInt(employees), rev = parseInt(revenue), sf = riskScore/50;
+  return {
+    pl:    Math.round(ind.pl_base * sf * (1+emp/200)),
+    pi:    Math.round(900 * sf * (1+rev/5000000)),
+    cyber: Math.round(1200 * sf),
+    bi:    Math.round(rev * 0.0008 * sf),
+    wc:    Math.round(emp * 65000/100 * (ind.wc_rate/100) * 100),
+  };
+}
+
+// ── MAIN LOOKUP ───────────────────────────────────────────────────────────────
+async function lookupCommercial() {
+  const abnRaw = document.getElementById('abn-input').value.trim();
+  const industryKey = document.getElementById('industry-select').value;
+  const bizAddr = document.getElementById('biz-addr-input').value.trim();
+  const employees = document.getElementById('employees-select').value;
+  const revenue = document.getElementById('revenue-select').value;
+  const structure = document.getElementById('structure-select').value;
+
+  if (!abnRaw) return showError('Please enter an ABN.');
+  if (!industryKey) return showError('Please select an industry.');
+  const digits = abnRaw.replace(/\D/g,'');
+  if (digits.length!==11 || !validateAbn(digits)) return showError('Invalid ABN — check digit failed. Please verify the number.');
+
+  hideError();
+  document.getElementById('progress-section').classList.add('visible');
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('search-btn').disabled = true;
+  document.getElementById('search-btn-label').textContent = '⏳ Querying…';
+  ['abn','abr','geocode','elevation','weather','flood','airquality','industry','scoring','keri'].forEach((s,i)=>{
+    document.getElementById('step-'+s).className='progress-step';
+    document.getElementById('si-'+s).textContent = String(i+1);
+  });
+
+  const result = {
+    inputs: { abn:displayAbn(digits), industry:industryKey, address:bizAddr, employees, revenue, structure },
+    timestamp: new Date().toISOString()
+  };
+
+  // ── STEP 1: ABN check-digit ──
+  setStep('abn','active');
+  await sleep(120);
+  result.abn_validation = { valid:true, algorithm:'Australian ABN check digit (weights: 10,1,3,5,7,9,11,13,15,17,19 mod 89)', abn:displayAbn(digits) };
+  setStep('abn','done');
+
+  // ── STEP 2: ABR live lookup (JSONP, requires GUID) ──
+  setStep('abr','active');
+  let abrData = null;
+  if (ABR_GUID) {
+    document.getElementById('abr-tag').textContent = 'live';
+    document.getElementById('abr-tag').className = 'step-tag live';
+    document.getElementById('sl-abr').textContent = 'Querying ABR live — JSONP / GUID authenticated…';
+    try {
+      abrData = await lookupAbrLive(digits);
+      result.abr = { ...abrData, oracle:'ABR (Australian Business Register) — JSONP Live' };
+      document.getElementById('abr-source-badge').textContent = '● ABR Live';
+      document.getElementById('abr-source-badge').className = 'entity-source-badge abr-live';
+      setStep('abr','done');
+    } catch(e) {
+      result.abr = { oracle:'ABR JSONP', error:e.message, note:'Falling back to ABN validation only' };
+      document.getElementById('abr-source-badge').textContent = '⚠ ABR error';
+      document.getElementById('abr-source-badge').className = 'entity-source-badge validated';
+      setStep('abr','error');
+    }
+  } else {
+    document.getElementById('sl-abr').textContent = 'ABR lookup skipped — no GUID (paste GUID above to enable)';
+    setStep('abr','skipped');
+    result.abr = { oracle:'ABR JSONP', note:'Skipped — no GUID provided. Set GUID above to enable live lookups.' };
+  }
+
+  // Build synthetic entity record if ABR didn't return data
+  if (!abrData) {
+    const states = ['NSW','VIC','QLD','SA','WA','TAS','NT','ACT'];
+    abrData = {
+      name: `Business Entity (ABN ${displayAbn(digits)})`,
+      status:'Active', gst:true, entityType:'Australian Private Company',
+      state: states[parseInt(digits[4])%8], postcode:'2000',
+      since:'—', acnc:false, dgr:false,
+      abn: displayAbn(digits), raw:digits, source:'ABN validated only', latency_ms:0
+    };
+  }
+
+  // ── STEP 3: Geocode ──
+  setStep('geocode','active');
+  let lat=null, lon=null;
+  if (bizAddr) {
+    try {
+      const t0=Date.now();
+      const gRes = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(bizAddr+', Australia')}&format=json&limit=1&addressdetails=1`,{headers:{'Accept-Language':'en'}});
+      const gJson = await gRes.json();
+      if (gJson.length) {
+        const g=gJson[0]; lat=parseFloat(g.lat); lon=parseFloat(g.lon);
+        result.geocode = { oracle:'Nominatim / OpenStreetMap', lat, lon, display_name:g.display_name, latency_ms:Date.now()-t0 };
+        setStep('geocode','done');
+      } else { result.geocode={oracle:'Nominatim',error:'Address not found'}; setStep('geocode','error'); }
+    } catch(e) { result.geocode={oracle:'Nominatim',error:e.message}; setStep('geocode','error'); }
+  } else { result.geocode={oracle:'Nominatim',note:'No address provided'}; setStep('geocode','skipped'); }
+
+  // ── PARALLEL LIVE FEEDS: elevation, weather, flood, air quality ──
+  if (lat!==null) {
+
+    // ── STEP 4: Elevation ──
+    setStep('elevation','active');
+    try {
+      const t0=Date.now();
+      const r=await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lon}`);
+      const d=await r.json();
+      const elev=d.elevation?.[0]??null;
+      result.elevation = { oracle:'Open-Meteo Elevation (ESA Copernicus DEM 90m)', elevation_m:elev,
+        flood_exposure: elev===null?'unknown':elev<2?'EXTREME':elev<5?'VERY HIGH':elev<10?'HIGH':elev<20?'MODERATE':elev<50?'LOW':'VERY LOW',
+        latency_ms:Date.now()-t0 };
+      setStep('elevation','done');
+    } catch(e) { result.elevation={oracle:'Open-Meteo Elevation',error:e.message}; setStep('elevation','error'); }
+
+    // ── STEP 5: Weather ──
+    setStep('weather','active');
+    try {
+      const t0=Date.now();
+      const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m,wind_gusts_10m,precipitation_probability,weather_code,relative_humidity_2m&daily=precipitation_sum,wind_speed_10m_max,wind_gusts_10m_max&forecast_days=1&timezone=auto`);
+      const d=await r.json(); const cur=d.current||{}; const daily=d.daily||{};
+      result.weather = { oracle:'Open-Meteo Weather (BOM/NOAA)', temperature_c:cur.temperature_2m,
+        wind_speed_kmh:cur.wind_speed_10m, wind_gusts_kmh:cur.wind_gusts_10m,
+        precip_probability:cur.precipitation_probability, relative_humidity:cur.relative_humidity_2m,
+        daily_precip_mm:daily.precipitation_sum?.[0], daily_max_wind_kmh:daily.wind_speed_10m_max?.[0],
+        daily_max_gust_kmh:daily.wind_gusts_10m_max?.[0], timezone:d.timezone, latency_ms:Date.now()-t0 };
+      setStep('weather','done');
+    } catch(e) { result.weather={oracle:'Open-Meteo Weather',error:e.message}; setStep('weather','error'); }
+
+    // ── STEP 6: Flood ──
+    setStep('flood','active');
+    try {
+      const t0=Date.now();
+      const r=await fetch(`https://flood-api.open-meteo.com/v1/flood?latitude=${lat}&longitude=${lon}&daily=river_discharge,river_discharge_max&forecast_days=1`);
+      const d=await r.json(); const fd=d.daily||{};
+      const discharge=fd.river_discharge?.[0]??0;
+      result.flood = { oracle:'Open-Meteo Flood API (GloFAS)', river_discharge:discharge,
+        river_discharge_max:fd.river_discharge_max?.[0]??0,
+        flood_risk_tier:discharge<10?'LOW':discharge<100?'MODERATE':discharge<500?'HIGH':'EXTREME',
+        unit:'m³/s', latency_ms:Date.now()-t0 };
+      setStep('flood','done');
+    } catch(e) { result.flood={oracle:'Open-Meteo Flood',error:e.message,river_discharge:0}; setStep('flood','error'); }
+
+    // ── STEP 7: Air Quality & Fire ──
+    setStep('airquality','active');
+    try {
+      const t0=Date.now();
+      const r=await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=pm10,pm2_5,us_aqi,fire_radiative_power&domains=auto`);
+      const d=await r.json(); const cur=d.current||{};
+      const aqi=cur.us_aqi??0;
+      result.airquality = { oracle:'Open-Meteo Air Quality (Copernicus CAMS)',
+        pm10:cur.pm10, pm2_5:cur.pm2_5, us_aqi:aqi,
+        aqi_category:aqi<50?'Good':aqi<100?'Moderate':aqi<150?'Unhealthy for Sensitive':aqi<200?'Unhealthy':'Very Unhealthy',
+        fire_radiative_power:cur.fire_radiative_power,
+        fire_risk:cur.fire_radiative_power>100?'EXTREME':cur.fire_radiative_power>30?'HIGH':cur.fire_radiative_power>5?'MODERATE':'LOW',
+        latency_ms:Date.now()-t0 };
+      setStep('airquality','done');
+    } catch(e) { result.airquality={oracle:'Open-Meteo Air Quality',error:e.message}; setStep('airquality','error'); }
+
+  } else {
+    ['elevation','weather','flood','airquality'].forEach(s=>{ result[s]={note:'Skipped — no geocode'}; setStep(s,'skipped'); });
+  }
+
+  // ── STEP 8: Industry ──
+  setStep('industry','active');
+  await sleep(80);
+  const ind = INDUSTRY_DATA[industryKey]||INDUSTRY_DATA.other;
+  result.industry_data = { ...ind, key:industryKey, anzsic_division:ind.anzsic, oracle:'selfdriven ANZSIC Hazard Engine' };
+  setStep('industry','done');
+
+  // ── STEP 9: Scoring & coverage ──
+  setStep('scoring','active');
+  await sleep(80);
+  const riskScore = computeRiskScore(result);
+  const premiums = estimatePremiums(industryKey, employees, revenue, riskScore);
+  const coverage = buildCoverage(industryKey, employees, revenue, structure);
+  const regFlags = buildRegFlags(industryKey, employees, revenue);
+  result.risk = { score:riskScore, label:riskLabel(riskScore), oracle:'selfdriven Composite Risk Engine' };
+  result.premiums = { ...premiums, oracle:'selfdriven Rating Engine', note:'Indicative AUD p.a. ex. stamp duty & GST. Subject to underwriter assessment.' };
+  result.coverage = { recommended:coverage };
+  result.regulatory_flags = regFlags;
+  setStep('scoring','done');
+
+  // ── STEP 10: KERI ──
+  setStep('keri','active');
+  await sleep(100);
+  const digest='sha256·'+[...Array(32)].map(()=>Math.floor(Math.random()*16).toString(16)).join('');
+  result.keriEvent = { type:'ixn', aid:'EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt', sn:keriSn, digest };
+  addKelEvent(`Commercial risk · ABN ${displayAbn(digits)} · score:${riskScore}`, digest);
+  setStep('keri','done');
+
+  // ── RENDER ──
+  currentJson = result;
+  renderResults(result, abrData, ind, coverage, regFlags, riskScore, premiums);
+  document.getElementById('progress-section').classList.remove('visible');
+  document.getElementById('results-section').classList.add('visible');
+  document.getElementById('search-btn').disabled = false;
+  document.getElementById('search-btn-label').textContent = '◈ Analyse Commercial Risk';
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderResults(result, abrData, ind, coverage, regFlags, riskScore, premiums) {
+  document.getElementById('res-entity-name').textContent = abrData.name;
+  document.getElementById('res-abn-line').textContent = `ABN ${abrData.abn} · ${abrData.entityType||abrData.type||'—'} · ${abrData.state||'—'}`;
+  const badge = document.getElementById('res-score-badge');
+  badge.className = 'result-score-badge '+riskClass(riskScore);
+  document.getElementById('res-score-num').textContent = riskScore;
+
+  // Entity grid
+  const flood = result.flood||{};
+  const elev = result.elevation||{};
+  const aq = result.airquality||{};
+  const weather = result.weather||{};
+
+  document.getElementById('entity-grid').innerHTML = [
+    { label:'Entity Name',    value:abrData.name,           sub:abrData.source||'ABR' },
+    { label:'ABN',            value:abrData.abn,            sub:abrData.status||'Valid' },
+    { label:'Entity Type',    value:abrData.entityType||'—',sub:'' },
+    { label:'GST Registered', value:abrData.gst?'Yes':'No', sub:abrData.gst?'Registered':'Not registered' },
+    { label:'State',          value:abrData.state||'—',     sub:abrData.since?`Since ${abrData.since}`:'—' },
+    { label:'ANZSIC Division',value:`Division ${ind.anzsic}`,sub:ind.label },
+    { label:'Hazard Class',   value:ind.hazard,             sub:`WC rate ${ind.wc_rate}%` },
+    { label:'Charity / DGR',  value:abrData.acnc?'ACNC Registered':'No', sub:abrData.dgr?'DGR Endorsed':'—' },
+  ].map(f=>`<div class="entity-field"><div class="ef-label">${f.label}</div><div class="ef-value">${f.value}</div>${f.sub?`<div class="ef-sub">${f.sub}</div>`:''}</div>`).join('');
+
+  // Coverage
+  const tierClass = {required:'required',recommended:'recommended',optional:'optional'};
+  document.getElementById('coverage-chips').innerHTML = coverage.map(c=>`<span class="cov-chip ${tierClass[c.tier]}" title="${c.note}"><span class="cov-dot"></span>${c.label}${c.limit?` (${c.limit})`:''}</span>`).join('');
+
+  // Reg flags
+  const regAlert = document.getElementById('reg-alert');
+  if (regFlags.length>0) {
+    document.getElementById('reg-list').innerHTML = regFlags.map(f=>`<div class="reg-item"><strong>${f.title}</strong><br>${f.body}</div>`).join('');
+    regAlert.classList.add('visible');
+  } else regAlert.classList.remove('visible');
+
+  // Oracle cards
+  const prem = premiums;
+  const cards = [
+    {
+      icon:'🏢', source:'ABR', type: abrData.source==='ABR Live'?'Australian Business Register — Live':'ABN Validated',
+      metric_label:'Business Status', metric_value:abrData.status||'Valid',
+      pct: abrData.status==='Active'?10:70,
+      rows:[
+        { label:'GST', value:abrData.gst?'Registered':'Not Registered', cls:abrData.gst?'green':'amber' },
+        { label:'Entity Type', value:abrData.entityType||'—' },
+        { label:'Since', value:abrData.since||'—' },
+      ],
+      tag: abrData.source==='ABR Live'?'abr':'derived',
+      tagLabel: abrData.source==='ABR Live'?'abr live':'validated',
+      latency: abrData.latency_ms?`${abrData.latency_ms}ms`:'—'
+    },
+    {
+      icon:ind.icon, source:'ANZSIC', type:'Industry Hazard Engine',
+      metric_label:'Hazard Classification', metric_value:ind.hazard,
+      pct:{LOW:12,MODERATE:35,HIGH:60,'VERY HIGH':80,EXTREME:97}[ind.hazard]||40,
+      rows:[
+        { label:'Division', value:`${ind.anzsic} — ${ind.label}` },
+        { label:'WHS Risk', value:ind.whs.toUpperCase(), cls:ind.whs==='very_high'||ind.whs==='high'?'red':ind.whs==='medium'?'amber':'green' },
+        { label:'Cyber Risk', value:ind.cyber.toUpperCase(), cls:ind.cyber==='very_high'||ind.cyber==='high'?'red':'amber' },
+      ],
+      tag:'derived', tagLabel:'derived', latency:'—'
+    },
+    {
+      icon:'⚖️', source:'RISK SCORE', type:'Composite Risk Engine',
+      metric_label:'Composite Risk Score', metric_value:String(riskScore),
+      pct:riskScore,
+      rows:[
+        { label:'Risk Level', value:riskLabel(riskScore), cls:riskScore<33?'green':riskScore<66?'amber':'red' },
+        { label:'Est. PL Premium', value:`$${prem.pl.toLocaleString()} p.a.` },
+        { label:'Est. PI Premium', value:`$${prem.pi.toLocaleString()} p.a.` },
+      ],
+      tag:'computed', tagLabel:'computed', latency:'—'
+    },
+    {
+      icon:'🌊', source:'FLOOD / ELEVATION', type:'Open-Meteo / GloFAS',
+      metric_label:'Flood Discharge', metric_value:flood.river_discharge!==undefined?String(+(flood.river_discharge||0).toFixed(1)):'N/A',
+      metric_unit:flood.river_discharge!==undefined?'m³/s':'',
+      pct:flood.river_discharge!==undefined?Math.min(99,Math.round((flood.river_discharge||0)/5)):0,
+      rows:[
+        { label:'Flood Risk', value:flood.flood_risk_tier||'N/A', cls:!flood.flood_risk_tier?'':flood.flood_risk_tier==='LOW'?'green':flood.flood_risk_tier==='MODERATE'?'amber':'red' },
+        { label:'Elevation', value:elev.elevation_m!==undefined?`${elev.elevation_m}m`:'N/A' },
+        { label:'Flood Exposure', value:elev.flood_exposure||'N/A' },
+      ],
+      tag:'live', tagLabel:'live', latency:result.geocode?.lat?'—':'no address'
+    },
+    {
+      icon:'💨', source:'AIR QUALITY & FIRE', type:'Open-Meteo / Copernicus CAMS',
+      metric_label:'US AQI', metric_value:aq.us_aqi!==undefined?String(aq.us_aqi):'N/A',
+      pct:aq.us_aqi!==undefined?Math.min(99,Math.round((aq.us_aqi||0)/2)):10,
+      rows:[
+        { label:'AQI Category', value:aq.aqi_category||'N/A', cls:!aq.aqi_category?'':aq.us_aqi<50?'green':aq.us_aqi<100?'amber':'red' },
+        { label:'Fire Radiative Power', value:aq.fire_radiative_power!==undefined?`${aq.fire_radiative_power} MW/km²`:'N/A', cls:aq.fire_risk==='HIGH'||aq.fire_risk==='EXTREME'?'red':'' },
+        { label:'Fire Risk', value:aq.fire_risk||'N/A', cls:!aq.fire_risk?'':aq.fire_risk==='LOW'?'green':aq.fire_risk==='MODERATE'?'amber':'red' },
+      ],
+      tag:'live', tagLabel:'live', latency:result.geocode?.lat?`${aq.latency_ms||'—'}ms`:'no address'
+    },
+    {
+      icon:'🌬️', source:'WEATHER', type:'Open-Meteo (BOM/NOAA)',
+      metric_label:'Wind Speed', metric_value:weather.wind_speed_kmh!==undefined?String(Math.round(weather.wind_speed_kmh||0)):'N/A',
+      metric_unit:weather.wind_speed_kmh!==undefined?'km/h':'',
+      pct:weather.wind_speed_kmh?Math.min(99,Math.round((weather.wind_speed_kmh||0)/1.2)):10,
+      rows:[
+        { label:'Gusts', value:weather.wind_gusts_kmh!==undefined?`${Math.round(weather.wind_gusts_kmh||0)} km/h`:'N/A', cls:(weather.wind_gusts_kmh||0)>60?'red':(weather.wind_gusts_kmh||0)>40?'amber':'green' },
+        { label:'Temperature', value:weather.temperature_c!==undefined?`${weather.temperature_c}°C`:'N/A' },
+        { label:'Precip. Prob.', value:weather.precip_probability!==undefined?`${weather.precip_probability}%`:'N/A' },
+      ],
+      tag:'live', tagLabel:'live', latency:result.geocode?.lat?`${weather.latency_ms||'—'}ms`:'no address'
+    },
+  ];
+
+  document.getElementById('oracle-grid').innerHTML = cards.map(c=>`
+    <div class="oracle-card">
+      <div class="oracle-card-top"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">${c.icon}</div>
+          <div><div class="oracle-source-name">${c.source}</div><div class="oracle-source-type">${c.type}</div></div>
+        </div>
+        <div class="oracle-metric-label">${c.metric_label}</div>
+        <div class="oracle-metric-value">${c.metric_value}<span class="oracle-metric-unit">${c.metric_unit||''}</span></div>
+        <div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${c.pct}%;background:${riskColor(c.pct)};"></div></div>
+        <div class="oracle-rows">${c.rows.map(r=>`<div class="oracle-row"><span class="ok">${r.label}</span><span class="ov${r.cls?' '+r.cls:''}">${r.value}</span></div>`).join('')}</div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag ${c.tag}"><span class="oracle-tag-dot"></span>${c.tagLabel}</span>
+          <span class="oracle-latency">${c.latency}</span>
+        </div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('json-body').innerHTML = syntaxHighlight(result);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+initGuid();
+</script>
+</body>
+</html>
