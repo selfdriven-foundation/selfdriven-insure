@@ -3,7 +3,7 @@ layout: selfdriven
 title: selfdriven Insure
 ---
 
-### Access to insurance to help communities & their members share risk and self-actuate.
+# Helping communities & their members share (insure) risk and self-actuate.
 
 ### Scope
 - Research & develop end to end risk-sharing frameworks,
