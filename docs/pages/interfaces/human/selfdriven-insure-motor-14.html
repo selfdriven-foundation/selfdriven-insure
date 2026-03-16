@@ -1,14 +1,14 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png">
-<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-<title>Motor Vehicle - selfdriven.insure - v13</title>
+<title>selfdriven.insure — Motor Vehicle Oracle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -727,22 +727,34 @@ function decodeVDS(vin, hintMake, hintYear, hintCountry) {
 function computeAUValuation(make, model, year, body, fuel, origin, recallCount) {
   const currentYear = 2026;
   const age = currentYear - (parseInt(year) || 2010);
+  const isEV = /electric|bev/i.test(fuel);
+  const isHybrid = /hybrid|phev/i.test(fuel);
 
   // Base MSRP estimates (AUD new) by make/segment
+  // EVs use separate table — their new price is the starting point for EV depreciation curve
   const baseValues = {
-    'Mitsubishi': { suv: 35000, sedan: 25000, hatch: 20000, default: 30000 },
-    'Toyota':     { suv: 42000, sedan: 28000, hatch: 22000, default: 35000 },
-    'Honda':      { suv: 36000, sedan: 26000, hatch: 21000, default: 28000 },
-    'Nissan':     { suv: 38000, sedan: 27000, hatch: 21000, default: 30000 },
-    'Mazda':      { suv: 37000, sedan: 27000, hatch: 22000, default: 30000 },
-    'Subaru':     { suv: 38000, sedan: 28000, hatch: 23000, default: 32000 },
-    'BMW':        { suv: 85000, sedan: 75000, hatch: 55000, default: 70000 },
-    'Mercedes-Benz': { suv: 95000, sedan: 85000, hatch: 60000, default: 80000 },
-    'Audi':       { suv: 80000, sedan: 72000, hatch: 52000, default: 70000 },
-    'Volkswagen': { suv: 50000, sedan: 38000, hatch: 32000, default: 40000 },
-    'Ford':       { suv: 45000, sedan: 32000, hatch: 28000, default: 40000 },
-    'Holden':     { suv: 38000, sedan: 30000, hatch: 24000, default: 32000 },
-    'default':    { suv: 35000, sedan: 25000, hatch: 20000, default: 28000 },
+    'Mitsubishi':    { suv: 35000, sedan: 25000, hatch: 20000, default: 30000 },
+    'Toyota':        { suv: 48000, sedan: 32000, hatch: 26000, default: 38000 },
+    'Honda':         { suv: 40000, sedan: 30000, hatch: 24000, default: 32000 },
+    'Nissan':        { suv: 42000, sedan: 30000, hatch: 24000, default: 34000 },
+    'Mazda':         { suv: 42000, sedan: 32000, hatch: 26000, default: 34000 },
+    'Subaru':        { suv: 44000, sedan: 32000, hatch: 26000, default: 36000 },
+    'BMW':           { suv: 95000, sedan: 82000, hatch: 62000, default: 78000 },
+    'Mercedes-Benz': { suv:105000, sedan: 92000, hatch: 68000, default: 88000 },
+    'Audi':          { suv: 88000, sedan: 78000, hatch: 58000, default: 76000 },
+    'Volkswagen':    { suv: 55000, sedan: 42000, hatch: 36000, default: 44000 },
+    'Ford':          { suv: 52000, sedan: 36000, hatch: 30000, default: 44000 },
+    'Holden':        { suv: 40000, sedan: 32000, hatch: 26000, default: 34000 },
+    'Kia':           { suv: 46000, sedan: 30000, hatch: 24000, default: 36000 },
+    'Hyundai':       { suv: 44000, sedan: 28000, hatch: 24000, default: 34000 },
+    'Lexus':         { suv: 78000, sedan: 68000, hatch: 52000, default: 68000 },
+    'Volvo':         { suv: 82000, sedan: 70000, hatch: 54000, default: 72000 },
+    // EV-native makes — new price is true EV market base
+    'Tesla':         { suv: 82000, sedan: 68000, hatch: 60000, default: 68000 },
+    'BYD':           { suv: 52000, sedan: 42000, hatch: 38000, default: 46000 },
+    'Polestar':      { suv: 78000, sedan: 72000, hatch: 62000, default: 72000 },
+    'Rivian':        { suv: 95000, sedan: 80000, hatch: 70000, default: 88000 },
+    'default':       { suv: 38000, sedan: 28000, hatch: 22000, default: 30000 },
   };
 
   const bodyKey = /suv|crossover|4wd|4x4/i.test(body) ? 'suv'
@@ -753,45 +765,63 @@ function computeAUValuation(make, model, year, body, fuel, origin, recallCount) 
   const makeKey = make in baseValues ? make : 'default';
   let baseAUD = baseValues[makeKey][bodyKey] || baseValues[makeKey].default;
 
-  // Grey import premium/discount — JDM models often cheaper as grey imports
-  const isJapanOrigin = /japan/i.test(origin);
-  const isRHD = isJapanOrigin || /japan|uk|australia/i.test(origin);
-  const isGreyImport = isJapanOrigin && !/Toyota|Honda|Mitsubishi|Nissan|Mazda|Subaru/.test(make);
-  // JDM grey imports have compliance + import costs (+$3-6k) but lower purchase price
-  if (isJapanOrigin) baseAUD = baseAUD * 0.85; // JDM grey import discount on base
+  // If fuel is Electric/Hybrid but make has no specific EV base, apply premium to base
+  if ((isEV || isHybrid) && !(make in {'Tesla':1,'BYD':1,'Polestar':1,'Rivian':1})) {
+    baseAUD = Math.round(baseAUD * (isEV ? 1.35 : 1.18)); // EV/hybrid premium on new price
+  }
 
-  // Depreciation curve (Australian market — steeper than US)
-  // Year 1-2: ~20% | Year 3-5: ~12%/yr | Year 6-10: ~8%/yr | 10+: ~5%/yr
+  // Grey import — JDM cars get compliance cost adjustment
+  const isJapanOrigin = /japan/i.test(origin);
+  const isRHD = isJapanOrigin || /uk|australia/i.test(origin);
+  const isGreyImport = isJapanOrigin && !/Toyota|Honda|Mitsubishi|Nissan|Mazda|Subaru|Suzuki/.test(make);
+  if (isJapanOrigin) baseAUD = Math.round(baseAUD * 0.85);
+
+  // Depreciation curves — EV curve is different from ICE
+  // ICE: yr1-2 -20%/yr | yr3-5 -12%/yr | yr6-10 -8%/yr | yr11+ -5%/yr
+  // EV:  yr1 -18% | yr2-3 -12%/yr | yr4-6 -9%/yr | yr7+ -6%/yr (batteries holding value)
+  // Floor: EVs don't go below ~15% of new (running battery, demand for EV parts)
   let residual = 1.0;
   for (let i = 0; i < Math.min(age, 25); i++) {
-    if (i < 2) residual *= 0.80;
-    else if (i < 5) residual *= 0.88;
-    else if (i < 10) residual *= 0.92;
-    else residual *= 0.95;
+    if (isEV) {
+      if (i < 1)       residual *= 0.82;  // yr1: steeper initial drop
+      else if (i < 3)  residual *= 0.88;  // yr2-3
+      else if (i < 6)  residual *= 0.91;  // yr4-6: stabilises
+      else             residual *= 0.94;  // yr7+: EVs hold well, battery demand
+    } else {
+      if (i < 2)       residual *= 0.80;  // yr1-2
+      else if (i < 5)  residual *= 0.88;  // yr3-5
+      else if (i < 10) residual *= 0.92;  // yr6-10
+      else             residual *= 0.95;  // yr11+
+    }
   }
+  // Floor: EV minimum 15% of base (running battery value), ICE minimum 8%
+  const floorPct = isEV ? 0.15 : 0.08;
+  residual = Math.max(residual, floorPct);
+
   const depreciated = Math.round(baseAUD * residual);
 
-  // Recall penalty
-  const recallAdj = Math.max(0, recallCount * 500);
-  const adjusted = Math.max(1500, depreciated - recallAdj);
+  // Recall penalty (capped at 10% of value — excessive recalls rare)
+  const recallAdj = Math.min(depreciated * 0.10, Math.max(0, recallCount * 500));
+  // Floor: $5k for running EV, $2k for ICE (scrap + parts value)
+  const valueFloor = isEV ? 5000 : 2000;
+  const adjusted = Math.max(valueFloor, depreciated - recallAdj);
 
-  // Market ranges
+  // Market ranges (±12% around mid reflects condition/odometer spread)
   const privateLow  = Math.round(adjusted * 0.88 / 100) * 100;
   const privateMid  = Math.round(adjusted / 100) * 100;
   const privateHigh = Math.round(adjusted * 1.12 / 100) * 100;
   const dealerLow   = Math.round(adjusted * 1.08 / 100) * 100;
   const dealerHigh  = Math.round(adjusted * 1.22 / 100) * 100;
-  const irv         = Math.round(adjusted * 1.15 / 100) * 100; // Insurance replacement
+  const irv         = Math.round(adjusted * 1.15 / 100) * 100; // Insurance replacement value
 
-  // EV/hybrid premium
-  const isHybrid = /hybrid|electric|phev/i.test(fuel);
-  const evMultiplier = isHybrid ? 1.12 : 1.0;
+  // EV/hybrid no longer needs a post-hoc multiplier — baked into base price above
+  const evMultiplier = 1.0;
 
-  // Market condition (AU used car market 2025/26 — stabilising after COVID surge)
+  // Market condition (AU used car market 2025/26)
   const marketCondition = age <= 3 ? 'strong' : age <= 8 ? 'normal' : 'soft';
 
-  // Confidence based on data quality
-  const confidence = (make && model && year) ? 'medium' : 'low';
+  // Confidence: higher when we have all three data points
+  const confidence = (make && model && year) ? (isEV ? 'medium' : 'medium') : 'low';
 
   const basis = `Based on ${make || 'vehicle'} ${bodyKey.toUpperCase()} segment depreciation curve (AU market), `
     + `${isJapanOrigin ? 'JDM grey import pricing adjustment, ' : ''}`
@@ -834,6 +864,20 @@ async function lookupVin() {
   });
 
   const result = { vin, timestamp: new Date().toISOString() };
+  // ── Proxy config — set to your deployed proxy URL, or '' to use direct fetch ──
+  const PROXY = window.SELFDRIVEN_PROXY || 'http://localhost:3001';
+
+  // Helper: fetch via proxy if available, fall back to direct
+  async function proxiedFetch(directUrl, proxyPath) {
+    if (PROXY) {
+      try {
+        const r = await fetch(PROXY + proxyPath);
+        if (r.ok) return r;
+      } catch(e) { /* proxy unavailable — fall through to direct */ }
+    }
+    return fetch(directUrl);
+  }
+
   const nonUs = isNonUsVin(vin);
 
   // ── 1: NHTSA vPIC VIN Decode ──
@@ -842,7 +886,7 @@ async function lookupVin() {
   let make='', model='', year='';
   try {
     const t0 = Date.now();
-    const res = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`);
+    const res = await proxiedFetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`, `/api/vin/nhtsa/${vin}`);
     const data = await res.json();
     const r = data.Results?.[0] ?? {};
     make = r.Make || ''; model = r.Model || ''; year = r.ModelYear || '';
@@ -870,7 +914,7 @@ async function lookupVin() {
       : 'Enriching with DB.VIN global oracle…';
     try {
       const t0 = Date.now();
-      const res = await fetch(`https://db.vin/${vin}`);
+      const res = await proxiedFetch(`https://db.vin/${vin}`, `/api/vin/dbvin/${vin}`);
       const dbdata = await res.json();
       if (dbdata && !dbdata.error) {
         result.dbvin = {
@@ -994,9 +1038,7 @@ async function lookupVin() {
   try {
     const t0ppsr = Date.now();
     // NEVDIS VIN check endpoint (used by ppsr.gov.au frontend, public CORS-friendly)
-    const ppsrRes = await fetch(`https://api.ppsr.gov.au/v1/vehicle/vin/${encodeURIComponent(vin)}`, {
-      headers: { 'Accept': 'application/json' }
-    });
+    const ppsrRes = await proxiedFetch(`https://api.ppsr.gov.au/v1/vehicle/vin/${encodeURIComponent(vin)}`, `/api/vin/ppsr/${vin}`);
     if (ppsrRes.ok) {
       const ppsrData = await ppsrRes.json();
       result.ppsr = {
