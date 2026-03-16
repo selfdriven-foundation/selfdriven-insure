@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -420,12 +425,18 @@ function decodeModelYear(vin) {
 
   // Known modern WMIs (registered or heavily used post-2005)
   const modernWmis = ['JMF','JMB','JMY','WBA','WBS','WAU','WAP','WP0','WP1','WDC','WDD',
-    'YV1','YV2','ZAM','ZFF','VF1','VF3','SAL','SAJ'];
+    'YV1','YV2','ZAM','ZFF','VF1','VF3','SAL','SAJ',
+    // Korean
+    'KNA','KNB','KNC','KND','KMH','KMY','KMX','KLA',
+    // US domestic
+    '1HG','1FA','1FT','1G1','1GC','2HG','3VW','5YJ','5XY',
+    // Chinese/new market
+    'LVS','LFV','LSG'];
   const isModernWmi = modernWmis.includes(wmi);
 
   // If serial > 100000 or WMI is in modern list → prefer 2010+ cycle
   // If serial < 5000 and WMI not in modern list → prefer 1980s cycle
-  if (isModernWmi || serial > 50000) {
+  if (isModernWmi || serial > 10000) {
     return letterSecond[ch] ? String(letterSecond[ch]) : String(letterFirst[ch]);
   } else if (serial < 5000 && !isModernWmi) {
     return String(letterFirst[ch]);
@@ -721,7 +732,7 @@ function decodeVDS(vin, hintMake, hintYear, hintCountry) {
 // ══════════════════════════════════════════════════════
 function computeAUValuation(make, model, year, body, fuel, origin, recallCount) {
   const currentYear = 2026;
-  const age = currentYear - (parseInt(year) || 2010);
+  const age = Math.max(0, currentYear - (parseInt(year) || currentYear));
   const isEV = /electric|bev/i.test(fuel);
   const isHybrid = /hybrid|phev/i.test(fuel);
 
@@ -1182,7 +1193,8 @@ async function lookupVin() {
   document.getElementById('step-valuation-label').textContent = 'Querying Claude AI for Australian market valuation…';
   const valMake = result.vin_decoded?.Make || '';
   const valModel = result.vin_decoded?.Model || result.dbvin?.model || '';
-  const valYear = result.vin_decoded?.ModelYear || result.dbvin?.year || '';
+  const valYear = result.vin_decoded?.ModelYear || result.dbvin?.year
+    || (vin ? String(decodeModelYear(vin)) : '') || String(new Date().getFullYear());
   const valBody = result.vin_decoded?.BodyClass || result.dbvin?.bodyType || '';
   const valEngine = result.vin_decoded?.EngineDisplacementL ? result.vin_decoded.EngineDisplacementL + 'L' : '';
   const valFuel = result.vin_decoded?.FuelTypePrimary || result.dbvin?.fuelType || '';
