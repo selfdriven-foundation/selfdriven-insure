@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -768,8 +773,10 @@ function computeAUValuation(make, model, year, body, fuel, origin, recallCount) 
   // Grey import — JDM cars get compliance cost adjustment
   const isJapanOrigin = /japan/i.test(origin);
   const isRHD = isJapanOrigin || /uk|australia/i.test(origin);
-  const isGreyImport = isJapanOrigin && !/Toyota|Honda|Mitsubishi|Nissan|Mazda|Subaru|Suzuki/.test(make);
-  if (isJapanOrigin) baseAUD = Math.round(baseAUD * 0.85);
+  // Never apply JDM discount to US-built or EV-native brands
+  const noJdmDiscount = /Tesla|Rivian|Lucid|Ford|Chevrolet|Dodge|Jeep|Chrysler/i.test(make);
+  const isGreyImport = isJapanOrigin && !noJdmDiscount && !/Toyota|Honda|Mitsubishi|Nissan|Mazda|Subaru|Suzuki/.test(make);
+  if (isJapanOrigin && !noJdmDiscount) baseAUD = Math.round(baseAUD * 0.85);
 
   // Depreciation curves — EV curve is different from ICE
   // ICE: yr1-2 -20%/yr | yr3-5 -12%/yr | yr6-10 -8%/yr | yr11+ -5%/yr
@@ -1182,7 +1189,7 @@ async function lookupVin() {
   const valBody = result.vin_decoded?.BodyClass || result.dbvin?.bodyType || '';
   const valEngine = result.vin_decoded?.EngineDisplacementL ? result.vin_decoded.EngineDisplacementL + 'L' : '';
   const valFuel = result.vin_decoded?.FuelTypePrimary || result.dbvin?.fuelType || '';
-  const valCountry = result.vin_decoded?.PlantCountry || 'Japan';
+  const valCountry = result.vin_decoded?.PlantCountry || result.dbvin?.registrationCountry || '';
   const t0val = Date.now();
   const auVal = computeAUValuation(valMake, valModel, valYear, valBody, valFuel, valCountry, result.recalls?.Count ?? 0);
   result.valuation = {
