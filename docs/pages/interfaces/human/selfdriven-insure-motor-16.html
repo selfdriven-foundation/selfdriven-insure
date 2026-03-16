@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -757,11 +762,13 @@ function computeAUValuation(make, model, year, body, fuel, origin, recallCount) 
                 : /hatch|hatchback/i.test(body) ? 'hatch'
                 : 'default';
 
-  const makeKey = make in baseValues ? make : 'default';
+  // Normalise make for lookup — NHTSA returns ALL CAPS (e.g. "TESLA", "TOYOTA")
+  const makeNorm = make ? make.charAt(0).toUpperCase() + make.slice(1).toLowerCase() : '';
+  const makeKey = makeNorm in baseValues ? makeNorm : (make in baseValues ? make : 'default');
   let baseAUD = baseValues[makeKey][bodyKey] || baseValues[makeKey].default;
 
   // If fuel is Electric/Hybrid but make has no specific EV base, apply premium to base
-  if ((isEV || isHybrid) && !(make in {'Tesla':1,'BYD':1,'Polestar':1,'Rivian':1})) {
+  if ((isEV || isHybrid) && !(makeNorm in {'Tesla':1,'Byd':1,'Polestar':1,'Rivian':1})) {
     baseAUD = Math.round(baseAUD * (isEV ? 1.35 : 1.18)); // EV/hybrid premium on new price
   }
 
