@@ -1,3 +1,8 @@
+---
+layout: null
+title: Property - selfdriven Insure
+permalink: /interfaces/human/motor-vehicle
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -431,7 +436,10 @@ function decodeModelYear(vin) {
 
   // If serial > 100000 or WMI is in modern list → prefer 2010+ cycle
   // If serial < 5000 and WMI not in modern list → prefer 1980s cycle
-  if (isModernWmi || serial > 10000) {
+  // Non-US origin (J=Japan, K=Korea, W=Germany, S=UK/Sweden, V=France/Spain, Z=Italy, L=China)
+  // These markets don't use US check digit and have independent serial numbering
+  const isNonUsOrigin = /^[JKWSVZLY]/.test(vin[0]);
+  if (isModernWmi || serial > 10000 || isNonUsOrigin) {
     return letterSecond[ch] ? String(letterSecond[ch]) : String(letterFirst[ch]);
   } else if (serial < 5000 && !isModernWmi) {
     return String(letterFirst[ch]);
@@ -853,9 +861,46 @@ function computeAUValuation(make, model, year, body, fuel, origin, recallCount) 
   };
 }
 
+// VIN check digit validator (ISO 3779)
+function vinCheckDigit(vin) {
+  const trans = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,J:1,K:2,L:3,M:4,N:5,P:7,R:9,
+                 S:2,T:3,U:4,V:5,W:6,X:7,Y:8,Z:9};
+  const weights = [8,7,6,5,4,3,2,10,0,9,8,7,6,5,4,3,2];
+  let sum = 0;
+  for (let i = 0; i < 17; i++) {
+    const c = vin[i];
+    const val = /[0-9]/.test(c) ? parseInt(c) : (trans[c] || 0);
+    sum += val * weights[i];
+  }
+  const r = sum % 11;
+  return r === 10 ? 'X' : String(r);
+}
+
 async function lookupVin() {
   const vin = document.getElementById('vin-input').value.trim().toUpperCase();
   if (vin.length < 11) { showError('Please enter at least 11 characters of a valid VIN.'); return; }
+  // Check digit validation (position 9) — warn but don't block (some foreign VINs relax this)
+  if (vin.length === 17) {
+    const expectedCheck = vinCheckDigit(vin);
+    const actualCheck = vin[8];
+    // Check digit rule only applies to North American (US/Canada/Mexico) VINs per FMVSS
+    const isNorthAmerican = /^[1-5]/.test(vin);
+    if (isNorthAmerican && expectedCheck !== actualCheck && actualCheck !== '0') {
+      // Show a non-blocking warning banner
+      const warn = document.getElementById('vin-warning') || (() => {
+        const w = document.createElement('div');
+        w.id = 'vin-warning';
+        w.style.cssText = 'background:rgba(200,68,47,0.15);border:1px solid var(--accent);border-radius:12px;padding:10px 16px;margin:8px 0;font-size:13px;color:var(--accent)';
+        document.getElementById('results').before(w);
+        return w;
+      })();
+      warn.innerHTML = `⚠ VIN check digit mismatch (expected <strong>${expectedCheck}</strong>, got <strong>${actualCheck}</strong>) — this may not be a real VIN. Results may be inaccurate.`;
+      warn.style.display = 'block';
+    } else {
+      const w = document.getElementById('vin-warning');
+      if (w) w.style.display = 'none';
+    }
+  }
 
   document.getElementById('error-banner').classList.remove('visible');
   document.getElementById('progress-section').classList.add('visible');
