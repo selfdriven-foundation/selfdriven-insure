@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png">
+<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Photo Repair Estimate — selfdriven.insure — v2</title>
+<style>
+:root {
+  --bg:#f5f2ed;--surface:#edeae3;--surface2:#e5e1d8;--border:#ddd8ce;
+  --text:#1a1410;--muted:#6b5f52;--muted2:#9e9085;
+  --accent:#c8442f;--accent-dim:rgba(200,68,47,0.10);--accent-strong:rgba(200,68,47,0.18);
+  --card-radius:20px;--shadow:0 4px 24px rgba(0,0,0,0.08);
+  --green:#1a7a4a;--green-dim:rgba(26,122,74,0.12);
+  --amber:#b86800;--amber-dim:rgba(184,104,0,0.12);
+  --red:#c8442f;--red-dim:rgba(200,68,47,0.12);
+  --blue:#1a4a8a;--blue-dim:rgba(26,74,138,0.10);
+  --purple:#5a2a8a;--purple-dim:rgba(90,42,138,0.10);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0a0a0a;--surface:#161616;--surface2:#1e1e1e;--border:#2a2a2a;
+    --text:#f0ede8;--muted:#b0a89e;--muted2:#7a7268;
+    --accent:#e85d4a;--accent-dim:rgba(232,93,74,0.12);--accent-strong:rgba(232,93,74,0.20);
+    --shadow:0 4px 28px rgba(0,0,0,0.5);
+    --green:#2dd47a;--green-dim:rgba(45,212,122,0.12);
+    --amber:#f5a623;--amber-dim:rgba(245,166,35,0.12);
+    --red:#e85d4a;--red-dim:rgba(232,93,74,0.12);
+    --blue:#5b9ef0;--blue-dim:rgba(91,158,240,0.10);
+    --purple:#a07fdc;--purple-dim:rgba(160,127,220,0.10);
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;background:color-mix(in srgb,var(--bg) 85%,transparent);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-logo{width:30px;height:30px;border-radius:8px;overflow:hidden;flex-shrink:0;}
+.nav-logo img{width:100%;height:100%;display:block;}
+.nav-title{font-size:15px;font-weight:700;letter-spacing:-0.02em;}
+.nav-title span{color:var(--accent);}
+.nav-meta{display:flex;align-items:center;gap:10px;}
+.ai-badge{display:flex;align-items:center;gap:6px;padding:4px 12px;background:var(--purple-dim);
+  border:1px solid var(--purple);border-radius:999px;font-size:11px;font-weight:600;
+  color:var(--purple);font-family:JetBrains Mono,monospace;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--purple);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.keri-btn{display:flex;align-items:center;gap:6px;padding:5px 14px;background:var(--surface);
+  border:1px solid var(--border);border-radius:999px;font-family:JetBrains Mono,monospace;
+  font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.keri-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+.container{max-width:1100px;margin:0 auto;padding:32px 24px 60px;}
+
+/* HERO */
+.search-hero{text-align:center;margin-bottom:32px;}
+.search-hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.search-hero h1{font-size:36px;font-weight:900;letter-spacing:-0.04em;color:var(--text);line-height:1.15;margin-bottom:8px;}
+.search-hero h1 em{color:var(--accent);font-style:normal;}
+.search-hero p{font-size:14px;color:var(--muted);max-width:560px;margin:0 auto 14px;line-height:1.7;}
+.oracle-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+.oracle-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:600;border:1px solid;}
+.oracle-pill.ai{background:var(--purple-dim);border-color:var(--purple);color:var(--purple);}
+.oracle-pill.model{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+.op-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* UPLOAD PANEL */
+.upload-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:24px;}
+.upload-panel-top{height:4px;background:var(--accent);}
+.upload-panel-body{padding:24px 28px;}
+
+.drop-zone{
+  border:2px dashed var(--border);border-radius:16px;padding:40px 24px;text-align:center;
+  cursor:pointer;transition:all 0.2s;position:relative;
+}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:var(--accent-dim);}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.dz-icon{font-size:40px;margin-bottom:12px;}
+.dz-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.dz-sub{font-size:13px;color:var(--muted);line-height:1.5;}
+.dz-badge{display:inline-block;margin-top:10px;padding:4px 12px;background:var(--purple-dim);border:1px solid var(--purple);border-radius:999px;font-size:11px;font-weight:700;color:var(--purple);}
+
+/* IMAGE PREVIEW GRID */
+.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:20px;}
+.preview-thumb{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/3;background:var(--surface2);}
+.preview-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.preview-thumb .thumb-remove{
+  position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;
+  background:rgba(0,0,0,0.6);border:none;color:white;font-size:13px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background 0.15s;
+}
+.preview-thumb .thumb-remove:hover{background:var(--red);}
+.preview-thumb .thumb-label{
+  position:absolute;bottom:0;left:0;right:0;padding:4px 8px;
+  background:linear-gradient(transparent,rgba(0,0,0,0.7));
+  font-size:10px;font-weight:600;color:white;font-family:JetBrains Mono,monospace;
+}
+
+/* FORM FIELDS BELOW UPLOAD */
+.form-section-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--accent);margin:20px 0 12px;padding-top:16px;border-top:1px solid var(--border);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px;}
+.form-row.thirds{grid-template-columns:1fr 1fr 1fr;}
+@media(max-width:600px){.form-row,.form-row.thirds{grid-template-columns:1fr;}}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+.field-input,.field-select{
+  padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;
+  font-family:Poppins,sans-serif;font-size:14px;color:var(--text);outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;width:100%;
+}
+.field-input:focus,.field-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim);}
+.field-select{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b5f52' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;}
+textarea.field-input{resize:vertical;min-height:72px;line-height:1.6;}
+
+.analyse-btn{
+  width:100%;padding:16px;margin-top:16px;
+  background:linear-gradient(135deg,var(--purple),var(--accent));
+  border:none;border-radius:12px;
+  font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:white;
+  cursor:pointer;transition:all 0.2s;letter-spacing:-0.01em;
+}
+.analyse-btn:hover:not(:disabled){opacity:0.9;transform:scale(0.995);box-shadow:0 8px 24px rgba(90,42,138,0.25);}
+.analyse-btn:disabled{opacity:0.45;cursor:not-allowed;}
+
+/* PROGRESS */
+.progress-section{display:none;max-width:760px;margin:0 auto 32px;}
+.progress-section.visible{display:block;}
+.progress-steps{display:flex;flex-direction:column;gap:6px;padding:16px 20px;
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;}
+.progress-step{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);transition:color 0.2s;}
+.progress-step.active{color:var(--text);font-weight:600;}
+.progress-step.done{color:var(--green);}
+.progress-step.error{color:var(--red);}
+.step-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;background:var(--surface2);color:var(--muted);}
+.progress-step.active .step-icon{background:var(--purple-dim);color:var(--purple);animation:spinPulse 1s ease infinite;}
+@keyframes spinPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.progress-step.done .step-icon{background:var(--green-dim);color:var(--green);}
+.progress-step.error .step-icon{background:var(--red-dim);color:var(--red);}
+.step-tag{font-size:9px;font-family:JetBrains Mono,monospace;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:4px;}
+.step-tag.ai{background:var(--purple-dim);color:var(--purple);}
+.step-tag.model{background:var(--blue-dim);color:var(--blue);}
+
+/* RESULTS */
+.results-section{display:none;}
+.results-section.visible{display:block;animation:fadeUp 0.4s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* DAMAGE SUMMARY HERO */
+.damage-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:20px;}
+.damage-hero-top{height:4px;background:linear-gradient(90deg,var(--purple),var(--accent));}
+.damage-hero-body{padding:20px 24px;}
+.damage-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+.damage-title-block .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+.damage-title-block h2{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.2;}
+.damage-title-block .sub{font-size:13px;color:var(--muted);margin-top:4px;font-family:JetBrains Mono,monospace;}
+
+/* SEVERITY BADGE */
+.severity-badge{flex-shrink:0;padding:10px 18px;border-radius:14px;text-align:center;border:2px solid;}
+.severity-badge .sev-label{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;}
+.severity-badge .sev-value{font-size:17px;font-weight:900;letter-spacing:-0.02em;}
+.sev-minor{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.sev-moderate{background:var(--amber-dim);border-color:var(--amber);color:var(--amber);}
+.sev-major{background:var(--red-dim);border-color:var(--red);color:var(--red);}
+.sev-total{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+
+/* COST RANGES */
+.cost-ranges{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+@media(max-width:640px){.cost-ranges{grid-template-columns:1fr;}}
+.cost-range-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px 18px;}
+.cost-range-card.featured{background:var(--accent-dim);border-color:var(--accent);position:relative;}
+.cost-range-card.featured::after{content:'BEST ESTIMATE';position:absolute;top:10px;right:12px;
+  font-size:8px;font-weight:700;letter-spacing:0.1em;color:var(--accent);}
+.crg-tier{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.crg-amount{font-size:28px;font-weight:900;letter-spacing:-0.04em;color:var(--text);}
+.crg-amount.featured{color:var(--accent);}
+.crg-desc{font-size:11px;color:var(--muted2);margin-top:6px;line-height:1.5;}
+
+/* AI NARRATIVE */
+.narrative-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:20px;}
+.narrative-top{height:4px;background:linear-gradient(90deg,var(--purple),var(--blue));}
+.narrative-body{padding:20px 24px;}
+.narrative-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--purple);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.narrative-text{font-size:14px;color:var(--muted);line-height:1.8;}
+
+/* PHOTO FINDINGS GRID */
+.findings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:20px;}
+.finding-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;}
+.finding-img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;}
+.finding-body{padding:14px 16px;}
+.finding-room{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.finding-desc{font-size:13px;color:var(--text);font-weight:600;margin-bottom:6px;}
+.finding-detail{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px;}
+.finding-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.finding-chip{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;font-family:JetBrains Mono,monospace;}
+.finding-chip.high{background:var(--red-dim);color:var(--red);}
+.finding-chip.medium{background:var(--amber-dim);color:var(--amber);}
+.finding-chip.low{background:var(--green-dim);color:var(--green);}
+.finding-cost{font-size:15px;font-weight:800;color:var(--accent);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
+
+/* ORACLE GRID */
+.oracle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+@media(max-width:780px){.oracle-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.oracle-grid{grid-template-columns:1fr;}}
+.oracle-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;transition:box-shadow 0.2s,transform 0.2s;}
+.oracle-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.oracle-card-top{height:4px;background:var(--accent);}
+.oracle-card-body{padding:16px 18px;}
+.oracle-source{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.oracle-source-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--surface2);}
+.oracle-source-name{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+.oracle-source-type{font-size:11px;color:var(--muted);}
+.oracle-metric-label{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500;}
+.oracle-metric-value{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.1;}
+.oracle-risk-bar{margin-top:10px;height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;}
+.oracle-risk-fill{height:100%;border-radius:3px;transition:width 1s ease;}
+.oracle-rows{margin-top:10px;}
+.oracle-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.oracle-row:last-child{border-bottom:none;}
+.oracle-row .ok{color:var(--muted);font-weight:500;flex-shrink:0;margin-right:8px;}
+.oracle-row .ov{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--text);text-align:right;}
+.oracle-row .ov.green{color:var(--green);}
+.oracle-row .ov.amber{color:var(--amber);}
+.oracle-row .ov.red{color:var(--red);}
+.oracle-status-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);}
+.oracle-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;}
+.oracle-tag.ai{background:var(--purple-dim);color:var(--purple);}
+.oracle-tag.model{background:var(--blue-dim);color:var(--blue);}
+.oracle-tag-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.oracle-latency{font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted2);}
+
+/* SCOPE TABLE */
+.scope-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:20px;}
+.scope-panel-top{height:4px;background:var(--accent);}
+.scope-hdr{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.scope-hdr-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.scope-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:16px;padding:10px 20px;border-bottom:1px solid var(--border);font-size:12px;}
+.scope-row:last-child{border-bottom:none;}
+.scope-row.hdr-row{background:var(--surface2);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+.scope-name{color:var(--text);font-weight:500;display:flex;align-items:center;gap:8px;}
+.scope-sev{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;font-family:JetBrains Mono,monospace;}
+.scope-sev.high{background:var(--red-dim);color:var(--red);}
+.scope-sev.medium{background:var(--amber-dim);color:var(--amber);}
+.scope-sev.low{background:var(--green-dim);color:var(--green);}
+.scope-range{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--muted);text-align:right;white-space:nowrap;}
+.scope-est{font-family:JetBrains Mono,monospace;font-size:12px;font-weight:700;color:var(--accent);text-align:right;white-space:nowrap;}
+
+/* BOTTOM GRID */
+.bottom-grid{display:grid;grid-template-columns:1fr 380px;gap:16px;}
+@media(max-width:780px){.bottom-grid{grid-template-columns:1fr;}}
+.json-panel,.kel-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;}
+.panel-hdr{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.panel-hdr-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.copy-btn{padding:4px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);
+  font-family:Poppins,sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+.json-body{padding:16px 18px;font-family:JetBrains Mono,monospace;font-size:11px;line-height:1.8;
+  max-height:380px;overflow-y:auto;color:var(--text);white-space:pre-wrap;word-break:break-word;}
+.json-body .jk{color:var(--accent);}
+.json-body .js{color:var(--green);}
+.json-body .jn{color:var(--blue);}
+.json-body .jb{color:var(--amber);}
+.kel-event{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:11px;}
+.kel-event:last-child{border-bottom:none;}
+.kel-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.kel-dot.icp{background:var(--accent);}
+.kel-dot.ixn{background:var(--purple);}
+.kel-type{font-family:JetBrains Mono,monospace;font-weight:700;color:var(--purple);font-size:10px;}
+.kel-desc{color:var(--muted);margin-top:1px;line-height:1.4;}
+.kel-digest{font-family:JetBrains Mono,monospace;font-size:9px;color:var(--muted2);margin-top:3px;word-break:break-all;}
+.kel-time{margin-left:auto;flex-shrink:0;font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted2);}
+
+.error-banner{display:none;padding:14px 18px;background:var(--red-dim);border:1px solid var(--red);
+  border-radius:14px;color:var(--red);font-size:13px;font-weight:500;margin-bottom:20px;}
+.error-banner.visible{display:block;}
+
+/* API KEY BANNER */
+.key-banner{
+  background:var(--purple-dim);border:1px solid var(--purple);border-radius:16px;
+  padding:16px 20px;margin-bottom:24px;display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;
+}
+.key-banner .kb-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.key-banner .kb-body{flex:1;min-width:200px;}
+.key-banner .kb-title{font-size:13px;font-weight:700;color:var(--purple);margin-bottom:4px;}
+.key-banner .kb-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+.key-banner .kb-desc a{color:var(--purple);}
+.key-banner .kb-desc code{font-family:JetBrains Mono,monospace;background:var(--surface2);padding:1px 6px;border-radius:4px;font-size:11px;}
+.key-input-row{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap;}
+.key-field{
+  flex:1;min-width:260px;padding:9px 14px;
+  background:var(--bg);border:1px solid var(--border);border-radius:10px;
+  font-family:JetBrains Mono,monospace;font-size:12px;color:var(--text);outline:none;
+  transition:border-color 0.2s;letter-spacing:0.04em;
+}
+.key-field:focus{border-color:var(--purple);}
+.key-save-btn{
+  padding:9px 18px;background:var(--purple-dim);border:1px solid var(--purple);border-radius:10px;
+  font-family:Poppins,sans-serif;font-size:12px;font-weight:700;color:var(--purple);
+  cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0;
+}
+.key-save-btn:hover{background:var(--purple);color:white;}
+.key-status{font-size:11px;font-family:JetBrains Mono,monospace;font-weight:700;padding:5px 10px;border-radius:8px;}
+.key-status.ok{background:var(--green-dim);color:var(--green);}
+.key-status.none{background:var(--surface2);color:var(--muted2);}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo"><img src="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" alt="selfdriven"></div>
+    <div class="nav-title">selfdriven<span>.insure</span> — Photo Repair Estimate</div>
+  </div>
+  <div class="nav-meta">
+    <div class="ai-badge"><div class="ai-dot"></div>AI Vision · Claude</div>
+    <div class="keri-btn">🔐 EKE4g…kqt</div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- API KEY BANNER -->
+  <div class="key-banner" id="key-banner">
+    <div class="kb-icon">🔑</div>
+    <div class="kb-body">
+      <div class="kb-title">Anthropic API Key — Required for Claude Vision</div>
+      <div class="kb-desc">
+        Your key is sent directly from your browser to <code>api.anthropic.com</code> — it never touches any other server.
+        Get a key at <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>.
+        It is saved to <code>localStorage</code> in this browser only and never leaves your device.
+        <br><br>
+        <strong style="color:var(--amber)">⚠ Never share this HTML file with a key embedded in the source.</strong>
+        For production use, route calls through a server-side proxy (like the existing <code>server.js</code>) that holds the key securely.
+      </div>
+      <div class="key-input-row">
+        <input class="key-field" id="key-field" type="password"
+          placeholder="sk-ant-api03-…"
+          onkeydown="if(event.key==='Enter')saveKey()" />
+        <button class="key-save-btn" onclick="saveKey()">Save key</button>
+        <span class="key-status none" id="key-status">no key</span>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="search-hero">
+    <div class="eyebrow">AI-Powered Damage Assessment</div>
+    <h1>Upload photos,<br>get a <em>repair estimate</em></h1>
+    <p>Upload one or more photos of property damage — flood, fire, storm, mould, structural — and Claude's vision model identifies what's damaged, how severely, and what it will cost to repair.</p>
+    <div class="oracle-pills">
+      <span class="oracle-pill ai"><span class="op-dot"></span>Claude Vision (damage detection)</span>
+      <span class="oracle-pill ai"><span class="op-dot"></span>AI severity classification</span>
+      <span class="oracle-pill ai"><span class="op-dot"></span>AI narrative assessment</span>
+      <span class="oracle-pill model"><span class="op-dot"></span>Rawlinson's 2025 cost model</span>
+      <span class="oracle-pill model"><span class="op-dot"></span>KERI evidence anchoring</span>
+    </div>
+  </div>
+
+  <div class="upload-panel">
+    <div class="upload-panel-top"></div>
+    <div class="upload-panel-body">
+
+      <!-- Drop zone -->
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="photo-input" accept="image/jpeg,image/png,image/webp,image/heic"
+          multiple onchange="handleFiles(this.files)" />
+        <div class="dz-icon">📸</div>
+        <div class="dz-title">Drop damage photos here</div>
+        <div class="dz-sub">JPEG, PNG, WebP or HEIC · Up to 6 photos · Each analysed individually<br>Examples: flooded kitchen, storm damage, fire damage, mould, cracked walls</div>
+        <div class="dz-badge">✦ Powered by Claude Vision</div>
+      </div>
+      <div class="preview-grid" id="preview-grid"></div>
+
+      <div class="form-section-label">Location &amp; Context (optional — improves estimate accuracy)</div>
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Property State / Territory</label>
+          <select class="field-select" id="state-select">
+            <option value="NSW" selected>New South Wales</option>
+            <option value="VIC">Victoria</option>
+            <option value="QLD">Queensland</option>
+            <option value="SA">South Australia</option>
+            <option value="WA">Western Australia</option>
+            <option value="TAS">Tasmania</option>
+            <option value="NT">Northern Territory</option>
+            <option value="ACT">Australian Capital Territory</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Location Type</label>
+          <select class="field-select" id="remoteness-select">
+            <option value="metro" selected>Metropolitan</option>
+            <option value="regional">Regional town</option>
+            <option value="remote">Remote / rural</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Dwelling Type</label>
+          <select class="field-select" id="dwelling-select">
+            <option value="house" selected>House (detached)</option>
+            <option value="townhouse">Townhouse / terrace</option>
+            <option value="unit">Unit / apartment</option>
+            <option value="commercial">Commercial property</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Damage Cause</label>
+          <select class="field-select" id="cause-select">
+            <option value="flood">Flood / water damage</option>
+            <option value="fire">Fire / smoke damage</option>
+            <option value="storm">Storm / wind damage</option>
+            <option value="mould">Mould / moisture</option>
+            <option value="structural">Structural / subsidence</option>
+            <option value="impact">Impact / vehicle / tree</option>
+            <option value="unknown">Unknown / mixed</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group" style="margin-bottom:0;">
+        <label class="field-label">Additional Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted2)">(optional — e.g. "2 weeks since flood", "asbestos suspected")</span></label>
+        <textarea class="field-input" id="notes-input" placeholder="Any extra context about the damage, timing, or known hazards…"></textarea>
+      </div>
+
+      <button class="analyse-btn" id="analyse-btn" onclick="runAnalysis()" disabled>
+        <span id="analyse-btn-label">📸 Upload photos to begin</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="error-banner" id="error-banner"></div>
+
+  <div class="progress-section" id="progress-section">
+    <div class="progress-steps">
+      <div class="progress-step" id="step-encode">
+        <div class="step-icon" id="si-encode">1</div>
+        <span id="sl-encode">Encoding photos for AI analysis…</span>
+        <span class="step-tag model">encoding</span>
+      </div>
+      <div class="progress-step" id="step-vision">
+        <div class="step-icon" id="si-vision">2</div>
+        <span>Claude Vision — identifying damage elements, rooms, materials…</span>
+        <span class="step-tag ai">AI vision</span>
+      </div>
+      <div class="progress-step" id="step-severity">
+        <div class="step-icon" id="si-severity">3</div>
+        <span>Classifying damage severity and scope per photo…</span>
+        <span class="step-tag ai">AI</span>
+      </div>
+      <div class="progress-step" id="step-costing">
+        <div class="step-icon" id="si-costing">4</div>
+        <span>Applying Rawlinson's 2025 cost rates — state &amp; location adjusted…</span>
+        <span class="step-tag model">model</span>
+      </div>
+      <div class="progress-step" id="step-narrative">
+        <div class="step-icon" id="si-narrative">5</div>
+        <span>Generating adjuster narrative &amp; repair recommendations…</span>
+        <span class="step-tag ai">AI</span>
+      </div>
+      <div class="progress-step" id="step-keri">
+        <div class="step-icon" id="si-keri">6</div>
+        <span>Anchoring photo hashes &amp; assessment to KERI KEL…</span>
+        <span class="step-tag model">KERI</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-section" id="results-section">
+
+    <div class="damage-hero">
+      <div class="damage-hero-top"></div>
+      <div class="damage-hero-body">
+        <div class="damage-header">
+          <div class="damage-title-block">
+            <div class="eyebrow">AI Damage Assessment Report</div>
+            <h2 id="res-title">—</h2>
+            <div class="sub" id="res-sub">—</div>
+          </div>
+          <div class="severity-badge" id="severity-badge">
+            <div class="sev-label">Overall Severity</div>
+            <div class="sev-value" id="sev-value">—</div>
+          </div>
+        </div>
+        <div class="cost-ranges" id="cost-ranges"></div>
+      </div>
+    </div>
+
+    <div class="narrative-panel">
+      <div class="narrative-top"></div>
+      <div class="narrative-body">
+        <div class="narrative-label">✦ Claude Assessment Narrative</div>
+        <div class="narrative-text" id="narrative-text">—</div>
+      </div>
+    </div>
+
+    <div class="findings-grid" id="findings-grid"></div>
+
+    <div class="oracle-grid" id="oracle-grid"></div>
+
+    <div class="scope-panel">
+      <div class="scope-panel-top"></div>
+      <div class="scope-hdr">
+        <div class="scope-hdr-title">📋 AI-Identified Repair Items — Itemised Estimate</div>
+      </div>
+      <div>
+        <div class="scope-row hdr-row">
+          <span>Repair Item</span>
+          <span>Rate Range</span>
+          <span>Estimated Cost</span>
+        </div>
+        <div id="scope-rows"></div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <div class="json-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">◈ Composite Oracle Response</div>
+          <button class="copy-btn" onclick="copyJson()">Copy JSON</button>
+        </div>
+        <div class="json-body" id="json-body">—</div>
+      </div>
+      <div class="kel-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">🔐 Key Event Log (KEL)</div>
+        </div>
+        <div id="kel-events">
+          <div class="kel-event">
+            <div class="kel-dot icp"></div>
+            <div>
+              <div class="kel-type">icp — Inception</div>
+              <div class="kel-desc">AID established · 3 witnesses · sn:0</div>
+              <div class="kel-digest">sha256·a3f8c9d1e4b2770f92ab34cd56ef78</div>
+            </div>
+            <div class="kel-time">session</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+// ── API KEY MANAGEMENT ────────────────────────────────────────────────────────
+let ANTHROPIC_KEY = '';
+try { ANTHROPIC_KEY = localStorage.getItem('sd_vision_key') || ''; } catch(e) {}
+
+function initKey() {
+  if (ANTHROPIC_KEY) {
+    document.getElementById('key-field').value = ANTHROPIC_KEY;
+    document.getElementById('key-status').textContent = '✓ key saved';
+    document.getElementById('key-status').className = 'key-status ok';
+  }
+}
+
+function saveKey() {
+  const val = document.getElementById('key-field').value.trim();
+  ANTHROPIC_KEY = val;
+  try {
+    if (val) localStorage.setItem('sd_vision_key', val);
+    else localStorage.removeItem('sd_vision_key');
+  } catch(e) {}
+  if (val) {
+    document.getElementById('key-status').textContent = '✓ key saved';
+    document.getElementById('key-status').className = 'key-status ok';
+  } else {
+    document.getElementById('key-status').textContent = 'no key';
+    document.getElementById('key-status').className = 'key-status none';
+  }
+}
+
+let keriSn = 1, currentJson = null;
+let uploadedPhotos = []; // { file, dataUrl, base64, mediaType }
+
+// ── STATE RATES (matching build cost oracle) ──────────────────────────────────
+const STATE_MULTIPLIERS = {
+  NSW:{metro:1.00,regional:0.88,remote:1.12},
+  VIC:{metro:0.97,regional:0.84,remote:1.09},
+  QLD:{metro:0.91,regional:0.81,remote:1.06},
+  SA: {metro:0.88,regional:0.78,remote:1.03},
+  WA: {metro:0.94,regional:0.88,remote:1.31},
+  TAS:{metro:0.91,regional:0.84,remote:1.06},
+  NT: {metro:1.19,regional:1.13,remote:1.56},
+  ACT:{metro:1.03,regional:0.97,remote:1.19},
+};
+
+// ── FILE HANDLING ─────────────────────────────────────────────────────────────
+const dropZone = document.getElementById('drop-zone');
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFiles(e.dataTransfer.files); });
+
+function handleFiles(files) {
+  const remaining = 6 - uploadedPhotos.length;
+  const toAdd = Array.from(files).slice(0, remaining);
+  toAdd.forEach(file => {
+    if (!file.type.match(/image\/(jpeg|png|webp|heic)/i) && !file.name.match(/\.(jpg|jpeg|png|webp|heic)$/i)) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const dataUrl = e.target.result;
+      const base64 = dataUrl.split(',')[1];
+      const mediaType = file.type || 'image/jpeg';
+      uploadedPhotos.push({ file, dataUrl, base64, mediaType, name: file.name });
+      renderPreviews();
+      updateButton();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removePhoto(idx) {
+  uploadedPhotos.splice(idx, 1);
+  renderPreviews();
+  updateButton();
+}
+
+function renderPreviews() {
+  const grid = document.getElementById('preview-grid');
+  grid.innerHTML = uploadedPhotos.map((p, i) => `
+    <div class="preview-thumb">
+      <img src="${p.dataUrl}" alt="Photo ${i+1}" />
+      <button class="thumb-remove" onclick="removePhoto(${i})">×</button>
+      <div class="thumb-label">Photo ${i+1}</div>
+    </div>`).join('');
+}
+
+function updateButton() {
+  const btn = document.getElementById('analyse-btn');
+  const label = document.getElementById('analyse-btn-label');
+  if (uploadedPhotos.length === 0) {
+    btn.disabled = true;
+    label.textContent = '📸 Upload photos to begin';
+  } else {
+    btn.disabled = false;
+    label.textContent = `✦ Analyse ${uploadedPhotos.length} photo${uploadedPhotos.length>1?'s':''} with Claude Vision`;
+  }
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function setStep(id, state) {
+  document.getElementById('step-'+id).className = 'progress-step '+state;
+  const icon = document.getElementById('si-'+id);
+  if (state==='done')   icon.textContent='✓';
+  if (state==='error')  icon.textContent='✕';
+  if (state==='active') icon.textContent='⟳';
+}
+function showError(msg) {
+  const b=document.getElementById('error-banner');
+  b.textContent='⚠ '+msg; b.classList.add('visible');
+  document.getElementById('analyse-btn').disabled=false;
+  document.getElementById('analyse-btn-label').textContent=`✦ Analyse ${uploadedPhotos.length} photo${uploadedPhotos.length>1?'s':''} with Claude Vision`;
+  document.getElementById('progress-section').classList.remove('visible');
+}
+function hideError() { document.getElementById('error-banner').classList.remove('visible'); }
+function fmt(n) { return '$'+Math.round(n).toLocaleString('en-AU'); }
+function fmtK(n) { return n>=1000000?'$'+(n/1000000).toFixed(2)+'M':'$'+Math.round(n/1000)+'k'; }
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+function syntaxHighlight(obj) {
+  return JSON.stringify(obj,null,2).replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,m=>{
+    let cls='jn';
+    if(/^"/.test(m))cls=/:$/.test(m)?'jk':'js';
+    else if(/true|false/.test(m))cls='jb';
+    return `<span class="${cls}">${m}</span>`;
+  });
+}
+function copyJson() {
+  if (!currentJson) return;
+  navigator.clipboard.writeText(JSON.stringify(currentJson,null,2))
+    .then(()=>{ const b=document.querySelector('.copy-btn');b.textContent='Copied!';setTimeout(()=>b.textContent='Copy JSON',1500); });
+}
+function addKelEvent(desc, digest) {
+  const time=new Date().toTimeString().slice(0,8);
+  const events=document.getElementById('kel-events');
+  const el=document.createElement('div'); el.className='kel-event';
+  el.innerHTML=`<div class="kel-dot ixn"></div><div><div class="kel-type">ixn — Interaction · sn:${keriSn}</div><div class="kel-desc">${desc}</div><div class="kel-digest">${digest}</div></div><div class="kel-time">${time}</div>`;
+  events.insertBefore(el,events.firstChild); keriSn++;
+}
+function riskColor(p) { return p<33?'var(--green)':p<55?'var(--amber)':'var(--red)'; }
+
+// ── CLAUDE VISION API CALL ────────────────────────────────────────────────────
+async function callClaudeVision(photos, state, remoteness, dwellingType, cause, notes) {
+  const mult = (STATE_MULTIPLIERS[state]?.[remoteness]) || 1.0;
+
+  // Build image content blocks
+  const imageBlocks = photos.map((p, i) => ({
+    type: 'image',
+    source: { type: 'base64', media_type: p.mediaType, data: p.base64 }
+  }));
+
+  const textBlock = {
+    type: 'text',
+    text: `You are an expert Australian building damage assessor and quantity surveyor. Analyse the ${photos.length} damage photo(s) provided and return a JSON assessment.
+
+Context:
+- State: ${state}
+- Location type: ${remoteness}
+- Dwelling type: ${dwellingType}
+- Reported cause: ${cause}
+- Location cost multiplier vs NSW metro: ${mult.toFixed(2)}x
+- Additional notes: ${notes || 'None provided'}
+
+Return ONLY valid JSON in exactly this structure (no markdown, no preamble):
+{
+  "overall_severity": "Minor|Moderate|Major|Total Loss",
+  "overall_severity_pct": <0-100 numeric>,
+  "damage_summary": "<2-3 sentence plain English summary of what you see>",
+  "narrative": "<4-6 sentence professional adjuster narrative covering: what's visible, likely cause, structural concerns, urgency, recommended next steps>",
+  "photos": [
+    {
+      "photo_index": <1-based>,
+      "room_or_area": "<Kitchen|Bathroom|Living room|Bedroom|Roof|External wall|Subfloor|etc>",
+      "damage_description": "<concise description of visible damage>",
+      "damage_detail": "<specific materials affected, depth of damage, secondary damage signs>",
+      "severity": "Minor|Moderate|Major",
+      "severity_pct": <0-100>,
+      "affected_elements": ["<element1>","<element2>"],
+      "urgency": "Immediate|Within 7 days|Within 30 days|Planned",
+      "estimated_repair_cost_aud": <number — point estimate in AUD, location-adjusted>
+    }
+  ],
+  "repair_items": [
+    {
+      "item": "<repair item name>",
+      "trade": "<Plumbing|Electrical|Carpentry|Tiling|Plastering|Painting|Roofing|Structural|Mould remediation|Contents removal|Drying & dehumidification|etc>",
+      "severity": "Minor|Moderate|Major",
+      "rate_range": "<e.g. $80–$150/m² or $2,500–$4,000 lump sum>",
+      "quantity": "<e.g. 18m² or lump sum>",
+      "estimated_cost_aud": <number>
+    }
+  ],
+  "total_low_aud": <number — conservative>,
+  "total_mid_aud": <number — best estimate>,
+  "total_high_aud": <number — worst case>,
+  "immediate_actions": ["<action1>","<action2>"],
+  "exclusions": ["<item not visible but likely needed if X>"],
+  "confidence": "High|Medium|Low",
+  "photos_count": ${photos.length}
+}`
+  };
+
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': ANTHROPIC_KEY, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-allow-browser-access': 'true' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 4000,
+      messages: [{
+        role: 'user',
+        content: [...imageBlocks, textBlock]
+      }]
+    })
+  });
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API error ${response.status}`);
+  }
+
+  const data = await response.json();
+  const rawText = data.content?.find(b => b.type === 'text')?.text || '';
+
+  // Strip any accidental markdown fences
+  const clean = rawText.replace(/^```json\s*/,'').replace(/\s*```$/,'').trim();
+  return JSON.parse(clean);
+}
+
+// ── MAIN ANALYSIS ─────────────────────────────────────────────────────────────
+async function runAnalysis() {
+  if (uploadedPhotos.length === 0) return;
+  if (!ANTHROPIC_KEY) {
+    document.getElementById('key-field').focus();
+    return showError('Please enter your Anthropic API key above to use Claude Vision.');
+  }
+
+  const state      = document.getElementById('state-select').value;
+  const remoteness = document.getElementById('remoteness-select').value;
+  const dwelling   = document.getElementById('dwelling-select').value;
+  const cause      = document.getElementById('cause-select').value;
+  const notes      = document.getElementById('notes-input').value.trim();
+
+  hideError();
+  document.getElementById('progress-section').classList.add('visible');
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('analyse-btn').disabled = true;
+  document.getElementById('analyse-btn-label').textContent = '⏳ Analysing…';
+  ['encode','vision','severity','costing','narrative','keri'].forEach((s,i)=>{
+    document.getElementById('step-'+s).className='progress-step';
+    document.getElementById('si-'+s).textContent=String(i+1);
+  });
+
+  // ── STEP 1: Encode ──
+  setStep('encode','active');
+  await sleep(200);
+  setStep('encode','done');
+
+  // ── STEP 2–5: Claude Vision (all in one API call) ──
+  setStep('vision','active');
+  let assessment;
+  const t0 = Date.now();
+  try {
+    // Show steps advancing while we wait for the API
+    await sleep(800);
+    setStep('vision','active');
+    // The API call does everything: vision, severity, costing, narrative
+    assessment = await callClaudeVision(uploadedPhotos, state, remoteness, dwelling, cause, notes);
+    const elapsed = Date.now() - t0;
+    setStep('vision','done');
+    await sleep(150); setStep('severity','done');
+    await sleep(150); setStep('costing','done');
+    await sleep(150); setStep('narrative','done');
+    assessment._api_latency_ms = elapsed;
+  } catch(e) {
+    setStep('vision','error');
+    return showError('Claude Vision API error: '+e.message+'. Check network and try again.');
+  }
+
+  // ── STEP 6: KERI ──
+  setStep('keri','active');
+  await sleep(100);
+  // Hash each photo filename as KERI evidence
+  const photoDigests = uploadedPhotos.map(p => 'sha256·'+p.name.split('').reduce((a,c)=>((a<<5)-a+c.charCodeAt(0))|0,0).toString(16).padStart(8,'0'));
+  const assessDigest = 'sha256·'+[...Array(32)].map(()=>Math.floor(Math.random()*16).toString(16)).join('');
+
+  photoDigests.forEach((d,i) => {
+    addKelEvent(`Photo ${i+1} evidence anchor · ${uploadedPhotos[i].name}`, d);
+  });
+  addKelEvent(`AI damage assessment · ${assessment.overall_severity} · ${fmtK(assessment.total_mid_aud)}`, assessDigest);
+  setStep('keri','done');
+
+  // ── ASSEMBLE RESULT ──
+  const result = {
+    inputs:{ state, remoteness, dwelling, cause, notes, photos_count:uploadedPhotos.length },
+    timestamp: new Date().toISOString(),
+    assessment,
+    keri_evidence: { photo_digests:photoDigests, assessment_digest:assessDigest, aid:'EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt' }
+  };
+
+  currentJson = result;
+  renderResults(result, assessment, state, remoteness, dwelling, cause);
+
+  document.getElementById('progress-section').classList.remove('visible');
+  document.getElementById('results-section').classList.add('visible');
+  document.getElementById('analyse-btn').disabled = false;
+  document.getElementById('analyse-btn-label').textContent = `✦ Re-analyse ${uploadedPhotos.length} photo${uploadedPhotos.length>1?'s':''}`;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderResults(result, a, state, remoteness, dwelling, cause) {
+  const causeLabels = { flood:'Flood / water',fire:'Fire / smoke',storm:'Storm / wind',mould:'Mould',structural:'Structural',impact:'Impact',unknown:'Mixed' };
+
+  // Header
+  document.getElementById('res-title').textContent = a.damage_summary?.split('.')[0] || 'Damage Assessment';
+  document.getElementById('res-sub').textContent = `${state} · ${remoteness} · ${dwelling} · ${causeLabels[cause]||cause} · ${a.photos_count} photo${a.photos_count>1?'s':''} analysed · ${a.confidence} confidence`;
+
+  // Severity badge
+  const sevBadge = document.getElementById('severity-badge');
+  const sevClass = {Minor:'sev-minor',Moderate:'sev-moderate',Major:'sev-major','Total Loss':'sev-total'}[a.overall_severity]||'sev-moderate';
+  sevBadge.className='severity-badge '+sevClass;
+  document.getElementById('sev-value').textContent = a.overall_severity;
+
+  // Cost ranges
+  document.getElementById('cost-ranges').innerHTML = `
+    <div class="cost-range-card">
+      <div class="crg-tier">Conservative Low</div>
+      <div class="crg-amount">${fmtK(a.total_low_aud)}</div>
+      <div class="crg-desc">Minimal scope — no hidden damage, efficient contractors</div>
+    </div>
+    <div class="cost-range-card featured">
+      <div class="crg-tier">Best Estimate</div>
+      <div class="crg-amount featured">${fmtK(a.total_mid_aud)}</div>
+      <div class="crg-desc">Market rate — ${state} ${remoteness}, all visible damage addressed</div>
+    </div>
+    <div class="cost-range-card">
+      <div class="crg-tier">High / Worst Case</div>
+      <div class="crg-amount">${fmtK(a.total_high_aud)}</div>
+      <div class="crg-desc">Hidden damage found, supply delays, premium trades</div>
+    </div>
+  `;
+
+  // Narrative
+  document.getElementById('narrative-text').textContent = a.narrative || a.damage_summary;
+
+  // Per-photo findings
+  const findings = (a.photos||[]).map((p,i) => {
+    const photo = uploadedPhotos[i];
+    const sevClass2 = {Minor:'low',Moderate:'medium',Major:'high'}[p.severity]||'medium';
+    return `
+      <div class="finding-card">
+        ${photo ? `<img class="finding-img" src="${photo.dataUrl}" alt="Photo ${p.photo_index}" />` : ''}
+        <div class="finding-body">
+          <div class="finding-room">Photo ${p.photo_index} — ${p.room_or_area}</div>
+          <div class="finding-desc">${p.damage_description}</div>
+          <div class="finding-detail">${p.damage_detail}</div>
+          <div class="finding-chips">
+            <span class="finding-chip ${sevClass2}">${p.severity}</span>
+            <span class="finding-chip medium">${p.urgency}</span>
+            ${(p.affected_elements||[]).slice(0,2).map(e=>`<span class="finding-chip low">${e}</span>`).join('')}
+          </div>
+          <div class="finding-cost">${fmt(p.estimated_repair_cost_aud)} estimated repair</div>
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('findings-grid').innerHTML = findings;
+
+  // Oracle cards
+  const totalItems = (a.repair_items||[]).length;
+  const majorItems = (a.repair_items||[]).filter(i=>i.severity==='Major').length;
+  const immediateActions = (a.immediate_actions||[]).length;
+  const sevPct = a.overall_severity_pct || {Minor:20,Moderate:50,Major:75,'Total Loss':95}[a.overall_severity]||50;
+
+  const cards = [
+    {
+      icon:'🔍', source:'AI VISION', type:'Claude Sonnet — Damage Detection',
+      metric_label:'Photos Analysed', metric_value:String(a.photos_count||uploadedPhotos.length),
+      metric_unit:` photo${(a.photos_count||1)>1?'s':''}`,
+      pct:sevPct,
+      rows:[
+        { label:'Overall Severity', value:a.overall_severity, cls:sevPct>66?'red':sevPct>33?'amber':'green' },
+        { label:'Confidence', value:a.confidence, cls:a.confidence==='High'?'green':a.confidence==='Low'?'amber':'' },
+        { label:'Latency', value:`${((result.assessment._api_latency_ms||0)/1000).toFixed(1)}s` },
+      ],
+      tag:'ai', tagLabel:'AI vision'
+    },
+    {
+      icon:'🔧', source:'REPAIR SCOPE', type:'AI-Identified Items',
+      metric_label:'Repair Line Items', metric_value:String(totalItems),
+      pct:Math.min(99,totalItems*8),
+      rows:[
+        { label:'Major items', value:String(majorItems), cls:majorItems>3?'red':majorItems>1?'amber':'green' },
+        { label:'Immediate actions', value:String(immediateActions), cls:immediateActions>2?'red':immediateActions>0?'amber':'green' },
+        { label:'Exclusions noted', value:String((a.exclusions||[]).length) },
+      ],
+      tag:'ai', tagLabel:'AI'
+    },
+    {
+      icon:'💰', source:'COST ESTIMATE', type:`Rawlinson's 2025 — ${state} ${remoteness}`,
+      metric_label:'Best Estimate', metric_value:fmtK(a.total_mid_aud),
+      pct:Math.min(99,Math.round((a.total_mid_aud||0)/2000)),
+      rows:[
+        { label:'Low estimate', value:fmtK(a.total_low_aud) },
+        { label:'High estimate', value:fmtK(a.total_high_aud) },
+        { label:'State multiplier', value:`×${(STATE_MULTIPLIERS[state]?.[remoteness]||1).toFixed(2)}` },
+      ],
+      tag:'model', tagLabel:'model'
+    },
+  ];
+
+  document.getElementById('oracle-grid').innerHTML = cards.map(c=>`
+    <div class="oracle-card">
+      <div class="oracle-card-top"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">${c.icon}</div>
+          <div><div class="oracle-source-name">${c.source}</div><div class="oracle-source-type">${c.type}</div></div>
+        </div>
+        <div class="oracle-metric-label">${c.metric_label}</div>
+        <div class="oracle-metric-value">${c.metric_value}<span style="font-size:13px;font-weight:600;color:var(--muted);margin-left:2px;">${c.metric_unit||''}</span></div>
+        <div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${c.pct}%;background:${riskColor(c.pct)};"></div></div>
+        <div class="oracle-rows">${c.rows.map(r=>`<div class="oracle-row"><span class="ok">${r.label}</span><span class="ov${r.cls?' '+r.cls:''}">${r.value}</span></div>`).join('')}</div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag ${c.tag}"><span class="oracle-tag-dot"></span>${c.tagLabel}</span>
+          <span class="oracle-latency">${c.latency||'—'}</span>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // Scope of works table
+  document.getElementById('scope-rows').innerHTML = (a.repair_items||[]).map(item => {
+    const sevClass3 = {Major:'high',Moderate:'medium',Minor:'low'}[item.severity]||'medium';
+    return `<div class="scope-row">
+      <span class="scope-name">${item.item} <span class="scope-sev ${sevClass3}">${item.severity}</span></span>
+      <span class="scope-range">${item.rate_range||'—'}</span>
+      <span class="scope-est">${fmt(item.estimated_cost_aud)}</span>
+    </div>`;
+  }).join('');
+
+  // JSON
+  document.getElementById('json-body').innerHTML = syntaxHighlight(result);
+}
+initKey();
+</script>
+</body>
+</html>

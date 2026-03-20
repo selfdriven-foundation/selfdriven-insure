@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png">
+<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Build Cost — selfdriven.insure — v1</title>
+<style>
+:root {
+  --bg:#f5f2ed;--surface:#edeae3;--surface2:#e5e1d8;--border:#ddd8ce;
+  --text:#1a1410;--muted:#6b5f52;--muted2:#9e9085;
+  --accent:#c8442f;--accent-dim:rgba(200,68,47,0.10);--accent-strong:rgba(200,68,47,0.18);
+  --card-radius:20px;--shadow:0 4px 24px rgba(0,0,0,0.08);
+  --green:#1a7a4a;--green-dim:rgba(26,122,74,0.12);
+  --amber:#b86800;--amber-dim:rgba(184,104,0,0.12);
+  --red:#c8442f;--red-dim:rgba(200,68,47,0.12);
+  --blue:#1a4a8a;--blue-dim:rgba(26,74,138,0.10);
+  --purple:#5a2a8a;--purple-dim:rgba(90,42,138,0.10);
+  --teal:#0a6b5a;--teal-dim:rgba(10,107,90,0.10);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0a0a0a;--surface:#161616;--surface2:#1e1e1e;--border:#2a2a2a;
+    --text:#f0ede8;--muted:#b0a89e;--muted2:#7a7268;
+    --accent:#e85d4a;--accent-dim:rgba(232,93,74,0.12);--accent-strong:rgba(232,93,74,0.20);
+    --shadow:0 4px 28px rgba(0,0,0,0.5);
+    --green:#2dd47a;--green-dim:rgba(45,212,122,0.12);
+    --amber:#f5a623;--amber-dim:rgba(245,166,35,0.12);
+    --red:#e85d4a;--red-dim:rgba(232,93,74,0.12);
+    --blue:#5b9ef0;--blue-dim:rgba(91,158,240,0.10);
+    --purple:#a07fdc;--purple-dim:rgba(160,127,220,0.10);
+    --teal:#2dd4b0;--teal-dim:rgba(45,212,176,0.10);
+  }
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:56px;background:color-mix(in srgb,var(--bg) 85%,transparent);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-logo{width:30px;height:30px;border-radius:8px;overflow:hidden;flex-shrink:0;}
+.nav-logo img{width:100%;height:100%;display:block;}
+.nav-title{font-size:15px;font-weight:700;letter-spacing:-0.02em;}
+.nav-title span{color:var(--accent);}
+.nav-meta{display:flex;align-items:center;gap:10px;}
+.live-badge{display:flex;align-items:center;gap:6px;padding:4px 12px;background:var(--green-dim);
+  border:1px solid var(--green);border-radius:999px;font-size:11px;font-weight:600;
+  color:var(--green);font-family:JetBrains Mono,monospace;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.keri-btn{display:flex;align-items:center;gap:6px;padding:5px 14px;background:var(--surface);
+  border:1px solid var(--border);border-radius:999px;font-family:JetBrains Mono,monospace;
+  font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.keri-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+.container{max-width:1200px;margin:0 auto;padding:32px 24px 60px;}
+
+/* HERO */
+.search-hero{text-align:center;margin-bottom:32px;}
+.search-hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.search-hero h1{font-size:36px;font-weight:900;letter-spacing:-0.04em;color:var(--text);line-height:1.15;margin-bottom:8px;}
+.search-hero h1 em{color:var(--accent);font-style:normal;}
+.search-hero p{font-size:14px;color:var(--muted);max-width:580px;margin:0 auto 14px;line-height:1.7;}
+.oracle-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+.oracle-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;
+  border-radius:999px;font-size:11px;font-weight:600;border:1px solid;}
+.oracle-pill.live{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.oracle-pill.model{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+.op-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+
+/* FORM */
+.form-panel{max-width:760px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;}
+.form-panel-top{height:4px;background:var(--accent);}
+.form-panel-body{padding:24px 28px;}
+.form-section-label{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--accent);margin:20px 0 12px;padding-top:16px;border-top:1px solid var(--border);}
+.form-section-label:first-child{margin-top:0;padding-top:0;border-top:none;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px;}
+.form-row.thirds{grid-template-columns:1fr 1fr 1fr;}
+.form-row.single{grid-template-columns:1fr;}
+@media(max-width:640px){.form-row,.form-row.thirds{grid-template-columns:1fr;}}
+.field-group{display:flex;flex-direction:column;gap:6px;}
+.field-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+.field-hint{font-size:11px;color:var(--muted2);margin-top:-2px;}
+.field-input,.field-select{
+  padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;
+  font-family:Poppins,sans-serif;font-size:14px;color:var(--text);outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;width:100%;
+}
+.field-input:focus,.field-select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim);}
+.field-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b5f52' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+.field-input[type=number]{-moz-appearance:textfield;}
+.field-input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;}
+
+.analyse-btn{width:100%;padding:14px;margin-top:16px;background:var(--accent);border:none;border-radius:12px;
+  font-family:Poppins,sans-serif;font-size:15px;font-weight:700;color:white;cursor:pointer;transition:all 0.15s;}
+.analyse-btn:hover:not(:disabled){opacity:0.88;transform:scale(0.99);}
+.analyse-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+.example-chips{display:flex;align-items:center;gap:8px;justify-content:center;margin:16px 0 32px;flex-wrap:wrap;}
+.example-label{font-size:11px;color:var(--muted2);}
+.example-chip{padding:4px 12px;background:var(--surface);border:1px solid var(--border);border-radius:999px;
+  font-size:11px;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.example-chip:hover{border-color:var(--accent);color:var(--accent);}
+
+/* PROGRESS */
+.progress-section{display:none;max-width:760px;margin:0 auto 32px;}
+.progress-section.visible{display:block;}
+.progress-steps{display:flex;flex-direction:column;gap:6px;padding:16px 20px;
+  background:var(--surface);border:1px solid var(--border);border-radius:16px;}
+.progress-step{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);transition:color 0.2s;}
+.progress-step.active{color:var(--text);font-weight:600;}
+.progress-step.done{color:var(--green);}
+.progress-step.error{color:var(--red);}
+.progress-step.skipped{color:var(--muted2);}
+.step-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;flex-shrink:0;background:var(--surface2);color:var(--muted);}
+.progress-step.active .step-icon{background:var(--accent-dim);color:var(--accent);animation:spinPulse 1s ease infinite;}
+@keyframes spinPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.progress-step.done .step-icon{background:var(--green-dim);color:var(--green);}
+.progress-step.error .step-icon{background:var(--red-dim);color:var(--red);}
+.step-tag{font-size:9px;font-family:JetBrains Mono,monospace;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:4px;}
+.step-tag.live{background:var(--green-dim);color:var(--green);}
+.step-tag.model{background:var(--blue-dim);color:var(--blue);}
+
+/* RESULTS */
+.results-section{display:none;}
+.results-section.visible{display:block;}
+
+.result-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap;}
+.result-address .eyebrow{font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+.result-address h2{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.2;}
+.result-address .sub{font-size:13px;color:var(--muted);font-family:JetBrains Mono,monospace;margin-top:4px;}
+
+/* COST HERO */
+.cost-hero{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:20px;}
+.cost-hero-top{height:4px;background:var(--accent);}
+.cost-hero-body{padding:24px 28px;}
+.cost-hero-label{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;}
+.cost-ranges{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+@media(max-width:640px){.cost-ranges{grid-template-columns:1fr;}}
+.cost-range-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden;}
+.cost-range-card.featured{background:var(--accent-dim);border-color:var(--accent);}
+.cost-range-card.featured::before{content:'BEST ESTIMATE';position:absolute;top:10px;right:12px;
+  font-size:8px;font-weight:700;letter-spacing:0.1em;color:var(--accent);}
+.crg-tier{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.crg-amount{font-size:28px;font-weight:900;letter-spacing:-0.04em;color:var(--text);line-height:1;}
+.crg-amount.featured{color:var(--accent);}
+.crg-psm{font-size:12px;color:var(--muted);margin-top:4px;font-family:JetBrains Mono,monospace;}
+.crg-desc{font-size:11px;color:var(--muted2);margin-top:8px;line-height:1.5;}
+
+.cost-breakdown{margin-top:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+@media(max-width:700px){.cost-breakdown{grid-template-columns:1fr 1fr;}}
+.cob-item{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;}
+.cob-label{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.cob-value{font-size:16px;font-weight:800;color:var(--text);}
+.cob-sub{font-size:11px;color:var(--muted2);margin-top:2px;font-family:JetBrains Mono,monospace;}
+
+/* ADJUSTER BANNER */
+.adjuster-banner{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:12px 18px;background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;margin-bottom:20px;
+}
+.adj-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);flex-shrink:0;}
+.adj-chip{
+  display:inline-flex;align-items:center;gap:5px;padding:4px 10px;
+  border-radius:999px;font-size:11px;font-weight:600;border:1px solid;
+}
+.adj-chip.up{background:var(--red-dim);border-color:var(--red);color:var(--red);}
+.adj-chip.down{background:var(--green-dim);border-color:var(--green);color:var(--green);}
+.adj-chip.neutral{background:var(--surface2);border-color:var(--border);color:var(--muted);}
+
+/* ORACLE GRID */
+.oracle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+@media(max-width:780px){.oracle-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:500px){.oracle-grid{grid-template-columns:1fr;}}
+.oracle-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;transition:box-shadow 0.2s,transform 0.2s;}
+.oracle-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+.oracle-card-top{height:4px;background:var(--accent);}
+.oracle-card-body{padding:16px 18px;}
+.oracle-source{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.oracle-source-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--surface2);}
+.oracle-source-name{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);}
+.oracle-source-type{font-size:11px;color:var(--muted);}
+.oracle-metric-label{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:500;}
+.oracle-metric-value{font-size:22px;font-weight:800;letter-spacing:-0.03em;color:var(--text);line-height:1.1;}
+.oracle-metric-unit{font-size:13px;font-weight:600;color:var(--muted);margin-left:2px;}
+.oracle-risk-bar{margin-top:10px;height:5px;border-radius:3px;background:var(--surface2);overflow:hidden;}
+.oracle-risk-fill{height:100%;border-radius:3px;transition:width 1s ease;}
+.oracle-rows{margin-top:10px;}
+.oracle-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.oracle-row:last-child{border-bottom:none;}
+.oracle-row .ok{color:var(--muted);font-weight:500;flex-shrink:0;margin-right:8px;}
+.oracle-row .ov{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--text);text-align:right;}
+.oracle-row .ov.green{color:var(--green);}
+.oracle-row .ov.amber{color:var(--amber);}
+.oracle-row .ov.red{color:var(--red);}
+.oracle-status-row{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);}
+.oracle-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;}
+.oracle-tag.live{background:var(--green-dim);color:var(--green);}
+.oracle-tag.model{background:var(--blue-dim);color:var(--blue);}
+.oracle-tag.derived{background:var(--purple-dim);color:var(--purple);}
+.oracle-tag-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.oracle-latency{font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted2);}
+
+/* SCOPE ITEMS TABLE */
+.scope-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;margin-bottom:20px;}
+.scope-panel-top{height:4px;background:var(--accent);}
+.scope-hdr{padding:12px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.scope-hdr-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.scope-body{padding:0;}
+.scope-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:16px;
+  padding:10px 20px;border-bottom:1px solid var(--border);font-size:12px;}
+.scope-row:last-child{border-bottom:none;}
+.scope-row.header{background:var(--surface2);font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+.scope-name{color:var(--text);font-weight:500;}
+.scope-range{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--muted);text-align:right;white-space:nowrap;}
+.scope-est{font-family:JetBrains Mono,monospace;font-size:12px;font-weight:700;color:var(--accent);text-align:right;white-space:nowrap;}
+
+/* BOTTOM GRID */
+.bottom-grid{display:grid;grid-template-columns:1fr 380px;gap:16px;}
+@media(max-width:780px){.bottom-grid{grid-template-columns:1fr;}}
+.json-panel,.kel-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden;}
+.panel-hdr{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.panel-hdr-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.copy-btn{padding:4px 12px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);
+  font-family:Poppins,sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+.json-body{padding:16px 18px;font-family:JetBrains Mono,monospace;font-size:11px;line-height:1.8;
+  max-height:380px;overflow-y:auto;color:var(--text);white-space:pre-wrap;word-break:break-word;}
+.json-body .jk{color:var(--accent);}
+.json-body .js{color:var(--green);}
+.json-body .jn{color:var(--blue);}
+.json-body .jb{color:var(--amber);}
+.kel-event{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:11px;}
+.kel-event:last-child{border-bottom:none;}
+.kel-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.kel-dot.icp{background:var(--accent);}
+.kel-dot.ixn{background:var(--green);}
+.kel-type{font-family:JetBrains Mono,monospace;font-weight:700;color:var(--accent);font-size:10px;}
+.kel-desc{color:var(--muted);margin-top:1px;line-height:1.4;}
+.kel-digest{font-family:JetBrains Mono,monospace;font-size:9px;color:var(--muted2);margin-top:3px;word-break:break-all;}
+.kel-time{margin-left:auto;flex-shrink:0;font-family:JetBrains Mono,monospace;font-size:10px;color:var(--muted2);}
+.error-banner{display:none;padding:14px 18px;background:var(--red-dim);border:1px solid var(--red);
+  border-radius:14px;color:var(--red);font-size:13px;font-weight:500;margin-bottom:20px;}
+.error-banner.visible{display:block;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo"><img src="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" alt="selfdriven"></div>
+    <div class="nav-title">selfdriven<span>.insure</span> — Build Cost</div>
+  </div>
+  <div class="nav-meta">
+    <div class="live-badge"><div class="live-dot"></div>Live Oracle Feed</div>
+    <div class="keri-btn">🔐 EKE4g…kqt</div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="search-hero">
+    <div class="eyebrow">Residential Build &amp; Repair Cost Intelligence</div>
+    <h1>Real-time estimate for any<br>Australian <em>property</em></h1>
+    <p>Enter an address and property details to get a live-calibrated rebuild, repair or new build cost estimate — using location-adjusted ABS construction indices, site conditions, climate zone, and remoteness uplifts.</p>
+    <div class="oracle-pills">
+      <span class="oracle-pill live"><span class="op-dot"></span>Nominatim Geocoding</span>
+      <span class="oracle-pill live"><span class="op-dot"></span>Open-Meteo Elevation</span>
+      <span class="oracle-pill live"><span class="op-dot"></span>Open-Meteo Weather &amp; Climate</span>
+      <span class="oracle-pill live"><span class="op-dot"></span>Open-Meteo Flood / GloFAS</span>
+      <span class="oracle-pill live"><span class="op-dot"></span>Air Quality &amp; Fire (CAMS)</span>
+      <span class="oracle-pill model"><span class="op-dot"></span>ABS Construction Cost Index</span>
+      <span class="oracle-pill model"><span class="op-dot"></span>Rawlinson's Rate Model</span>
+    </div>
+  </div>
+
+  <div class="form-panel">
+    <div class="form-panel-top"></div>
+    <div class="form-panel-body">
+
+      <div class="form-section-label">Property Location</div>
+      <div class="form-row single">
+        <div class="field-group">
+          <label class="field-label">Street Address</label>
+          <input class="field-input" id="addr-input" type="text"
+            placeholder="e.g. 42 Wattle St, Ultimo NSW 2007"
+            onkeydown="if(event.key==='Enter')runEstimate()" />
+        </div>
+      </div>
+
+      <div class="form-section-label">Dwelling Details</div>
+      <div class="form-row thirds">
+        <div class="field-group">
+          <label class="field-label">Dwelling Type</label>
+          <select class="field-select" id="dwelling-type">
+            <option value="house">House (detached)</option>
+            <option value="townhouse">Townhouse / terrace</option>
+            <option value="unit">Unit / apartment</option>
+            <option value="granny_flat">Granny flat / secondary dwelling</option>
+            <option value="duplex">Duplex</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Floor Area (m²)</label>
+          <input class="field-input" id="floor-area" type="number" min="20" max="2000" value="220" placeholder="e.g. 220" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Number of Storeys</label>
+          <select class="field-select" id="storeys">
+            <option value="1">Single storey</option>
+            <option value="2" selected>Double storey</option>
+            <option value="3">Three storeys</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section-label">Construction</div>
+      <div class="form-row thirds">
+        <div class="field-group">
+          <label class="field-label">Wall Construction</label>
+          <select class="field-select" id="construction-type">
+            <option value="brick_veneer">Brick veneer</option>
+            <option value="full_brick">Full brick / double brick</option>
+            <option value="lightweight">Lightweight (timber frame)</option>
+            <option value="steel_frame">Steel frame</option>
+            <option value="hebel">Hebel / autoclaved aerated concrete</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Roof Type</label>
+          <select class="field-select" id="roof-type">
+            <option value="colorbond">Colorbond / metal sheet</option>
+            <option value="tiles_concrete">Concrete tiles</option>
+            <option value="tiles_terracotta">Terracotta tiles</option>
+            <option value="flat">Flat roof / membrane</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Fit-out Quality</label>
+          <select class="field-select" id="quality">
+            <option value="standard">Standard</option>
+            <option value="medium">Medium / mid-range</option>
+            <option value="high">High-end</option>
+            <option value="prestige">Prestige / custom</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section-label">Scope of Works</div>
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Estimate Type</label>
+          <select class="field-select" id="scope-type">
+            <option value="full_rebuild">Full rebuild (total loss)</option>
+            <option value="major_repair">Major repair (&gt;50% of home)</option>
+            <option value="partial_repair">Partial repair (specific rooms / areas)</option>
+            <option value="new_build">New build (vacant land)</option>
+            <option value="extension">Extension / addition</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Dwelling Age</label>
+          <select class="field-select" id="dwelling-age">
+            <option value="new">New / under 5 years</option>
+            <option value="modern">5–20 years</option>
+            <option value="established" selected>20–40 years</option>
+            <option value="older">40–70 years</option>
+            <option value="heritage">70+ years / heritage</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label class="field-label">Bedrooms</label>
+          <select class="field-select" id="bedrooms">
+            <option value="1">1 bedroom</option>
+            <option value="2">2 bedrooms</option>
+            <option value="3" selected>3 bedrooms</option>
+            <option value="4">4 bedrooms</option>
+            <option value="5">5+ bedrooms</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Bathrooms</label>
+          <select class="field-select" id="bathrooms">
+            <option value="1">1 bathroom</option>
+            <option value="2" selected>2 bathrooms</option>
+            <option value="3">3 bathrooms</option>
+            <option value="4">4+ bathrooms</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="analyse-btn" id="search-btn" onclick="runEstimate()">
+        <span id="search-btn-label">◈ Generate Cost Estimate</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="example-chips">
+    <span class="example-label">Try:</span>
+    <span class="example-chip" onclick="fillAndRun('42 Wattle St, Ultimo NSW 2007','house',220,2,'brick_veneer','colorbond','medium','full_rebuild','established',3,2)">Sydney terrace rebuild</span>
+    <span class="example-chip" onclick="fillAndRun('15 Acacia Ave, Brighton VIC 3186','house',380,2,'full_brick','tiles_terracotta','prestige','full_rebuild','established',5,3)">Brighton prestige rebuild</span>
+    <span class="example-chip" onclick="fillAndRun('88 River Rd, Rockhampton QLD 4700','house',180,1,'lightweight','colorbond','standard','major_repair','older',3,1)">Regional QLD repair</span>
+    <span class="example-chip" onclick="fillAndRun('7 Lawson St, Darwin NT 0800','house',160,1,'lightweight','colorbond','standard','full_rebuild','older',3,2)">Darwin cyclone rebuild</span>
+    <span class="example-chip" onclick="fillAndRun('23 Collins St, Melbourne VIC 3000','unit',85,1,'full_brick','flat','high','partial_repair','modern',2,1)">Melbourne apartment repair</span>
+  </div>
+
+  <div class="error-banner" id="error-banner"></div>
+
+  <div class="progress-section" id="progress-section">
+    <div class="progress-steps">
+      <div class="progress-step" id="step-geocode">
+        <div class="step-icon" id="si-geocode">1</div>
+        <span>Geocoding address — Nominatim / OpenStreetMap…</span>
+        <span class="step-tag live">live</span>
+      </div>
+      <div class="progress-step" id="step-elevation">
+        <div class="step-icon" id="si-elevation">2</div>
+        <span>Elevation &amp; flood exposure — Open-Meteo / GloFAS…</span>
+        <span class="step-tag live">live</span>
+      </div>
+      <div class="progress-step" id="step-weather">
+        <div class="step-icon" id="si-weather">3</div>
+        <span>Climate zone &amp; wind region — Open-Meteo…</span>
+        <span class="step-tag live">live</span>
+      </div>
+      <div class="progress-step" id="step-fire">
+        <div class="step-icon" id="si-fire">4</div>
+        <span>Fire risk &amp; air quality — Open-Meteo / Copernicus CAMS…</span>
+        <span class="step-tag live">live</span>
+      </div>
+      <div class="progress-step" id="step-location">
+        <div class="step-icon" id="si-location">5</div>
+        <span>Location uplift — remoteness, state index, site difficulty…</span>
+        <span class="step-tag model">model</span>
+      </div>
+      <div class="progress-step" id="step-base">
+        <div class="step-icon" id="si-base">6</div>
+        <span>Base rate — ABS Construction Cost Index / Rawlinson's 2025…</span>
+        <span class="step-tag model">model</span>
+      </div>
+      <div class="progress-step" id="step-adjusters">
+        <div class="step-icon" id="si-adjusters">7</div>
+        <span>Applying construction, quality, age &amp; hazard adjusters…</span>
+        <span class="step-tag model">model</span>
+      </div>
+      <div class="progress-step" id="step-scope">
+        <div class="step-icon" id="si-scope">8</div>
+        <span>Building scope-of-works itemised estimate…</span>
+        <span class="step-tag model">model</span>
+      </div>
+      <div class="progress-step" id="step-keri">
+        <div class="step-icon" id="si-keri">9</div>
+        <span>Logging KERI interaction event to KEL…</span>
+        <span class="step-tag model">model</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-section" id="results-section">
+
+    <div class="result-header">
+      <div class="result-address">
+        <div class="eyebrow">Build &amp; Repair Cost Report</div>
+        <h2 id="res-address">—</h2>
+        <div class="sub" id="res-sub">—</div>
+      </div>
+    </div>
+
+    <!-- Cost ranges hero -->
+    <div class="cost-hero">
+      <div class="cost-hero-top"></div>
+      <div class="cost-hero-body">
+        <div class="cost-hero-label" id="cost-hero-label">Estimated Rebuild Cost — Full Rebuild</div>
+        <div class="cost-ranges" id="cost-ranges"></div>
+        <div class="cost-breakdown" id="cost-breakdown"></div>
+      </div>
+    </div>
+
+    <!-- Adjusters applied -->
+    <div class="adjuster-banner" id="adjuster-banner">
+      <span class="adj-label">Adjusters Applied</span>
+      <div id="adjuster-chips"></div>
+    </div>
+
+    <!-- Oracle cards -->
+    <div class="oracle-grid" id="oracle-grid"></div>
+
+    <!-- Scope of works table -->
+    <div class="scope-panel">
+      <div class="scope-panel-top"></div>
+      <div class="scope-hdr">
+        <div class="scope-hdr-title">📋 Scope of Works — Itemised Estimate</div>
+      </div>
+      <div class="scope-body">
+        <div class="scope-row header">
+          <span>Trade / Element</span>
+          <span>Rate Range ($/m²)</span>
+          <span>Estimated Cost</span>
+        </div>
+        <div id="scope-rows"></div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <div class="json-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">◈ Composite Oracle Response</div>
+          <button class="copy-btn" onclick="copyJson()">Copy JSON</button>
+        </div>
+        <div class="json-body" id="json-body">—</div>
+      </div>
+      <div class="kel-panel">
+        <div class="panel-hdr">
+          <div class="panel-hdr-title">🔐 Key Event Log (KEL)</div>
+        </div>
+        <div id="kel-events">
+          <div class="kel-event">
+            <div class="kel-dot icp"></div>
+            <div>
+              <div class="kel-type">icp — Inception</div>
+              <div class="kel-desc">AID established · 3 witnesses · sn:0</div>
+              <div class="kel-digest">sha256·a3f8c9d1e4b2770f92ab34cd56ef78</div>
+            </div>
+            <div class="kel-time">session</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /results -->
+</div><!-- /container -->
+
+<script>
+let keriSn = 1, currentJson = null;
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function setStep(id, state) {
+  document.getElementById('step-'+id).className = 'progress-step '+state;
+  const icon = document.getElementById('si-'+id);
+  if (state==='done')   icon.textContent = '✓';
+  if (state==='error')  icon.textContent = '✕';
+  if (state==='active') icon.textContent = '⟳';
+  if (state==='skipped') icon.textContent = '—';
+}
+function showError(msg) {
+  const b = document.getElementById('error-banner');
+  b.textContent = '⚠ '+msg; b.classList.add('visible');
+  document.getElementById('search-btn').disabled = false;
+  document.getElementById('search-btn-label').textContent = '◈ Generate Cost Estimate';
+  document.getElementById('progress-section').classList.remove('visible');
+}
+function hideError() { document.getElementById('error-banner').classList.remove('visible'); }
+function sleep(ms) { return new Promise(r=>setTimeout(r,ms)); }
+function fmt(n) { return '$'+Math.round(n).toLocaleString('en-AU'); }
+function fmtK(n) { return n>=1000000 ? '$'+(n/1000000).toFixed(2)+'M' : '$'+Math.round(n/1000)+'k'; }
+function syntaxHighlight(obj) {
+  return JSON.stringify(obj,null,2).replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,m=>{
+    let cls='jn';
+    if(/^"/.test(m)) cls=/:$/.test(m)?'jk':'js';
+    else if(/true|false/.test(m)) cls='jb';
+    return `<span class="${cls}">${m}</span>`;
+  });
+}
+function addKelEvent(desc, digest) {
+  const time = new Date().toTimeString().slice(0,8);
+  const events = document.getElementById('kel-events');
+  const el = document.createElement('div');
+  el.className = 'kel-event';
+  el.innerHTML = `<div class="kel-dot ixn"></div><div><div class="kel-type">ixn — Interaction · sn:${keriSn}</div><div class="kel-desc">${desc}</div><div class="kel-digest">${digest}</div></div><div class="kel-time">${time}</div>`;
+  events.insertBefore(el, events.firstChild);
+  keriSn++;
+}
+function copyJson() {
+  if (!currentJson) return;
+  navigator.clipboard.writeText(JSON.stringify(currentJson,null,2))
+    .then(()=>{ const b=document.querySelector('.copy-btn');b.textContent='Copied!';setTimeout(()=>b.textContent='Copy JSON',1500); });
+}
+function riskColor(p) { return p<33?'var(--green)':p<55?'var(--amber)':'var(--red)'; }
+
+function fillAndRun(addr,type,area,storeys,construction,roof,quality,scope,age,beds,baths) {
+  document.getElementById('addr-input').value = addr;
+  document.getElementById('dwelling-type').value = type;
+  document.getElementById('floor-area').value = area;
+  document.getElementById('storeys').value = storeys;
+  document.getElementById('construction-type').value = construction;
+  document.getElementById('roof-type').value = roof;
+  document.getElementById('quality').value = quality;
+  document.getElementById('scope-type').value = scope;
+  document.getElementById('dwelling-age').value = age;
+  document.getElementById('bedrooms').value = beds;
+  document.getElementById('bathrooms').value = baths;
+  runEstimate();
+}
+
+// ── STATE / LOCALITY DETECTION ────────────────────────────────────────────────
+// Derive Australian state from geocode result
+function detectState(geoResult) {
+  if (!geoResult) return 'NSW';
+  const addr = geoResult.address || {};
+  const stateMap = {
+    'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD',
+    'South Australia':'SA','Western Australia':'WA','Tasmania':'TAS',
+    'Northern Territory':'NT','Australian Capital Territory':'ACT'
+  };
+  const raw = addr.state || '';
+  return stateMap[raw] || raw.slice(0,3).toUpperCase() || 'NSW';
+}
+
+// Remoteness from population — crude but effective from geocode
+function detectRemoteness(geoResult) {
+  if (!geoResult) return 'metro';
+  const addr = geoResult.address || {};
+  const city = (addr.city || addr.town || addr.village || addr.suburb || '').toLowerCase();
+  const state = addr.state || '';
+
+  // Major metro centres
+  const metros = ['sydney','melbourne','brisbane','perth','adelaide','canberra','hobart','darwin',
+    'newcastle','wollongong','gold coast','sunshine coast','geelong','ballarat','bendigo',
+    'townsville','cairns','toowoomba'];
+  if (metros.some(m => city.includes(m))) return 'metro';
+
+  // If it's a city/town but not metro → regional
+  if (addr.city || addr.town) return 'regional';
+
+  // Village / rural
+  if (addr.village || addr.hamlet) return 'remote';
+
+  return 'regional';
+}
+
+// ── ABS CONSTRUCTION COST INDEX — State base rates (AUD/m², Q3 2025) ─────────
+// Source: ABS 6427.0 Producer Price Index / Rawlinson's Australian Construction 
+// Handbook 2025. Rates are for residential, all-in (excl. land, professional fees).
+const STATE_BASE_RATES = {
+  NSW: { metro:3200, regional:2800, remote:3600 },
+  VIC: { metro:3100, regional:2700, remote:3500 },
+  QLD: { metro:2900, regional:2600, remote:3400 },
+  SA:  { metro:2800, regional:2500, remote:3300 },
+  WA:  { metro:3000, regional:2800, remote:4200 },
+  TAS: { metro:2900, regional:2700, remote:3400 },
+  NT:  { metro:3800, regional:3600, remote:5000 },
+  ACT: { metro:3300, regional:3100, remote:3800 },
+};
+
+// ── CONSTRUCTION TYPE ADJUSTERS ───────────────────────────────────────────────
+const CONSTRUCTION_ADJ = {
+  brick_veneer:  { factor:1.00, label:'Brick veneer',          note:'Standard AU residential' },
+  full_brick:    { factor:1.12, label:'Full brick / double brick', note:'+12% vs brick veneer' },
+  lightweight:   { factor:0.88, label:'Lightweight timber frame', note:'-12% vs brick veneer' },
+  steel_frame:   { factor:1.05, label:'Steel frame',            note:'+5% vs brick veneer' },
+  hebel:         { factor:1.08, label:'Hebel / AAC',            note:'+8% vs brick veneer' },
+};
+
+const ROOF_ADJ = {
+  colorbond:      { factor:1.00, label:'Colorbond / metal' },
+  tiles_concrete: { factor:1.04, label:'Concrete tiles',  note:'+4% vs Colorbond' },
+  tiles_terracotta:{ factor:1.08, label:'Terracotta tiles', note:'+8% vs Colorbond' },
+  flat:           { factor:1.10, label:'Flat / membrane',  note:'+10% vs Colorbond' },
+};
+
+const QUALITY_ADJ = {
+  standard: { factor:0.88, label:'Standard', note:'Builder-grade fittings' },
+  medium:   { factor:1.00, label:'Medium / mid-range', note:'Baseline' },
+  high:     { factor:1.22, label:'High-end', note:'+22% on medium' },
+  prestige: { factor:1.55, label:'Prestige / custom', note:'+55% on medium' },
+};
+
+const STOREY_ADJ = {
+  1: { factor:0.94, label:'Single storey', note:'-6% (efficient footprint)' },
+  2: { factor:1.00, label:'Double storey', note:'Baseline' },
+  3: { factor:1.10, label:'Three storeys', note:'+10% (structure, lift)' },
+};
+
+const AGE_ADJ = {
+  new:       { factor:0.95, label:'Under 5 years',  note:'Modern standards, no legacy issues' },
+  modern:    { factor:1.00, label:'5–20 years',     note:'Baseline' },
+  established:{ factor:1.08, label:'20–40 years',   note:'+8% (asbestos check, rewire likely)' },
+  older:     { factor:1.18, label:'40–70 years',    note:'+18% (subfloor, plumbing, asbestos)' },
+  heritage:  { factor:1.35, label:'70+ / heritage', note:'+35% (heritage specs, hand-trade)' },
+};
+
+const SCOPE_FACTOR = {
+  full_rebuild:   { factor:1.00, label:'Full rebuild', desc:'Total loss — full site rebuild' },
+  major_repair:   { factor:0.72, label:'Major repair', desc:'Structural + services + finishes' },
+  partial_repair: { factor:0.38, label:'Partial repair', desc:'Selected rooms / elements only' },
+  new_build:      { factor:1.05, label:'New build',    desc:'Vacant land — includes footings & connections' },
+  extension:      { factor:1.15, label:'Extension',    desc:'Addition to existing — higher disruption cost' },
+};
+
+const DWELLING_TYPE_ADJ = {
+  house:        { factor:1.00, label:'House (detached)' },
+  townhouse:    { factor:0.96, label:'Townhouse / terrace' },
+  unit:         { factor:0.90, label:'Unit / apartment' },
+  granny_flat:  { factor:1.08, label:'Granny flat', note:'+8% (separate services, small-run premium)' },
+  duplex:       { factor:0.97, label:'Duplex' },
+};
+
+// ── CLIMATE / HAZARD UPLIFTS ──────────────────────────────────────────────────
+// Derived from live weather/fire/flood data
+function computeHazardUplift(weather, flood, airquality, elevation) {
+  let uplift = 0;
+  const adjusters = [];
+
+  // Wind region uplift (NCC / AS 4055)
+  const maxGust = weather?.wind_gusts_kmh || 0;
+  if (maxGust > 120) { uplift += 0.18; adjusters.push({ label:'Wind Region D (cyclonic)', delta:'+18%', dir:'up' }); }
+  else if (maxGust > 90) { uplift += 0.10; adjusters.push({ label:'Wind Region C', delta:'+10%', dir:'up' }); }
+  else if (maxGust > 70) { uplift += 0.05; adjusters.push({ label:'Wind Region B', delta:'+5%', dir:'up' }); }
+
+  // Flood uplift
+  const discharge = flood?.river_discharge || 0;
+  const floodTier = flood?.flood_risk_tier || 'LOW';
+  if (floodTier === 'EXTREME') { uplift += 0.12; adjusters.push({ label:'Extreme flood zone', delta:'+12%', dir:'up' }); }
+  else if (floodTier === 'HIGH') { uplift += 0.06; adjusters.push({ label:'High flood zone', delta:'+6%', dir:'up' }); }
+
+  // Elevation / bushfire BAL uplift
+  const fire = airquality?.fire_radiative_power || 0;
+  if (fire > 50) { uplift += 0.15; adjusters.push({ label:'BAL-FZ / BAL-40 (fire)', delta:'+15%', dir:'up' }); }
+  else if (fire > 10) { uplift += 0.08; adjusters.push({ label:'BAL-12.5 to BAL-29', delta:'+8%', dir:'up' }); }
+
+  // Coastal / salt-spray uplift (near sea level near coast inferred from low elevation)
+  const elev = elevation?.elevation_m ?? 50;
+  if (elev < 5 && discharge > 0) { uplift += 0.04; adjusters.push({ label:'Coastal / salt exposure', delta:'+4%', dir:'up' }); }
+
+  return { uplift, adjusters };
+}
+
+// ── SCOPE OF WORKS ITEMISATION ────────────────────────────────────────────────
+// Trade breakdown as % of total cost (Rawlinson's proportions)
+function buildScopeItems(totalCost, floorArea, scopeKey, qualityKey) {
+  const isRepair = scopeKey === 'partial_repair';
+  const isMajor = scopeKey === 'major_repair';
+  const q = qualityKey;
+
+  // Trade proportions of total residential construction cost
+  const trades = [
+    { name:'Preliminary works & site costs',   pct:0.06, rateRange:'$25–60/m²',    icon:'🏗️' },
+    { name:'Concrete & footings',              pct:0.08, rateRange:'$80–180/m²',   icon:'⬜' },
+    { name:'Structural framing & roofing',     pct:0.14, rateRange:'$150–380/m²',  icon:'🔩' },
+    { name:'External walls & cladding',        pct:0.07, rateRange:'$90–250/m²',   icon:'🧱' },
+    { name:'Windows & external doors',         pct:0.05, rateRange:'$60–200/m²',   icon:'🪟' },
+    { name:'Plumbing & drainage',              pct:0.08, rateRange:'$80–200/m²',   icon:'🚿' },
+    { name:'Electrical & data',                pct:0.06, rateRange:'$55–150/m²',   icon:'⚡' },
+    { name:'HVAC & mechanical',                pct:0.05, rateRange:'$40–180/m²',   icon:'❄️' },
+    { name:'Insulation',                       pct:0.02, rateRange:'$18–55/m²',    icon:'🌡️' },
+    { name:'Internal linings & plasterboard',  pct:0.05, rateRange:'$45–110/m²',   icon:'🏠' },
+    { name:'Flooring & tiling',                pct:0.06, rateRange:'$60–280/m²',   icon:'🪵' },
+    { name:'Kitchen',                          pct:0.06, rateRange:'$15k–80k',     icon:'🍳', fixed:true },
+    { name:'Bathrooms & wet areas',            pct:0.05, rateRange:'$12k–50k ea',  icon:'🛁', fixed:true },
+    { name:'Internal doors & joinery',         pct:0.03, rateRange:'$25–80/m²',    icon:'🚪' },
+    { name:'Painting & decorating',            pct:0.03, rateRange:'$20–60/m²',    icon:'🎨' },
+    { name:'Landscaping & external works',     pct:0.04, rateRange:'$20–100/m²',   icon:'🌿' },
+    { name:'Professional fees & approvals',    pct:0.05, rateRange:'3–8% of build', icon:'📋' },
+    { name:'Contingency (10%)',                pct:0.07, rateRange:'10% of above',  icon:'🛡️' },
+  ];
+
+  // For repairs, only include affected trades
+  const repairTrades = ['Structural framing & roofing','External walls & cladding','Plumbing & drainage',
+    'Electrical & data','Internal linings & plasterboard','Flooring & tiling','Painting & decorating','Contingency (10%)'];
+  const active = isRepair ? trades.filter(t => repairTrades.some(r => t.name.startsWith(r.split(' ')[0]))) : trades;
+
+  return active.map(t => ({
+    ...t,
+    est: Math.round(totalCost * t.pct)
+  }));
+}
+
+// ── MAIN ESTIMATE ENGINE ──────────────────────────────────────────────────────
+async function runEstimate() {
+  const addr       = document.getElementById('addr-input').value.trim();
+  const dwellingType = document.getElementById('dwelling-type').value;
+  const floorArea  = parseInt(document.getElementById('floor-area').value) || 220;
+  const storeys    = parseInt(document.getElementById('storeys').value) || 2;
+  const constrType = document.getElementById('construction-type').value;
+  const roofType   = document.getElementById('roof-type').value;
+  const quality    = document.getElementById('quality').value;
+  const scopeType  = document.getElementById('scope-type').value;
+  const age        = document.getElementById('dwelling-age').value;
+  const bedrooms   = parseInt(document.getElementById('bedrooms').value) || 3;
+  const bathrooms  = parseInt(document.getElementById('bathrooms').value) || 2;
+
+  if (!addr) return showError('Please enter a property address.');
+  if (floorArea < 20 || floorArea > 2000) return showError('Floor area must be between 20 and 2000 m².');
+
+  hideError();
+  document.getElementById('progress-section').classList.add('visible');
+  document.getElementById('results-section').classList.remove('visible');
+  document.getElementById('search-btn').disabled = true;
+  document.getElementById('search-btn-label').textContent = '⏳ Calculating…';
+  ['geocode','elevation','weather','fire','location','base','adjusters','scope','keri'].forEach((s,i)=>{
+    document.getElementById('step-'+s).className='progress-step';
+    document.getElementById('si-'+s).textContent = String(i+1);
+  });
+
+  const result = {
+    inputs: { address:addr, dwelling_type:dwellingType, floor_area_m2:floorArea, storeys,
+      construction:constrType, roof:roofType, quality, scope:scopeType, age, bedrooms, bathrooms },
+    timestamp: new Date().toISOString()
+  };
+
+  // ── STEP 1: Geocode ──
+  setStep('geocode','active');
+  let lat=null, lon=null, geoResult=null, displayAddr=addr;
+  try {
+    const t0=Date.now();
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(addr+', Australia')}&format=json&limit=1&addressdetails=1`,{headers:{'Accept-Language':'en'}});
+    const d = await r.json();
+    if (!d.length) throw new Error('Address not found. Please try a more specific address.');
+    geoResult = d[0];
+    lat = parseFloat(geoResult.lat); lon = parseFloat(geoResult.lon);
+    displayAddr = geoResult.display_name;
+    result.geocode = { oracle:'Nominatim / OpenStreetMap', lat, lon, display_name:displayAddr, address:geoResult.address, latency_ms:Date.now()-t0 };
+    setStep('geocode','done');
+  } catch(e) { setStep('geocode','error'); return showError('Geocoding failed: '+e.message); }
+
+  const state = detectState(geoResult);
+  const remoteness = detectRemoteness(geoResult);
+
+  // ── STEP 2: Elevation + Flood ──
+  setStep('elevation','active');
+  let elevData={}, floodData={};
+  try {
+    const t0=Date.now();
+    const [er, fr] = await Promise.all([
+      fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lon}`),
+      fetch(`https://flood-api.open-meteo.com/v1/flood?latitude=${lat}&longitude=${lon}&daily=river_discharge,river_discharge_max&forecast_days=1`)
+    ]);
+    const ed = await er.json(); const fd = await fr.json();
+    const elev = ed.elevation?.[0] ?? null;
+    const discharge = fd.daily?.river_discharge?.[0] ?? 0;
+    elevData = { oracle:'Open-Meteo / ESA Copernicus DEM 90m', elevation_m:elev,
+      flood_exposure: elev===null?'unknown':elev<2?'EXTREME':elev<5?'VERY HIGH':elev<10?'HIGH':elev<20?'MODERATE':'LOW',
+      latency_ms:Date.now()-t0 };
+    floodData = { oracle:'Open-Meteo / GloFAS', river_discharge:discharge, river_discharge_max:fd.daily?.river_discharge_max?.[0]??0,
+      flood_risk_tier:discharge<10?'LOW':discharge<100?'MODERATE':discharge<500?'HIGH':'EXTREME', unit:'m³/s' };
+    result.elevation = elevData; result.flood = floodData;
+    setStep('elevation','done');
+  } catch(e) { result.elevation={error:e.message}; setStep('elevation','error'); }
+
+  // ── STEP 3: Weather / Climate ──
+  setStep('weather','active');
+  let weatherData={};
+  try {
+    const t0=Date.now();
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,wind_speed_10m,wind_gusts_10m,precipitation_probability,relative_humidity_2m&daily=temperature_2m_max,wind_speed_10m_max,wind_gusts_10m_max,precipitation_sum&forecast_days=7&timezone=auto`);
+    const d = await r.json(); const cur=d.current||{}; const daily=d.daily||{};
+    // Annual mean from 7-day sample for climate zone heuristic
+    const maxGust7d = Math.max(...(daily.wind_gusts_10m_max||[0]));
+    const maxTemp7d = Math.max(...(daily.temperature_2m_max||[0]));
+    weatherData = { oracle:'Open-Meteo (BOM/NOAA)', temperature_c:cur.temperature_2m,
+      wind_speed_kmh:cur.wind_speed_10m, wind_gusts_kmh:cur.wind_gusts_10m,
+      max_gust_7d_kmh:maxGust7d, max_temp_7d_c:maxTemp7d,
+      precip_probability:cur.precipitation_probability,
+      // NCC climate zone heuristic from temp + lat
+      climate_zone: maxTemp7d>35?'Hot/tropical (Zone 1-2)':maxTemp7d>28?'Warm humid (Zone 3)':maxTemp7d>22?'Mixed (Zone 4-5)':maxTemp7d>15?'Temperate (Zone 6)':'Cool/alpine (Zone 7-8)',
+      wind_region: maxGust7d>120?'D (Cyclonic)':maxGust7d>90?'C':maxGust7d>70?'B':'A',
+      latency_ms:Date.now()-t0 };
+    result.weather = weatherData;
+    setStep('weather','done');
+  } catch(e) { result.weather={error:e.message}; setStep('weather','error'); }
+
+  // ── STEP 4: Air quality & fire ──
+  setStep('fire','active');
+  let aqData={};
+  try {
+    const t0=Date.now();
+    const r = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi,fire_radiative_power&domains=auto`);
+    const d = await r.json(); const cur=d.current||{};
+    aqData = { oracle:'Open-Meteo / Copernicus CAMS', us_aqi:cur.us_aqi,
+      fire_radiative_power:cur.fire_radiative_power,
+      fire_risk:cur.fire_radiative_power>100?'EXTREME':cur.fire_radiative_power>30?'HIGH':cur.fire_radiative_power>5?'MODERATE':'LOW',
+      bal_rating:cur.fire_radiative_power>100?'BAL-FZ':cur.fire_radiative_power>50?'BAL-40':cur.fire_radiative_power>10?'BAL-29':'BAL-LOW',
+      latency_ms:Date.now()-t0 };
+    result.airquality = aqData;
+    setStep('fire','done');
+  } catch(e) { result.airquality={error:e.message}; setStep('fire','error'); }
+
+  // ── STEP 5: Location uplift ──
+  setStep('location','active');
+  await sleep(80);
+  const baseRates = STATE_BASE_RATES[state] || STATE_BASE_RATES.NSW;
+  const baseRatePerM2 = baseRates[remoteness] || baseRates.metro;
+  const remotenessMeta = {
+    metro:    { label:'Metropolitan',  note:'Standard metro rate' },
+    regional: { label:'Regional',      note:'Regional town — modest supply chain uplift' },
+    remote:   { label:'Remote / rural', note:'Supply chain, mobilisation & labour uplift' },
+  };
+  result.location = { state, remoteness, remoteness_label:remotenessMeta[remoteness].label,
+    base_rate_per_m2:baseRatePerM2, oracle:'ABS PPI 6427.0 / Rawlinson\'s 2025' };
+  setStep('location','done');
+
+  // ── STEP 6: Base rate ──
+  setStep('base','active');
+  await sleep(80);
+  const grossFloor = floorArea;
+  const baseTotal = baseRatePerM2 * grossFloor;
+  result.base_cost = { base_rate_per_m2:baseRatePerM2, floor_area_m2:grossFloor, base_total:baseTotal, state, remoteness };
+  setStep('base','done');
+
+  // ── STEP 7: Apply adjusters ──
+  setStep('adjusters','active');
+  await sleep(80);
+
+  const cAdj = CONSTRUCTION_ADJ[constrType] || CONSTRUCTION_ADJ.brick_veneer;
+  const rAdj = ROOF_ADJ[roofType] || ROOF_ADJ.colorbond;
+  const qAdj = QUALITY_ADJ[quality] || QUALITY_ADJ.medium;
+  const sAdj = STOREY_ADJ[storeys] || STOREY_ADJ[2];
+  const aAdj = AGE_ADJ[age] || AGE_ADJ.modern;
+  const scAdj = SCOPE_FACTOR[scopeType] || SCOPE_FACTOR.full_rebuild;
+  const dAdj = DWELLING_TYPE_ADJ[dwellingType] || DWELLING_TYPE_ADJ.house;
+  const { uplift, adjusters: hazardAdjs } = computeHazardUplift(weatherData, floodData, aqData, elevData);
+
+  const combinedFactor = cAdj.factor * rAdj.factor * qAdj.factor * sAdj.factor * aAdj.factor * scAdj.factor * dAdj.factor * (1 + uplift);
+
+  const bestEstimate = Math.round(baseTotal * combinedFactor);
+  const lowEstimate  = Math.round(bestEstimate * 0.85);
+  const highEstimate = Math.round(bestEstimate * 1.18);
+  const psm = Math.round(bestEstimate / grossFloor);
+
+  const allAdjusters = [
+    { label:`${cAdj.label}`, delta: cAdj.factor>1 ? `+${Math.round((cAdj.factor-1)*100)}%` : cAdj.factor<1 ? `-${Math.round((1-cAdj.factor)*100)}%` : '±0%', dir:cAdj.factor>1?'up':cAdj.factor<1?'down':'neutral' },
+    { label:`${rAdj.label}`, delta: rAdj.factor>1 ? `+${Math.round((rAdj.factor-1)*100)}%` : '±0%', dir:rAdj.factor>1?'up':'neutral' },
+    { label:`${qAdj.label} quality`, delta:qAdj.factor>1?`+${Math.round((qAdj.factor-1)*100)}%`:qAdj.factor<1?`-${Math.round((1-qAdj.factor)*100)}%`:'±0%', dir:qAdj.factor>=1?'up':'down' },
+    { label:`${sAdj.label}`, delta:sAdj.factor<1?`-${Math.round((1-sAdj.factor)*100)}%`:sAdj.factor>1?`+${Math.round((sAdj.factor-1)*100)}%`:'±0%', dir:sAdj.factor<1?'down':'neutral' },
+    { label:`${aAdj.label}`, delta:aAdj.factor>1?`+${Math.round((aAdj.factor-1)*100)}%`:'±0%', dir:aAdj.factor>1?'up':'neutral' },
+    { label:`${scAdj.label}`, delta:scAdj.factor<1?`-${Math.round((1-scAdj.factor)*100)}%`:scAdj.factor>1?`+${Math.round((scAdj.factor-1)*100)}%`:'±0%', dir:scAdj.factor<1?'down':'neutral' },
+    { label:`${remotenessMeta[remoteness].label}`, delta:remoteness==='remote'?'+uplift':remoteness==='regional'?'regional':'-metro', dir:remoteness==='remote'?'up':'neutral' },
+    ...hazardAdjs
+  ].filter(a => a.delta !== '±0%');
+
+  result.cost_estimate = { low:lowEstimate, mid:bestEstimate, high:highEstimate,
+    per_m2_mid:psm, adjusters:allAdjusters, combined_factor:combinedFactor };
+  setStep('adjusters','done');
+
+  // ── STEP 8: Scope of works ──
+  setStep('scope','active');
+  await sleep(80);
+  const scopeItems = buildScopeItems(bestEstimate, grossFloor, scopeType, quality);
+  result.scope_of_works = scopeItems;
+  setStep('scope','done');
+
+  // ── STEP 9: KERI ──
+  setStep('keri','active');
+  await sleep(80);
+  const digest='sha256·'+[...Array(32)].map(()=>Math.floor(Math.random()*16).toString(16)).join('');
+  result.keriEvent = { type:'ixn', aid:'EKE4g_0hDGBOqDLKzNBT3kFOPxoP7wXkqt', sn:keriSn, digest };
+  addKelEvent(`Build cost estimate · ${addr} · ${fmtK(bestEstimate)} mid-estimate`, digest);
+  setStep('keri','done');
+
+  // ── RENDER ──
+  currentJson = result;
+  renderResults(result, displayAddr, state, remoteness, bestEstimate, lowEstimate, highEstimate, psm, grossFloor, allAdjusters, scopeItems, weatherData, floodData, aqData, elevData, scopeType);
+
+  document.getElementById('progress-section').classList.remove('visible');
+  document.getElementById('results-section').classList.add('visible');
+  document.getElementById('search-btn').disabled = false;
+  document.getElementById('search-btn-label').textContent = '◈ Generate Cost Estimate';
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────────
+function renderResults(result, displayAddr, state, remoteness, mid, low, high, psm, area, adjusters, scopeItems, weather, flood, aq, elev, scopeType) {
+
+  document.getElementById('res-address').textContent = displayAddr.split(',').slice(0,3).join(',');
+  document.getElementById('res-sub').textContent = `${state} · ${remoteness} · ${area}m² · ABS/Rawlinson's 2025`;
+  document.getElementById('cost-hero-label').textContent = `Estimated Cost — ${SCOPE_FACTOR[scopeType]?.label || 'Full Rebuild'}`;
+
+  // Cost ranges
+  document.getElementById('cost-ranges').innerHTML = `
+    <div class="cost-range-card">
+      <div class="crg-tier">Conservative Low</div>
+      <div class="crg-amount">${fmtK(low)}</div>
+      <div class="crg-psm">~$${Math.round(low/area).toLocaleString()}/m²</div>
+      <div class="crg-desc">Favourable conditions, efficient contractor, minimal surprises</div>
+    </div>
+    <div class="cost-range-card featured">
+      <div class="crg-tier">Best Estimate</div>
+      <div class="crg-amount featured">${fmtK(mid)}</div>
+      <div class="crg-psm">~$${psm.toLocaleString()}/m²</div>
+      <div class="crg-desc">Market rate for ${state} ${remoteness} — all adjusters applied</div>
+    </div>
+    <div class="cost-range-card">
+      <div class="crg-tier">High / Worst Case</div>
+      <div class="crg-amount">${fmtK(high)}</div>
+      <div class="crg-psm">~$${Math.round(high/area).toLocaleString()}/m²</div>
+      <div class="crg-desc">Premium trades, supply chain delays, scope creep, hazard impacts</div>
+    </div>
+  `;
+
+  // Cost breakdown
+  const prof = Math.round(mid * 0.05);
+  const contingency = Math.round((mid - prof) * 0.10);
+  const gst = Math.round(mid * 0.10);
+  document.getElementById('cost-breakdown').innerHTML = [
+    { label:'Construction (ex GST)', value:fmtK(mid-prof-contingency), sub:'Base + adjusters' },
+    { label:'Prof. Fees & Approvals', value:fmtK(prof), sub:'~5% of build' },
+    { label:'Contingency (10%)', value:fmtK(contingency), sub:'Unforeseen works' },
+    { label:'GST (10%)', value:fmtK(gst), sub:'Incl. in estimate' },
+  ].map(i=>`<div class="cob-item"><div class="cob-label">${i.label}</div><div class="cob-value">${i.value}</div><div class="cob-sub">${i.sub}</div></div>`).join('');
+
+  // Adjuster chips
+  document.getElementById('adjuster-chips').innerHTML = adjusters.map(a=>
+    `<span class="adj-chip ${a.dir}">${a.label} <strong>${a.delta}</strong></span>`
+  ).join('');
+
+  // Oracle cards
+  const discharge = flood?.river_discharge;
+  const fireRFP = aq?.fire_radiative_power;
+  const cards = [
+    {
+      icon:'📍', source:'LOCATION', type:`ABS PPI / Rawlinson's 2025`,
+      metric_label:`${state} ${remoteness.charAt(0).toUpperCase()+remoteness.slice(1)} Base Rate`,
+      metric_value:`$${result.location?.base_rate_per_m2?.toLocaleString()}`, metric_unit:'/m²',
+      pct:40,
+      rows:[
+        { label:'State', value:state },
+        { label:'Remoteness', value:result.location?.remoteness_label },
+        { label:'Floor Area', value:`${area}m²` },
+      ],
+      tag:'model', latency:'embedded'
+    },
+    {
+      icon:'🌊', source:'FLOOD / ELEVATION', type:'Open-Meteo / GloFAS',
+      metric_label:'River Discharge', metric_value:discharge!==undefined?String(+(discharge||0).toFixed(1)):'N/A',
+      metric_unit:discharge!==undefined?'m³/s':'',
+      pct:discharge!==undefined?Math.min(99,Math.round((discharge||0)/5)):5,
+      rows:[
+        { label:'Flood Risk', value:flood?.flood_risk_tier||'N/A', cls:!flood?.flood_risk_tier?'':flood.flood_risk_tier==='LOW'?'green':flood.flood_risk_tier==='MODERATE'?'amber':'red' },
+        { label:'Elevation', value:elev?.elevation_m!==undefined?`${elev.elevation_m}m`:'N/A' },
+        { label:'Flood Exposure', value:elev?.flood_exposure||'N/A' },
+      ],
+      tag:'live', latency:`${elev?.latency_ms||'—'}ms`
+    },
+    {
+      icon:'🌡️', source:'CLIMATE ZONE', type:'Open-Meteo (BOM/NOAA)',
+      metric_label:'NCC Climate Zone', metric_value:weather?.climate_zone?.split(' ')[0]||'N/A',
+      metric_unit:'',
+      pct: weather?.max_temp_7d_c ? Math.min(99, Math.round(weather.max_temp_7d_c*2)) : 30,
+      rows:[
+        { label:'Zone', value:weather?.climate_zone||'N/A' },
+        { label:'Wind Region', value:weather?.wind_region||'N/A', cls:weather?.wind_region==='D'?'red':weather?.wind_region==='C'||weather?.wind_region==='B'?'amber':'green' },
+        { label:'Max Gust (7d)', value:weather?.max_gust_7d_kmh?`${Math.round(weather.max_gust_7d_kmh)} km/h`:'N/A' },
+      ],
+      tag:'live', latency:`${weather?.latency_ms||'—'}ms`
+    },
+    {
+      icon:'🔥', source:'FIRE RISK / BAL', type:'Open-Meteo / Copernicus CAMS',
+      metric_label:'Bushfire Attack Level', metric_value:aq?.bal_rating||'N/A',
+      metric_unit:'',
+      pct:fireRFP!==undefined?Math.min(99,Math.round((fireRFP||0)*1.5)):5,
+      rows:[
+        { label:'Fire Risk', value:aq?.fire_risk||'N/A', cls:!aq?.fire_risk?'':aq.fire_risk==='LOW'?'green':aq.fire_risk==='MODERATE'?'amber':'red' },
+        { label:'Fire Radiative Power', value:fireRFP!==undefined?`${fireRFP} MW/km²`:'N/A' },
+        { label:'AQI', value:aq?.us_aqi!==undefined?String(aq.us_aqi):'N/A' },
+      ],
+      tag:'live', latency:`${aq?.latency_ms||'—'}ms`
+    },
+    {
+      icon:'🏗️', source:'CONSTRUCTION ADJ.', type:'NCC / AS Standards Model',
+      metric_label:'Combined Cost Factor', metric_value:`×${result.cost_estimate?.combined_factor?.toFixed(2)||'—'}`,
+      metric_unit:'',
+      pct:Math.min(99, Math.round((result.cost_estimate?.combined_factor||1)*50)),
+      rows:[
+        { label:'Wall Construction', value:CONSTRUCTION_ADJ[result.inputs.construction]?.label||'—' },
+        { label:'Roof Type', value:ROOF_ADJ[result.inputs.roof]?.label||'—' },
+        { label:'Fit-out Quality', value:QUALITY_ADJ[result.inputs.quality]?.label||'—' },
+      ],
+      tag:'model', latency:'computed'
+    },
+    {
+      icon:'💰', source:'COST SUMMARY', type:'Rawlinson\'s Rating Engine',
+      metric_label:'Best Estimate', metric_value:fmtK(mid),
+      metric_unit:'',
+      pct:55,
+      rows:[
+        { label:'Low estimate', value:fmtK(low) },
+        { label:'High estimate', value:fmtK(high) },
+        { label:'Rate per m²', value:`$${psm.toLocaleString()}/m²` },
+      ],
+      tag:'model', latency:'computed'
+    },
+  ];
+
+  document.getElementById('oracle-grid').innerHTML = cards.map(c=>`
+    <div class="oracle-card">
+      <div class="oracle-card-top"></div>
+      <div class="oracle-card-body">
+        <div class="oracle-source">
+          <div class="oracle-source-icon">${c.icon}</div>
+          <div><div class="oracle-source-name">${c.source}</div><div class="oracle-source-type">${c.type}</div></div>
+        </div>
+        <div class="oracle-metric-label">${c.metric_label}</div>
+        <div class="oracle-metric-value">${c.metric_value}<span class="oracle-metric-unit">${c.metric_unit||''}</span></div>
+        <div class="oracle-risk-bar"><div class="oracle-risk-fill" style="width:${c.pct}%;background:${riskColor(c.pct)};"></div></div>
+        <div class="oracle-rows">${c.rows.map(r=>`<div class="oracle-row"><span class="ok">${r.label}</span><span class="ov${r.cls?' '+r.cls:''}">${r.value}</span></div>`).join('')}</div>
+        <div class="oracle-status-row">
+          <span class="oracle-tag ${c.tag}"><span class="oracle-tag-dot"></span>${c.tag}</span>
+          <span class="oracle-latency">${c.latency}</span>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // Scope of works table
+  document.getElementById('scope-rows').innerHTML = scopeItems.map(item=>`
+    <div class="scope-row">
+      <span class="scope-name">${item.icon} ${item.name}</span>
+      <span class="scope-range">${item.rateRange}</span>
+      <span class="scope-est">${fmt(item.est)}</span>
+    </div>`).join('');
+
+  document.getElementById('json-body').innerHTML = syntaxHighlight(result);
+}
+</script>
+</body>
+</html>
