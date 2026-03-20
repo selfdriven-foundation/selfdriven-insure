@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Archy Risk Walk</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #000000;
+  --surface: #111111;
+  --surface2: #1a1a1a;
+  --surface3: #252525;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.04);
+  --text: #F5F0EA;
+  --muted: #C8B8A9;
+  --muted2: #888888;
+  --muted3: #555555;
+  --accent: #E8732A;
+  --accent-light: #F28C4E;
+  --accent-dim: rgba(232,115,42,0.12);
+  --accent-strong: rgba(232,115,42,0.20);
+  --accent-faint: rgba(232,115,42,0.06);
+  --success: #4ADE80;
+  --warning: #FBBF24;
+  --danger: #DC2626;
+  --radius-card: 16px;
+  --radius-btn: 14px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(165deg, #E8DDD2 0%, #F5F0EA 50%, #E8DDD2 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.phone-shell {
+  width: 390px; height: 844px;
+  background: var(--bg);
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.8), 0 0 0 12px #111, 0 0 0 14px #222;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Status Bar */
+.status-bar {
+  height: 54px; display: flex; align-items: flex-end; justify-content: space-between;
+  padding: 0 32px 8px; flex-shrink: 0; background: var(--bg);
+}
+.status-time { font-size: 15px; font-weight: 600; color: white; font-variant-numeric: tabular-nums; }
+.status-icons { display: flex; gap: 5px; align-items: center; }
+
+/* Tab Bar */
+.tab-bar {
+  height: 84px; display: flex; align-items: flex-start; justify-content: space-around;
+  padding-top: 10px; flex-shrink: 0;
+  background: rgba(0,0,0,0.95);
+  border-top: 1px solid var(--border);
+}
+.tab-item {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  background: none; border: none; cursor: pointer; padding: 4px 16px;
+}
+.tab-item svg { width: 22px; height: 22px; }
+.tab-item span { font-size: 10px; font-weight: 500; font-family: 'DM Sans', sans-serif; }
+
+/* Scrollable content */
+.screen-content {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.screen-content::-webkit-scrollbar { width: 0; }
+
+/* Animations */
+@keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+@keyframes slideIn { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+@keyframes slideOut { from { transform:translateX(0); opacity:1; } to { transform:translateX(-100%); opacity:0; } }
+@keyframes scaleIn { from { transform:scale(0.9); opacity:0; } to { transform:scale(1); opacity:1; } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+@keyframes ringPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(232,115,42,0.4); } 50% { box-shadow: 0 0 0 12px rgba(232,115,42,0); } }
+@keyframes countUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+@keyframes barGrow { from { width: 0; } }
+.fade-up { animation: fadeUp .5s ease both; }
+.fade-up-1 { animation: fadeUp .5s ease .1s both; }
+.fade-up-2 { animation: fadeUp .5s ease .2s both; }
+.fade-up-3 { animation: fadeUp .5s ease .3s both; }
+.fade-up-4 { animation: fadeUp .5s ease .4s both; }
+.fade-up-5 { animation: fadeUp .5s ease .5s both; }
+
+/* Shared Components */
+.pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; padding: 4px 10px;
+  border-radius: 20px; letter-spacing: 0.02em;
+}
+.pill-ember { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-strong); }
+.pill-green { background: rgba(74,222,128,0.12); color: #4ADE80; border: 1px solid rgba(74,222,128,0.2); }
+.pill-amber { background: rgba(251,191,36,0.12); color: #FBBF24; border: 1px solid rgba(251,191,36,0.2); }
+.pill-red { background: rgba(220,38,38,0.12); color: #ef4444; border: 1px solid rgba(220,38,38,0.2); }
+.pill-muted { background: rgba(255,255,255,0.06); color: var(--muted2); border: 1px solid var(--border); }
+
+button:active { transform: scale(0.97); }
+
+/* ===== SCREENS ===== */
+
+/* -- Welcome Screen -- */
+.welcome-screen { padding: 40px 24px 24px; display: flex; flex-direction: column; min-height: 100%; }
+.welcome-logo { width: 72px; height: 72px; margin: 0 auto 20px; animation: scaleIn .6s ease both; }
+.welcome-logo svg { width: 72px; height: 72px; }
+.welcome-h1 { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: var(--text); text-align: center; line-height: 1.2; animation: fadeUp .5s ease .2s both; }
+.welcome-h1 .ember { color: var(--accent); }
+.welcome-sub { font-size: 14px; color: var(--muted2); text-align: center; margin-top: 8px; line-height: 1.5; animation: fadeUp .5s ease .3s both; }
+.welcome-features { margin-top: 32px; display: flex; flex-direction: column; gap: 12px; }
+.welcome-feat {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-card); padding: 16px;
+}
+.feat-icon {
+  width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.feat-icon.ember-bg { background: var(--accent-dim); }
+.feat-icon.green-bg { background: rgba(74,222,128,0.10); }
+.feat-icon.blue-bg { background: rgba(96,165,250,0.10); }
+.feat-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.feat-desc { font-size: 12px; color: var(--muted2); line-height: 1.45; }
+.welcome-cta {
+  margin-top: auto; padding-top: 24px;
+  width: 100%; height: 52px;
+  background: var(--accent); color: white;
+  border: none; border-radius: var(--radius-btn);
+  font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.welcome-cta:hover { background: var(--accent-light); }
+.welcome-footer { text-align: center; margin-top: 12px; font-size: 11px; color: var(--muted3); }
+.welcome-footer span { font-family: 'Fira Code', monospace; }
+
+/* -- Setup Screen -- */
+.setup-screen { padding: 24px; }
+.setup-h2 { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.setup-sub { font-size: 13px; color: var(--muted2); margin-bottom: 24px; }
+.form-group { margin-bottom: 20px; }
+.form-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted2); margin-bottom: 8px; display: block; }
+.form-input {
+  width: 100%; height: 48px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 0 14px; color: var(--text); font-size: 14px;
+  font-family: 'DM Sans', sans-serif; outline: none; transition: border-color .2s;
+}
+.form-input:focus { border-color: var(--accent); }
+.form-input::placeholder { color: var(--muted3); }
+.form-select {
+  width: 100%; height: 48px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 0 14px; color: var(--text); font-size: 14px;
+  font-family: 'DM Sans', sans-serif; outline: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+}
+.form-select option { background: #1a1a1a; color: var(--text); }
+
+/* Zone selector */
+.zone-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.zone-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px; cursor: pointer; transition: all .2s;
+}
+.zone-chip.selected { border-color: var(--accent); background: var(--accent-dim); }
+.zone-chip .z-icon { font-size: 18px; }
+.zone-chip .z-label { font-size: 13px; font-weight: 500; color: var(--text); }
+.zone-chip .z-check { margin-left: auto; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--muted3); display: flex; align-items: center; justify-content: center; }
+.zone-chip.selected .z-check { border-color: var(--accent); background: var(--accent); }
+
+.start-walk-btn {
+  width: 100%; height: 52px; margin-top: 24px;
+  background: var(--accent); color: white; border: none; border-radius: var(--radius-btn);
+  font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.start-walk-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* -- Walk Screen -- */
+.walk-header {
+  padding: 8px 20px 12px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border2);
+}
+.walk-zone-title { font-family: 'Outfit', sans-serif; font-size: 17px; font-weight: 600; color: var(--text); }
+.walk-progress-row { display: flex; align-items: center; gap: 8px; }
+.walk-progress-text { font-size: 12px; color: var(--muted2); font-family: 'Fira Code', monospace; }
+.walk-progress-bar { width: 60px; height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+.walk-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width .4s ease; }
+
+.walk-body { padding: 16px 20px; }
+.zone-banner {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-card); padding: 16px; margin-bottom: 16px;
+}
+.zone-banner .zb-icon { font-size: 28px; }
+.zone-banner .zb-name { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); }
+.zone-banner .zb-sub { font-size: 12px; color: var(--muted2); }
+
+.risk-checklist { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.risk-item {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 16px; cursor: pointer; transition: all .2s;
+  position: relative; overflow: hidden;
+}
+.risk-item::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--muted3); transition: background .2s;
+}
+.risk-item.flagged::before { background: var(--danger); }
+.risk-item.ok::before { background: var(--success); }
+.risk-item.flagged { border-color: rgba(220,38,38,0.15); }
+.risk-item.ok { border-color: rgba(74,222,128,0.1); }
+
+.ri-toggle {
+  width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; border: none; cursor: pointer; transition: all .2s;
+}
+.ri-toggle.none { background: rgba(255,255,255,0.06); border: 1.5px solid var(--muted3); }
+.ri-toggle.ok-btn { background: rgba(74,222,128,0.15); color: #4ADE80; border: 1.5px solid rgba(74,222,128,0.3); }
+.ri-toggle.flag-btn { background: rgba(220,38,38,0.15); color: #ef4444; border: 1.5px solid rgba(220,38,38,0.3); }
+
+.ri-body { flex: 1; }
+.ri-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.ri-hint { font-size: 12px; color: var(--muted3); line-height: 1.4; }
+
+.ri-actions { display: flex; gap: 4px; margin-left: auto; align-self: center; }
+.ri-action-btn {
+  width: 32px; height: 32px; border-radius: 8px; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; transition: all .2s;
+}
+.btn-ok { background: rgba(74,222,128,0.1); color: #4ADE80; }
+.btn-ok:hover { background: rgba(74,222,128,0.2); }
+.btn-flag { background: rgba(220,38,38,0.08); color: #ef4444; }
+.btn-flag:hover { background: rgba(220,38,38,0.15); }
+
+.note-input {
+  width: 100%; margin-top: 8px; padding: 8px 10px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 12px;
+  font-family: 'DM Sans', sans-serif; outline: none; resize: none;
+}
+.note-input::placeholder { color: var(--muted3); }
+
+.walk-nav {
+  display: flex; gap: 10px; padding: 16px 20px 20px;
+}
+.walk-nav-btn {
+  flex: 1; height: 48px; border-radius: var(--radius-btn); border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-secondary { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border); }
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:disabled { opacity: 0.4; cursor: default; }
+
+/* -- Report Screen -- */
+.report-screen { padding: 20px; }
+.report-header { text-align: center; margin-bottom: 24px; }
+.report-header .rh-icon { font-size: 48px; margin-bottom: 8px; }
+.report-header h2 { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; color: var(--text); }
+.report-header .rh-sub { font-size: 13px; color: var(--muted2); margin-top: 4px; }
+
+.score-ring-container { display: flex; justify-content: center; margin-bottom: 24px; }
+.score-ring { position: relative; width: 140px; height: 140px; }
+.score-ring svg { width: 140px; height: 140px; transform: rotate(-90deg); }
+.score-ring .ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 10; }
+.score-ring .ring-fill { fill: none; stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset 1.5s ease; }
+.score-ring .score-text {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  text-align: center;
+}
+.score-ring .score-num { font-family: 'Outfit', sans-serif; font-size: 36px; font-weight: 800; color: var(--text); }
+.score-ring .score-label { font-size: 11px; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+
+.score-summary {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px;
+}
+.ss-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px; text-align: center;
+}
+.ss-num { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; }
+.ss-label { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+
+.report-section { margin-bottom: 16px; }
+.rs-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted2); margin-bottom: 10px; padding-left: 2px;
+}
+.flag-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 16px; margin-bottom: 8px;
+  border-left: 3px solid var(--danger);
+}
+.flag-card .fc-zone { font-size: 11px; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.flag-card .fc-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.flag-card .fc-note { font-size: 12px; color: var(--muted2); line-height: 1.45; margin-bottom: 8px; }
+.flag-card .fc-rec {
+  display: flex; gap: 8px; align-items: flex-start;
+  background: var(--accent-faint); border: 1px solid var(--accent-dim);
+  border-radius: 10px; padding: 10px 12px;
+}
+.fc-rec .rec-icon { color: var(--accent); font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.fc-rec .rec-text { font-size: 12px; color: var(--muted); line-height: 1.45; }
+
+.ok-summary {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 16px;
+  border-left: 3px solid var(--success);
+}
+.ok-summary .os-title { font-size: 14px; font-weight: 600; color: var(--success); margin-bottom: 6px; }
+.ok-summary .os-list { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+.keri-panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-card); padding: 16px; margin-top: 20px;
+}
+.keri-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border2); }
+.keri-row:last-child { border-bottom: none; }
+.keri-key { font-size: 12px; color: var(--muted2); }
+.keri-val { font-family: 'Fira Code', monospace; font-size: 11px; color: var(--accent); }
+
+.report-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 24px; padding-bottom: 20px; }
+.report-btn {
+  height: 48px; border-radius: var(--radius-btn); border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+/* -- Generating Screen -- */
+.generating-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100%; padding: 40px; }
+.gen-ring { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--accent-dim); border-top-color: var(--accent); animation: spin 1s linear infinite; margin-bottom: 24px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.gen-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.gen-sub { font-size: 13px; color: var(--muted2); text-align: center; line-height: 1.5; }
+.gen-steps { margin-top: 24px; display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.gen-step { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted2); }
+.gen-step.done { color: var(--success); }
+.gen-step.active { color: var(--text); }
+.gen-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.gen-step.done .gen-dot { background: var(--success); }
+.gen-step.active .gen-dot { background: var(--accent); animation: pulse 1s infinite; }
+.gen-step.pending .gen-dot { background: var(--muted3); }
+</style>
+</head>
+<body>
+
+<div class="phone-shell" id="app"></div>
+
+<script>
+// ============================================================
+// Archy Risk Walk — Mobile Business Premises Risk Assessment
+// ============================================================
+
+const ZONES = [
+  { id: 'entry', icon: '🚪', name: 'Entry & Reception', checks: [
+    { id: 'e1', title: 'Slip/trip hazards at entry', hint: 'Check for uneven surfaces, wet floors, loose mats' },
+    { id: 'e2', title: 'Adequate lighting', hint: 'Entrance, pathways, and signage well-lit' },
+    { id: 'e3', title: 'Fire exit signage visible', hint: 'Illuminated exit signs, clear evacuation routes' },
+    { id: 'e4', title: 'Visitor sign-in procedure', hint: 'Log book or digital check-in, visitor badges' },
+    { id: 'e5', title: 'Security access controls', hint: 'Locks, keypads, CCTV coverage at entrance' },
+  ]},
+  { id: 'office', icon: '🖥️', name: 'Office & Workstations', checks: [
+    { id: 'o1', title: 'Electrical cord management', hint: 'No exposed or tangled cables across walkways' },
+    { id: 'o2', title: 'Ergonomic workstations', hint: 'Adjustable chairs, monitor heights, keyboard placement' },
+    { id: 'o3', title: 'Fire extinguisher accessible', hint: 'Correct type, serviced, not blocked' },
+    { id: 'o4', title: 'Emergency exits unobstructed', hint: 'No boxes, furniture, or storage blocking exits' },
+    { id: 'o5', title: 'First aid kit stocked', hint: 'Current supplies, visible location, signage' },
+  ]},
+  { id: 'kitchen', icon: '☕', name: 'Kitchen & Break Room', checks: [
+    { id: 'k1', title: 'Appliance safety', hint: 'PAT tested, no frayed cords, auto-shutoff' },
+    { id: 'k2', title: 'Fire blanket / extinguisher', hint: 'Correct type for grease fires, accessible' },
+    { id: 'k3', title: 'Slip-resistant flooring', hint: 'No water pooling, non-slip mats near sink' },
+    { id: 'k4', title: 'Hygiene & pest control', hint: 'Clean surfaces, sealed food storage, no signs of pests' },
+  ]},
+  { id: 'storage', icon: '📦', name: 'Storage & Warehouse', checks: [
+    { id: 's1', title: 'Shelving stability', hint: 'Secure to wall, no overloading, heavy items low' },
+    { id: 's2', title: 'Hazardous materials stored correctly', hint: 'MSDS available, locked cabinet, ventilation' },
+    { id: 's3', title: 'Clear aisle widths', hint: 'Minimum 1m clearance, no obstructions' },
+    { id: 's4', title: 'Loading dock safety', hint: 'Edge protection, signage, adequate lighting' },
+    { id: 's5', title: 'Sprinkler / fire suppression', hint: 'Not obstructed, heads clear of stock by 500mm+' },
+  ]},
+  { id: 'exterior', icon: '🏢', name: 'Exterior & Parking', checks: [
+    { id: 'x1', title: 'Perimeter fencing & gates', hint: 'Intact, lockable, no gaps or damage' },
+    { id: 'x2', title: 'Parking lot lighting', hint: 'Well-lit after dark, no blind spots' },
+    { id: 'x3', title: 'Drainage & water pooling', hint: 'No standing water, gutters clear, stormwater channels' },
+    { id: 'x4', title: 'Signage & wayfinding', hint: 'Speed limits, pedestrian zones, hazard warnings' },
+    { id: 'x5', title: 'Roof & building exterior condition', hint: 'No visible damage, loose materials, or vegetation overgrowth' },
+  ]},
+  { id: 'plant', icon: '⚙️', name: 'Plant & Equipment', checks: [
+    { id: 'p1', title: 'Machine guarding in place', hint: 'All rotating parts shielded, interlocks functional' },
+    { id: 'p2', title: 'PPE available & worn', hint: 'Correct PPE for tasks, in good condition' },
+    { id: 'p3', title: 'Maintenance schedules current', hint: 'Service tags up to date, no overdue items' },
+    { id: 'p4', title: 'Lockout/tagout procedures', hint: 'LOTO equipment available, staff trained' },
+    { id: 'p5', title: 'Noise levels acceptable', hint: 'Below 85dB or hearing protection provided' },
+  ]},
+];
+
+const BUSINESS_TYPES = [
+  'Retail / Shopfront',
+  'Office / Professional Services',
+  'Warehouse / Distribution',
+  'Hospitality / Food & Beverage',
+  'Manufacturing / Workshop',
+  'Healthcare / Medical',
+  'Education / Training Centre',
+  'Mixed Use / Other',
+];
+
+const RECOMMENDATIONS = {
+  e1: 'Install anti-slip mats and ensure all floor surfaces are level. Consider rubber transition strips for doorways.',
+  e2: 'Upgrade to LED lighting with motion sensors. Aim for minimum 200 lux at entry points per AS/NZS 1680.',
+  e3: 'Install illuminated exit signs compliant with AS 2293. Test monthly and log results.',
+  e4: 'Implement a digital visitor management system with photo ID capture. Provides evidence trail for insurers.',
+  e5: 'Install or upgrade access control (keypad/card). Ensure CCTV covers all entry/exit points with 30-day retention.',
+  o1: 'Use cable management trays and floor covers. Conduct monthly walkthrough checks.',
+  o2: 'Provide adjustable sit/stand desks and task-specific chairs. Schedule annual ergonomic assessments.',
+  o3: 'Install correct fire extinguisher type per zone (ABE for general, CO2 for electrical). Service every 6 months.',
+  o4: 'Clear all emergency exits immediately. Maintain 1.2m minimum clear width. Monthly compliance checks.',
+  o5: 'Restock first aid kit per WHS Code of Practice. Appoint trained first aider per 25 workers.',
+  k1: 'Arrange PAT testing for all appliances annually. Replace any with frayed cords immediately.',
+  k2: 'Install a fire blanket and ABE extinguisher within 2m of cooking area. Service every 6 months.',
+  k3: 'Apply anti-slip coating to tiles. Install drainage mats near water sources.',
+  k4: 'Schedule monthly pest inspections. Implement clean-desk policy for food areas.',
+  s1: 'Bolt all shelving units to walls. Apply load rating labels. Conduct quarterly inspections.',
+  s2: 'Provide SDS (Safety Data Sheets) at point of storage. Lock hazardous cabinets. Install ventilation.',
+  s3: 'Mark aisle widths with floor tape. Conduct weekly checks for obstructions.',
+  s4: 'Install wheel stops, edge barriers, and high-visibility signage. Ensure adequate lighting (150 lux min).',
+  s5: 'Maintain 500mm clearance below sprinkler heads. Annual fire system inspection per AS 1851.',
+  x1: 'Repair all fence damage within 48 hours. Install self-closing gate mechanisms.',
+  x2: 'Install timer or sensor-activated LED floodlights. Aim for 50 lux minimum across parking areas.',
+  x3: 'Clear all drains and gutters quarterly. Install French drains in pooling areas.',
+  x4: 'Refresh all faded signage. Add reflective markers for after-dark visibility.',
+  x5: 'Schedule biannual roof inspections. Remove vegetation within 1m of building. Log and photograph condition.',
+  p1: 'Audit all machine guards quarterly. Replace any damaged guards before resuming operation.',
+  p2: 'Conduct PPE audit monthly. Provide training on correct usage. Document compliance.',
+  p3: 'Implement a digital maintenance tracking system. Set up automated reminders for service dates.',
+  p4: 'Provide LOTO kits at each machine. Train all operators annually. Audit procedures quarterly.',
+  p5: 'Conduct noise level survey. Provide hearing protection above 85dB. Post signage in noisy zones.',
+};
+
+// ============== STATE ==============
+let state = {
+  screen: 'welcome', // welcome, setup, walk, generating, report
+  businessName: '',
+  businessType: '',
+  selectedZones: ['entry','office','kitchen','exterior'],
+  currentZoneIdx: 0,
+  results: {}, // { checkId: { status: 'ok'|'flagged'|null, note: '' } }
+  genStep: 0,
+};
+
+function setState(patch) {
+  Object.assign(state, patch);
+  render();
+}
+
+// ============== RENDER ==============
+function render() {
+  const app = document.getElementById('app');
+  let html = renderStatusBar();
+
+  switch(state.screen) {
+    case 'welcome': html += renderWelcome(); break;
+    case 'setup': html += renderSetup(); break;
+    case 'walk': html += renderWalk(); break;
+    case 'generating': html += renderGenerating(); break;
+    case 'report': html += renderReport(); break;
+  }
+
+  if (state.screen === 'walk') {
+    html += renderTabBar();
+  }
+
+  app.innerHTML = html;
+  bindEvents();
+}
+
+function renderStatusBar() {
+  return `<div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12"><rect x="0" y="6" width="3" height="6" rx="1" fill="white"/><rect x="4.5" y="4" width="3" height="8" rx="1" fill="white"/><rect x="9" y="1.5" width="3" height="10.5" rx="1" fill="white"/><rect x="13" y="0" width="3" height="12" rx="1" fill="white"/></svg>
+      <svg width="15" height="12" viewBox="0 0 15 12"><path d="M7.5 3.6C9.4 3.6 11.1 4.3 12.4 5.5L14 3.9C12.2 2.2 10 1.2 7.5 1.2C5 1.2 2.8 2.2 1 3.9L2.6 5.5C3.9 4.3 5.6 3.6 7.5 3.6Z" fill="white"/><circle cx="7.5" cy="10" r="2" fill="white"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2.5" stroke="white" stroke-width="1" fill="none"/><rect x="22" y="4" width="2" height="4" rx="1" fill="white" opacity="0.4"/><rect x="1.5" y="2.5" width="15" height="7" rx="1.5" fill="#4ADE80"/></svg>
+    </div>
+  </div>`;
+}
+
+function renderTabBar() {
+  return `<div class="tab-bar">
+    <div class="tab-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#E8732A" stroke-width="1.8"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <span style="color:#E8732A">Walk</span>
+    </div>
+    <div class="tab-item" onclick="finishWalk()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      <span style="color:#666">Report</span>
+    </div>
+    <div class="tab-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <span style="color:#666">Settings</span>
+    </div>
+  </div>`;
+}
+
+// ============== WELCOME ==============
+function renderWelcome() {
+  return `<div class="screen-content">
+    <div class="welcome-screen">
+      <div class="welcome-logo">
+        <svg width="72" height="72" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="22" fill="#2A1A0E"/>
+          <path d="M18 80 L18 52 Q18 20 50 20 Q82 20 82 52 L82 80" stroke="#E8732A" stroke-width="14" fill="none" stroke-linecap="square"/>
+          <rect x="26" y="52" width="14" height="28" fill="#3D2410"/>
+          <rect x="60" y="52" width="14" height="28" fill="#3D2410"/>
+          <circle cx="50" cy="62" r="6" fill="#C8A882"/>
+        </svg>
+      </div>
+      <h1 class="welcome-h1">Risk Walk<br><span class="ember">for Business</span></h1>
+      <p class="welcome-sub">Walk your premises. Identify hazards.<br>Get an instant risk reduction report.</p>
+      <div class="welcome-features">
+        <div class="welcome-feat fade-up-1">
+          <div class="feat-icon ember-bg">🔍</div>
+          <div><div class="feat-title">Zone-by-Zone Assessment</div><div class="feat-desc">Guided checklists for every area of your premises — entry, office, storage, exterior & more.</div></div>
+        </div>
+        <div class="welcome-feat fade-up-2">
+          <div class="feat-icon green-bg">📊</div>
+          <div><div class="feat-title">Instant Risk Score</div><div class="feat-desc">Get an overall risk rating with prioritised recommendations to reduce your exposure.</div></div>
+        </div>
+        <div class="welcome-feat fade-up-3">
+          <div class="feat-icon blue-bg">🔐</div>
+          <div><div class="feat-title">KERI Evidence Trail</div><div class="feat-desc">Every assessment is anchored to your KERI identity — tamper-proof, verifiable, insurer-ready.</div></div>
+        </div>
+      </div>
+      <button class="welcome-cta fade-up-4" onclick="setState({screen:'setup'})">Start Risk Walk →</button>
+      <div class="welcome-footer fade-up-5">Powered by <span>archy.insure</span> · KERI Protocol</div>
+    </div>
+  </div>`;
+}
+
+// ============== SETUP ==============
+function renderSetup() {
+  const selZones = state.selectedZones;
+  const canStart = state.businessName.trim().length > 0 && selZones.length > 0;
+  let zonesHtml = ZONES.map(z => {
+    const sel = selZones.includes(z.id);
+    return `<div class="zone-chip ${sel?'selected':''}" onclick="toggleZone('${z.id}')">
+      <span class="z-icon">${z.icon}</span>
+      <span class="z-label">${z.name}</span>
+      <span class="z-check">${sel?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':''}</span>
+    </div>`;
+  }).join('');
+
+  let optionsHtml = BUSINESS_TYPES.map(t => `<option value="${t}" ${state.businessType===t?'selected':''}>${t}</option>`).join('');
+
+  return `<div class="screen-content">
+    <div class="setup-screen">
+      <h2 class="setup-h2 fade-up">Setup Your Walk</h2>
+      <p class="setup-sub fade-up-1">Tell us about your business so we can tailor the assessment.</p>
+
+      <div class="form-group fade-up-1">
+        <label class="form-label">Business Name</label>
+        <input class="form-input" id="biz-name" type="text" placeholder="e.g. Acme Pty Ltd" value="${escHtml(state.businessName)}" />
+      </div>
+
+      <div class="form-group fade-up-2">
+        <label class="form-label">Business Type</label>
+        <select class="form-select" id="biz-type">
+          <option value="">Select type…</option>
+          ${optionsHtml}
+        </select>
+      </div>
+
+      <div class="form-group fade-up-3">
+        <label class="form-label">Zones to Assess</label>
+        <div class="zone-grid">${zonesHtml}</div>
+      </div>
+
+      <button class="start-walk-btn fade-up-4" ${canStart?'':'disabled'} onclick="startWalk()">
+        Begin Assessment →
+      </button>
+    </div>
+  </div>`;
+}
+
+// ============== WALK ==============
+function renderWalk() {
+  const activeZones = ZONES.filter(z => state.selectedZones.includes(z.id));
+  const zone = activeZones[state.currentZoneIdx];
+  if (!zone) return '<div class="screen-content"><p style="padding:40px;color:var(--muted)">No zones selected.</p></div>';
+
+  const totalZones = activeZones.length;
+  const zoneProgress = `${state.currentZoneIdx + 1}/${totalZones}`;
+
+  // Count answered items in current zone
+  const answered = zone.checks.filter(c => state.results[c.id] && state.results[c.id].status).length;
+  const total = zone.checks.length;
+  const pct = total > 0 ? Math.round((answered / total) * 100) : 0;
+
+  let checksHtml = zone.checks.map((c, i) => {
+    const r = state.results[c.id] || { status: null, note: '' };
+    const statusClass = r.status === 'ok' ? 'ok' : r.status === 'flagged' ? 'flagged' : '';
+    const noteVal = r.note || '';
+    const showNote = r.status === 'flagged';
+
+    return `<div class="risk-item ${statusClass}" style="animation: fadeUp .4s ease ${i*0.06}s both">
+      <div class="ri-body">
+        <div class="ri-title">${c.title}</div>
+        <div class="ri-hint">${c.hint}</div>
+        ${showNote ? `<textarea class="note-input" rows="2" placeholder="Add note about the issue…" id="note-${c.id}" oninput="updateNote('${c.id}',this.value)">${escHtml(noteVal)}</textarea>` : ''}
+      </div>
+      <div class="ri-actions">
+        <button class="ri-action-btn btn-ok ${r.status==='ok'?'pill-green':''}" style="${r.status==='ok'?'background:rgba(74,222,128,0.2);color:#4ADE80;':''}" onclick="markCheck('${c.id}','ok')" title="OK">✓</button>
+        <button class="ri-action-btn btn-flag ${r.status==='flagged'?'pill-red':''}" style="${r.status==='flagged'?'background:rgba(220,38,38,0.2);color:#ef4444;':''}" onclick="markCheck('${c.id}','flagged')" title="Flag">⚠</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const isFirst = state.currentZoneIdx === 0;
+  const isLast = state.currentZoneIdx === totalZones - 1;
+
+  return `<div class="walk-header">
+    <div>
+      <div class="walk-zone-title">${zone.icon} ${zone.name}</div>
+      <div class="walk-progress-row">
+        <span class="walk-progress-text">${zoneProgress} zones</span>
+        <div class="walk-progress-bar"><div class="walk-progress-fill" style="width:${pct}%"></div></div>
+        <span class="walk-progress-text">${answered}/${total}</span>
+      </div>
+    </div>
+    <span class="pill pill-ember">${answered === total && total > 0 ? '✓ Done' : 'In Progress'}</span>
+  </div>
+  <div class="screen-content">
+    <div class="walk-body">
+      <div class="risk-checklist">${checksHtml}</div>
+    </div>
+    <div class="walk-nav">
+      ${isFirst ? '<div style="flex:1"></div>' : '<button class="walk-nav-btn btn-secondary" onclick="prevZone()">← Back</button>'}
+      ${isLast
+        ? `<button class="walk-nav-btn btn-primary" onclick="finishWalk()">Generate Report →</button>`
+        : `<button class="walk-nav-btn btn-primary" onclick="nextZone()">Next Zone →</button>`
+      }
+    </div>
+  </div>`;
+}
+
+// ============== GENERATING ==============
+function renderGenerating() {
+  const steps = [
+    'Compiling zone assessments',
+    'Calculating risk scores',
+    'Generating recommendations',
+    'Anchoring to KERI identity',
+    'Building report'
+  ];
+  let stepsHtml = steps.map((s, i) => {
+    let cls = i < state.genStep ? 'done' : i === state.genStep ? 'active' : 'pending';
+    return `<div class="gen-step ${cls}"><span class="gen-dot"></span>${i < state.genStep ? '✓ ' : ''}${s}</div>`;
+  }).join('');
+
+  return `<div class="screen-content">
+    <div class="generating-screen">
+      <div class="gen-ring"></div>
+      <div class="gen-title">Generating Risk Report</div>
+      <div class="gen-sub">Analysing ${state.selectedZones.length} zones across your premises…</div>
+      <div class="gen-steps">${stepsHtml}</div>
+    </div>
+  </div>`;
+}
+
+// ============== REPORT ==============
+function renderReport() {
+  const activeZones = ZONES.filter(z => state.selectedZones.includes(z.id));
+  const allChecks = activeZones.flatMap(z => z.checks.map(c => ({ ...c, zone: z })));
+  const totalChecks = allChecks.length;
+  const okChecks = allChecks.filter(c => (state.results[c.id]||{}).status === 'ok');
+  const flaggedChecks = allChecks.filter(c => (state.results[c.id]||{}).status === 'flagged');
+  const skippedChecks = allChecks.filter(c => !(state.results[c.id]||{}).status);
+
+  const score = totalChecks > 0 ? Math.round(((okChecks.length) / totalChecks) * 100) : 0;
+  const circumference = 2 * Math.PI * 56;
+  const offset = circumference - (score / 100) * circumference;
+  const scoreColor = score >= 80 ? '#4ADE80' : score >= 50 ? '#FBBF24' : '#ef4444';
+  const scoreLabel = score >= 80 ? 'Low Risk' : score >= 50 ? 'Moderate Risk' : 'High Risk';
+
+  let flaggedHtml = flaggedChecks.map(c => {
+    const note = (state.results[c.id]||{}).note || '';
+    const rec = RECOMMENDATIONS[c.id] || 'Address this finding to reduce risk exposure.';
+    return `<div class="flag-card">
+      <div class="fc-zone">${c.zone.icon} ${c.zone.name}</div>
+      <div class="fc-title">${c.title}</div>
+      ${note ? `<div class="fc-note">"${escHtml(note)}"</div>` : ''}
+      <div class="fc-rec">
+        <span class="rec-icon">💡</span>
+        <span class="rec-text">${rec}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  let okListHtml = okChecks.map(c => `✓ ${c.title} <span style="color:var(--muted3)">(${c.zone.name})</span>`).join('<br>');
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-AU', { day:'2-digit', month:'short', year:'numeric' });
+  const timeStr = now.toLocaleTimeString('en-AU', { hour:'2-digit', minute:'2-digit' });
+  const walkId = 'RW-' + now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '-' + String(Math.floor(Math.random()*9000)+1000);
+
+  return `<div class="screen-content">
+    <div class="report-screen">
+      <div class="report-header fade-up">
+        <div class="rh-icon">📋</div>
+        <h2>Risk Assessment Report</h2>
+        <div class="rh-sub">${escHtml(state.businessName)} · ${dateStr} ${timeStr}</div>
+      </div>
+
+      <div class="score-ring-container fade-up-1">
+        <div class="score-ring">
+          <svg viewBox="0 0 140 140">
+            <circle class="ring-bg" cx="70" cy="70" r="56"/>
+            <circle class="ring-fill" cx="70" cy="70" r="56"
+              stroke="${scoreColor}"
+              stroke-dasharray="${circumference}"
+              stroke-dashoffset="${offset}"
+            />
+          </svg>
+          <div class="score-text">
+            <div class="score-num" style="color:${scoreColor}">${score}</div>
+            <div class="score-label">${scoreLabel}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="score-summary fade-up-2">
+        <div class="ss-card">
+          <div class="ss-num" style="color:var(--success)">${okChecks.length}</div>
+          <div class="ss-label">Passed</div>
+        </div>
+        <div class="ss-card">
+          <div class="ss-num" style="color:var(--danger)">${flaggedChecks.length}</div>
+          <div class="ss-label">Flagged</div>
+        </div>
+        <div class="ss-card">
+          <div class="ss-num" style="color:var(--muted3)">${skippedChecks.length}</div>
+          <div class="ss-label">Skipped</div>
+        </div>
+      </div>
+
+      ${flaggedChecks.length > 0 ? `
+      <div class="report-section fade-up-3">
+        <div class="rs-title">⚠ Flagged Items & Recommendations</div>
+        ${flaggedHtml}
+      </div>` : ''}
+
+      ${okChecks.length > 0 ? `
+      <div class="report-section fade-up-4">
+        <div class="rs-title">✓ Passed Items</div>
+        <div class="ok-summary">
+          <div class="os-title">${okChecks.length} items passed</div>
+          <div class="os-list">${okListHtml}</div>
+        </div>
+      </div>` : ''}
+
+      <div class="keri-panel fade-up-5">
+        <div style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted2);margin-bottom:10px;">KERI Evidence Anchor</div>
+        <div class="keri-row"><span class="keri-key">Walk ID</span><span class="keri-val">${walkId}</span></div>
+        <div class="keri-row"><span class="keri-key">AID</span><span class="keri-val">EKE4g_0hDGB...kqt</span></div>
+        <div class="keri-row"><span class="keri-key">Event Type</span><span class="keri-val">ixn</span></div>
+        <div class="keri-row"><span class="keri-key">Zones Assessed</span><span class="keri-val">${state.selectedZones.length}</span></div>
+        <div class="keri-row"><span class="keri-key">Items Checked</span><span class="keri-val">${okChecks.length + flaggedChecks.length}/${totalChecks}</span></div>
+        <div class="keri-row"><span class="keri-key">Timestamp</span><span class="keri-val">${now.toISOString().slice(0,19)}Z</span></div>
+        <div class="keri-row"><span class="keri-key">Witnesses</span><span class="keri-val">3 of 3 ✓</span></div>
+      </div>
+
+      <div class="report-actions">
+        <button class="report-btn btn-primary" onclick="alert('Report shared with archy.insure')">Share with Insurer →</button>
+        <button class="report-btn btn-secondary" onclick="setState({screen:'welcome', currentZoneIdx:0, results:{}})">New Walk</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ============== ACTIONS ==============
+function toggleZone(id) {
+  let sel = [...state.selectedZones];
+  const idx = sel.indexOf(id);
+  if (idx >= 0) sel.splice(idx, 1); else sel.push(id);
+  setState({ selectedZones: sel });
+}
+
+function startWalk() {
+  const name = document.getElementById('biz-name')?.value || state.businessName;
+  const type = document.getElementById('biz-type')?.value || state.businessType;
+  setState({ screen: 'walk', businessName: name, businessType: type, currentZoneIdx: 0 });
+}
+
+function markCheck(id, status) {
+  const current = (state.results[id] || {}).status;
+  const newStatus = current === status ? null : status;
+  const results = { ...state.results, [id]: { ...(state.results[id]||{}), status: newStatus } };
+  if (newStatus !== 'flagged' && results[id]) results[id].note = '';
+  setState({ results });
+}
+
+function updateNote(id, val) {
+  const results = { ...state.results, [id]: { ...(state.results[id]||{}), note: val } };
+  state.results = results; // Don't re-render on every keystroke
+}
+
+function nextZone() {
+  const activeZones = ZONES.filter(z => state.selectedZones.includes(z.id));
+  if (state.currentZoneIdx < activeZones.length - 1) {
+    setState({ currentZoneIdx: state.currentZoneIdx + 1 });
+  }
+}
+
+function prevZone() {
+  if (state.currentZoneIdx > 0) {
+    setState({ currentZoneIdx: state.currentZoneIdx - 1 });
+  }
+}
+
+function finishWalk() {
+  setState({ screen: 'generating', genStep: 0 });
+  const steps = 5;
+  let step = 0;
+  const interval = setInterval(() => {
+    step++;
+    if (step >= steps) {
+      clearInterval(interval);
+      setState({ screen: 'report' });
+    } else {
+      setState({ genStep: step });
+    }
+  }, 600);
+}
+
+function bindEvents() {
+  const nameInput = document.getElementById('biz-name');
+  if (nameInput) {
+    nameInput.addEventListener('input', (e) => { state.businessName = e.target.value; });
+    nameInput.addEventListener('change', () => render());
+  }
+  const typeSelect = document.getElementById('biz-type');
+  if (typeSelect) {
+    typeSelect.addEventListener('change', (e) => { state.businessType = e.target.value; });
+  }
+}
+
+function escHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ============== INIT ==============
+render();
+</script>
+</body>
+</html>
