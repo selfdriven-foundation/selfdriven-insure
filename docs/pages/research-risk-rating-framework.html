@@ -1,0 +1,842 @@
+---
+layout: null
+title: "Dynamic Risk & Resilience Rating Framework (DR²) — selfdriven.insure"
+permalink: /research-risk-rating-framework/
+---
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+	<meta charset="UTF-8" />
+	<title>Dynamic Risk &amp; Resilience Rating Framework (DR²) — selfdriven.insure</title>
+	<meta name="description" content="DR²: technical architecture, risk methodology and validation specification for evidence-driven, peril-specific insurance risk rating — starting with commercial property." />
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+	<link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" type="image/png" />
+	<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
+	<meta property="og:title" content="Dynamic Risk &amp; Resilience Rating Framework (DR²) — selfdriven.insure" />
+	<meta property="og:description" content="Risk assessed as a verifiable, evolving state rather than a static classification." />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/css/style.css" />
+	<style>
+		.prose pre{margin:24px 0 28px;padding:22px 24px;background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow-x:auto;font-size:14px;line-height:1.6}
+		.prose pre code{background:none;padding:0;font-size:inherit}
+		.doc-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:0 0 36px}
+		.doc-meta div{background:var(--paper);padding:14px 16px}
+		.doc-meta dt{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+		.doc-meta dd{margin:0;font-size:15px;font-weight:500}
+		.formula{font-family:var(--font-mono);font-size:1rem;background:var(--surface);border-left:3px solid var(--orange);border-radius:4px;padding:12px 16px;margin:0 0 18px}
+		.principle p{margin:0 0 10px}
+		.principle p:last-child{margin:0}
+		.toc ol{counter-reset:none}
+	</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+	<header class="header">
+		<a class="logo" href="/"><img class="logo-finance" src="/assets/img/selfdriven-logo-insure-flamingo-transparent.png" alt="selfdriven.insure" /></a>
+		<nav class="nav">
+			<a href="/#purpose">Purpose</a>
+			<a href="/#scope">Scope</a>
+			<a href="/#interfaces">Interfaces</a>
+			<a href="/#references">References</a>
+			<a href="/research">Research</a>
+		</nav>
+	</header>
+
+	<main class="main-content" id="main">
+		<div class="page-grid">
+			<article class="prose">
+				<p class="crumb"><a href="/">selfdriven.insure</a> / <a href="/research">Research</a> / DR²</p>
+				<h1>Dynamic Risk &amp; Resilience Rating Framework <em>(DR²)</em></h1>
+				<p>Technical architecture, risk methodology and validation specification.</p>
+
+				<dl class="doc-meta">
+					<div><dt>Version</dt><dd>0.1 — Foundational draft</dd></div>
+					<div><dt>Date</dt><dd>23 October 2026</dd></div>
+					<div><dt>Status</dt><dd>Proposed / R&amp;D</dd></div>
+					<div><dt>Initial domain</dt><dd>Commercial property</dd></div>
+				</dl>
+				<p><strong>Extension domains:</strong> residential property, motor, cyber, agriculture, business interruption and infrastructure.</p>
+
+				<h2 id="s1">1. Executive summary</h2>
+				<p>Traditional insurance underwriting relies on relatively static assessments of risk characteristics, historical claims and periodic reassessments.</p>
+				<p>For property insurance, the established COPE framework — Construction, Occupancy, Protection and Exposure — provides a useful foundation for describing risk.</p>
+				<p>However, COPE alone does not prescribe how an insurer should model the changing condition of an asset, the effectiveness of risk controls, resilience, recovery capability or the reliability of supporting evidence.</p>
+				<p>The Dynamic Risk &amp; Resilience Rating Framework (DR²) extends traditional insurance assessment through a modular, evidence-driven architecture.</p>
+				<p>The framework is designed to:</p>
+				<ol>
+					<li>Preserve established underwriting concepts, including COPE.</li>
+					<li>Evaluate inherent and residual risk by individual peril.</li>
+					<li>Separate observed risk characteristics from the evidence supporting them.</li>
+					<li>Incorporate prevention, resilience and recovery capabilities.</li>
+					<li>Track changes in risk over time.</li>
+					<li>Support explainable, independently verifiable risk assessments.</li>
+					<li>Enable insurers to calibrate technical premiums against real loss experience.</li>
+					<li>Provide insured parties with actionable risk-improvement pathways.</li>
+				</ol>
+				<p><strong>Fundamental principle:</strong></p>
+				<blockquote><p>Risk should be assessed as a verifiable, evolving state rather than a static classification.</p></blockquote>
+				<p>The framework separates six concepts that must not be conflated:</p>
+				<ul>
+					<li><strong>Risk:</strong> Expected adverse outcomes and their severity.</li>
+					<li><strong>Mitigation:</strong> Demonstrable reduction in risk.</li>
+					<li><strong>Evidence:</strong> Basis for believing particular assertions.</li>
+					<li><strong>Uncertainty:</strong> What remains unknown about risk.</li>
+					<li><strong>Resilience:</strong> Capacity to withstand and recover from adverse events.</li>
+					<li><strong>Insurability:</strong> Whether a risk is sufficiently understood and bounded to offer sustainable insurance.</li>
+				</ul>
+				<p>These concepts remain separately represented even when summarised into customer-facing ratings.</p>
+
+				<h2 id="s2">2. Scope and objectives</h2>
+				<h3>2.1 Initial scope</h3>
+				<p>Version 0.1 shall focus on commercial property insurance with the following initial perils:</p>
+				<ul>
+					<li>Fire</li>
+					<li>Flood</li>
+					<li>Storm and wind</li>
+					<li>Theft and malicious damage</li>
+					<li>Escape of water</li>
+				</ul>
+				<p>Business interruption may be introduced subsequently, with explicit modelling of physical-damage dependencies and policy terms.</p>
+				<h3>2.2 Out of scope for v0.1</h3>
+				<ul>
+					<li>Fully autonomous binding of insurance cover</li>
+					<li>Automatic premium changes based solely on telemetry</li>
+					<li>Production actuarial approval</li>
+					<li>Automated rejection of insurance applications</li>
+					<li>Cross-line portfolio capital optimisation</li>
+					<li>Claims adjudication</li>
+				</ul>
+				<h3>2.3 Core design requirements</h3>
+				<p>The system SHALL:</p>
+				<ul>
+					<li>Separate source data from inferred attributes and model outputs.</li>
+					<li>Retain original COPE classifications.</li>
+					<li>Associate assessments with a defined asset, location, peril and effective date.</li>
+					<li>Preserve model versions and calculation provenance.</li>
+					<li>Represent missing, disputed and stale evidence explicitly.</li>
+					<li>Support independent recalculation of deterministic ratings.</li>
+					<li>Support human review and overrides with recorded justification.</li>
+					<li>Distinguish estimated losses from presentation scores.</li>
+					<li>Allow risk models and calibration datasets to be replaced without changing the canonical asset model.</li>
+				</ul>
+				<p>The system SHOULD:</p>
+				<ul>
+					<li>Accept periodic and event-driven evidence updates.</li>
+					<li>Generate explainable mitigation recommendations.</li>
+					<li>Support privacy-preserving verification.</li>
+					<li>Interoperate with insurer-specific underwriting rules and taxonomies.</li>
+					<li>Support signed evidence and independently reproducible assessments.</li>
+				</ul>
+
+				<h2 id="s3">3. Conceptual architecture</h2>
+				<p>The architecture consists of seven layers.</p>
+				<table>
+					<thead><tr><th>Layer</th><th>Purpose</th></tr></thead>
+					<tbody>
+						<tr><td>1. Risk Object</td><td>Identifies the asset, location, entity, coverage and insured value</td></tr>
+						<tr><td>2. COPE Profile</td><td>Defines foundational physical and operational characteristics</td></tr>
+						<tr><td>3. Evidence Graph</td><td>Records claims, sources, verification, validity and provenance</td></tr>
+						<tr><td>4. Peril Models</td><td>Estimates frequency, severity and risk drivers for each peril</td></tr>
+						<tr><td>5. Mitigation &amp; Resilience</td><td>Models control effectiveness, condition and recovery</td></tr>
+						<tr><td>6. Rating Engine</td><td>Produces technical risk estimates, uncertainty and presentation scores</td></tr>
+						<tr><td>7. Underwriting Interface</td><td>Supports eligibility, referrals, decisions, recommendations and pricing integrations</td></tr>
+					</tbody>
+				</table>
+				<p>A change in evidence may trigger reassessment, but it does not automatically justify a premium or coverage change.</p>
+
+				<h2 id="s4">4. COPE data model</h2>
+				<p>COPE remains a canonical grouping for property risk characteristics.</p>
+				<h3>4.1 Construction</h3>
+				<p>Properties include:</p>
+				<ul>
+					<li>Primary structural materials</li>
+					<li>Construction date and relevant modifications</li>
+					<li>Roof construction and condition</li>
+					<li>Building height and floor area</li>
+					<li>Fire compartmentation</li>
+					<li>Structural characteristics</li>
+					<li>Relevant engineering certifications</li>
+					<li>Replacement cost</li>
+				</ul>
+				<h3>4.2 Occupancy</h3>
+				<p>Properties include:</p>
+				<ul>
+					<li>Primary and secondary occupancy types</li>
+					<li>Business activities</li>
+					<li>Combustible and hazardous materials</li>
+					<li>Operational hours</li>
+					<li>Storage arrangements</li>
+					<li>Occupancy density</li>
+					<li>Maintenance activities</li>
+					<li>Changes in use</li>
+				</ul>
+				<h3>4.3 Protection</h3>
+				<p>Properties include:</p>
+				<ul>
+					<li>Fire detection</li>
+					<li>Automatic fire suppression</li>
+					<li>Security systems</li>
+					<li>Emergency response access</li>
+					<li>Physical access controls</li>
+					<li>Preventive maintenance</li>
+					<li>Inspection and certification</li>
+					<li>Water leak detection and isolation</li>
+				</ul>
+				<p>Protection systems must be assessed for operational condition, not merely recorded as present or absent.</p>
+				<h3>4.4 Exposure</h3>
+				<p>Properties include:</p>
+				<ul>
+					<li>Geographic hazards</li>
+					<li>Nearby properties and activities</li>
+					<li>Flood exposure</li>
+					<li>Bushfire exposure</li>
+					<li>Wind and storm exposure</li>
+					<li>External fire hazards</li>
+					<li>Physical access and infrastructure dependencies</li>
+					<li>Accumulation and catastrophe exposure</li>
+				</ul>
+				<p>The model must distinguish external hazard, insured value exposed, vulnerability and financial consequences.</p>
+
+				<h2 id="s5">5. Risk taxonomy</h2>
+				<p>DR² extends COPE using eight analytical dimensions.</p>
+				<table>
+					<thead><tr><th>Dimension</th><th>Definition</th></tr></thead>
+					<tbody>
+						<tr><td>Exposure</td><td>Nature and magnitude of the assets and activities subject to adverse events</td></tr>
+						<tr><td>Behaviour</td><td>Observable operating practices materially associated with loss</td></tr>
+						<tr><td>Condition</td><td>Current physical or operational state</td></tr>
+						<tr><td>Controls</td><td>Measures preventing or limiting adverse outcomes</td></tr>
+						<tr><td>Resilience</td><td>Capacity to withstand disruption while retaining essential function</td></tr>
+						<tr><td>Recovery</td><td>Ability to restore operations and replace damaged assets</td></tr>
+						<tr><td>Context</td><td>External environmental and systemic conditions</td></tr>
+						<tr><td>Evidence</td><td>Quality and coverage of the information supporting the assessment</td></tr>
+					</tbody>
+				</table>
+				<p>Evidence is an assessment-quality dimension, not a physical peril or loss mitigation mechanism.</p>
+				<p>The eight dimensions constitute a descriptive framework. They are not assumed to be statistically independent.</p>
+				<p>No universal weighting across all dimensions shall be adopted without empirical validation.</p>
+
+				<h2 id="s6">6. Peril-specific risk model</h2>
+				<h3>6.1 Primary unit of assessment</h3>
+				<p>The principal risk object is:</p>
+				<p class="formula">Asset × Peril × Coverage × Evaluation Period</p>
+				<p>For each risk object, the engine estimates a probability distribution of insured loss.</p>
+				<p>Define:</p>
+				<ul>
+					<li><code>a</code>: asset</li>
+					<li><code>p</code>: peril</li>
+					<li><code>t</code>: evaluation period</li>
+					<li><code>x</code>: relevant observed attributes</li>
+					<li><code>c</code>: verified control state</li>
+					<li><code>L</code>: insured loss amount</li>
+				</ul>
+				<p>The objective is to estimate:</p>
+				<p class="formula">P(L | a, p, t, x, c)</p>
+				<p>The engine must retain the distinction between the underlying hazard event, physical damage and loss payable under insurance terms.</p>
+				<h3>6.2 Expected annual loss</h3>
+				<p>For an initial frequency-severity model:</p>
+				<p class="formula">EAL = λ × μ</p>
+				<p>Where:</p>
+				<ul>
+					<li>λ = expected annual claim frequency</li>
+					<li>μ = expected insured claim severity, conditional on a claim</li>
+					<li>EAL = expected annual insured loss</li>
+				</ul>
+				<p>A more complete model may use event simulation, catastrophe scenarios and aggregate annual loss distributions.</p>
+				<h3>6.3 Inherent risk</h3>
+				<p>Inherent risk represents a defined reference condition before the specified mitigation measures are applied.</p>
+				<p>This reference condition must be explicitly defined, as removing all controls is not always physically meaningful.</p>
+				<h3>6.4 Residual risk</h3>
+				<p>Residual risk represents the loss distribution after relevant mitigation and recovery capabilities are taken into account.</p>
+				<p>For a simple exploratory model:</p>
+				<p class="formula">Residual EAL = Reference EAL × (1 − M)</p>
+				<p>Where M represents the estimated fractional loss reduction from explicitly modelled controls.</p>
+				<p>This equation is only valid where the mitigation factor is calibrated against the same reference basis and outcome.</p>
+				<p>Production models should separately evaluate whether controls affect:</p>
+				<ul>
+					<li>Event or claim frequency</li>
+					<li>Damage probability</li>
+					<li>Damage severity</li>
+					<li>Loss duration</li>
+					<li>Recovery cost</li>
+				</ul>
+				<p>Independent controls must not be assumed to have additive benefits.</p>
+				<h3>6.5 Multiple perils</h3>
+				<p>Portfolio expected loss may be estimated by summing expected losses across mutually defined coverage/peril components, provided overlaps and double-counting are resolved.</p>
+				<p>Aggregate volatility, tail risk and capital requirements require joint distributions that account for correlations and common catastrophic events.</p>
+
+				<h2 id="s7">7. Evidence &amp; verification model</h2>
+				<h3>7.1 Evidence object</h3>
+				<p>Every material underwriting assertion should be supported by a structured evidence record.</p>
+				<p>Required fields:</p>
+				<table>
+					<thead><tr><th>Field</th><th>Description</th></tr></thead>
+					<tbody>
+						<tr><td><code>evidence_id</code></td><td>Immutable evidence identifier</td></tr>
+						<tr><td><code>subject_id</code></td><td>Asset, system or entity</td></tr>
+						<tr><td><code>predicate</code></td><td>Attribute or assertion being supported</td></tr>
+						<tr><td><code>value</code></td><td>Claimed value</td></tr>
+						<tr><td><code>observed_at</code></td><td>Time the fact was observed</td></tr>
+						<tr><td><code>recorded_at</code></td><td>Time ingested</td></tr>
+						<tr><td><code>valid_from</code> / <code>valid_to</code></td><td>Period of asserted validity</td></tr>
+						<tr><td><code>issuer</code></td><td>Originating organisation or device</td></tr>
+						<tr><td><code>collection_method</code></td><td>Inspection, sensor, API, document or declaration</td></tr>
+						<tr><td><code>verification_method</code></td><td>Method used to establish authenticity or reliability</td></tr>
+						<tr><td><code>verification_status</code></td><td>Verified, unverified, disputed, expired or revoked</td></tr>
+						<tr><td><code>content_hash</code></td><td>Digest of canonical evidence payload</td></tr>
+						<tr><td><code>signature</code></td><td>Optional digital signature or verification reference</td></tr>
+						<tr><td><code>provenance</code></td><td>Supporting evidence lineage</td></tr>
+						<tr><td><code>policy_reference</code></td><td>Applicable verification policy</td></tr>
+					</tbody>
+				</table>
+				<h3>7.2 Evidence confidence</h3>
+				<p>Evidence confidence is not equivalent to risk safety.</p>
+				<p>The framework shall assess evidence across:</p>
+				<ul>
+					<li>Authenticity</li>
+					<li>Relevance</li>
+					<li>Freshness</li>
+					<li>Completeness</li>
+					<li>Coverage</li>
+					<li>Independence</li>
+					<li>Consistency</li>
+					<li>Verification quality</li>
+				</ul>
+				<p>An illustrative composite indicator may be presented on a 0–100 scale.</p>
+				<p>However, confidence aggregation should account for correlated sources. Multiple documents originating from the same underlying assertion do not necessarily provide independent corroboration.</p>
+				<h3>7.3 Missing evidence</h3>
+				<p>Missing evidence shall be represented explicitly.</p>
+				<p>It may trigger:</p>
+				<ul>
+					<li>An uncertainty interval</li>
+					<li>A request for further inspection</li>
+					<li>A provisional rating</li>
+					<li>A manual underwriting referral</li>
+					<li>A conservative treatment where justified by calibrated underwriting policy</li>
+				</ul>
+				<p>Missing evidence must not automatically be treated as proof that a control is absent or defective.</p>
+				<h3>7.4 Verified Context Graphs</h3>
+				<p>The framework may use a Verified Context Graph (VCG) to model relationships among:</p>
+				<p class="formula">Assets → Assertions → Evidence → Controls → Perils → Loss Models → Ratings</p>
+				<p>The graph supports traceability, not automatic proof that a rating is actuarially correct.</p>
+				<p>Three forms of verification must remain distinct:</p>
+				<ol>
+					<li><strong>Evidence verification:</strong> Is an assertion authentic and supported?</li>
+					<li><strong>Computational verification:</strong> Was the specified rating model executed correctly?</li>
+					<li><strong>Predictive validation:</strong> Does the model estimate real-world outcomes accurately?</li>
+				</ol>
+				<p>Cryptographic proof of source integrity satisfies neither predictive validation nor control effectiveness by itself.</p>
+
+				<h2 id="s8">8. Risk trajectory</h2>
+				<p>The system shall retain historical assessment snapshots and support temporal analysis.</p>
+				<p>Measures include:</p>
+				<ul>
+					<li>Current risk estimate</li>
+					<li>Change over a defined period</li>
+					<li>Rate of change</li>
+					<li>Observed variability</li>
+					<li>Confidence in changes</li>
+					<li>Materiality of emerging changes</li>
+				</ul>
+				<p>Example:</p>
+				<p>An improved fire suppression system may reduce estimated fire severity after inspection and verification.</p>
+				<p>A deteriorating roof condition may increase storm vulnerability.</p>
+				<p>Trajectory must be calculated on a comparable model basis. A model version change must not be mistaken for a change in the underlying risk.</p>
+				<p>Historical scores should be recomputed or explicitly separated when model calibration changes.</p>
+
+				<h2 id="s9">9. Resilience &amp; recovery</h2>
+				<p>Resilience is assessed as the ability to withstand adverse events while maintaining essential capabilities.</p>
+				<p>Recovery measures include:</p>
+				<ul>
+					<li>Time to restore</li>
+					<li>Repair and replacement lead time</li>
+					<li>Availability of contractors</li>
+					<li>Replacement part availability</li>
+					<li>Financial capacity</li>
+					<li>Emergency plans</li>
+					<li>Business continuity arrangements</li>
+					<li>Testing history</li>
+				</ul>
+				<p>Where applicable, resilience and recovery are integrated into the loss model.</p>
+				<p>For example, restoration time may affect business interruption losses, but should not automatically influence direct property damage frequency.</p>
+				<p>The system shall avoid counting a resilience benefit twice through both the loss model and a separate rating discount.</p>
+
+				<h2 id="s10">10. Insurability assessment</h2>
+				<p>Insurability is separate from expected loss.</p>
+				<p>It measures whether a risk can be assessed, bounded and transferred within an insurer's requirements.</p>
+				<p>Four proposed components:</p>
+				<ol>
+					<li><strong>Observability:</strong> Availability of decision-relevant information.</li>
+					<li><strong>Predictability:</strong> Reliability of estimates and uncertainty bounds.</li>
+					<li><strong>Controllability:</strong> Availability and effectiveness of relevant mitigation.</li>
+					<li><strong>Recoverability:</strong> Ability to restore operations and manage loss consequences.</li>
+				</ol>
+				<p>Insurability should be represented as a multidimensional assessment, with an optional summary indicator.</p>
+				<p>The final underwriting determination additionally depends on:</p>
+				<ul>
+					<li>Insurer risk appetite</li>
+					<li>Available capacity</li>
+					<li>Policy terms and exclusions</li>
+					<li>Portfolio concentration</li>
+					<li>Reinsurance arrangements</li>
+					<li>Regulatory and commercial constraints</li>
+				</ul>
+				<p>A higher insurability indicator does not guarantee an offer of insurance.</p>
+
+				<h2 id="s11">11. Rating outputs</h2>
+				<p>DR² shall produce four headline outputs.</p>
+				<h3>11.1 Risk Rating</h3>
+				<p>A 0–100 customer-facing indicator, where a higher value represents lower estimated risk relative to a defined benchmark.</p>
+				<p>Proposed presentation bands:</p>
+				<table>
+					<thead><tr><th>Grade</th><th style="text-align:right">Score</th></tr></thead>
+					<tbody>
+						<tr><td>A+</td><td style="text-align:right">90–100</td></tr>
+						<tr><td>A</td><td style="text-align:right">80–89</td></tr>
+						<tr><td>B</td><td style="text-align:right">70–79</td></tr>
+						<tr><td>C</td><td style="text-align:right">60–69</td></tr>
+						<tr><td>D</td><td style="text-align:right">45–59</td></tr>
+						<tr><td>E</td><td style="text-align:right">30–44</td></tr>
+						<tr><td>F</td><td style="text-align:right">0–29</td></tr>
+					</tbody>
+				</table>
+				<p>These bands are provisional presentation conventions.</p>
+				<p>They shall not be used as claims about calibrated risk until validated against the relevant insurance population.</p>
+				<h3>11.2 Evidence Rating</h3>
+				<p>Quality and completeness of evidence supporting the assessment.</p>
+				<h3>11.3 Risk Trajectory</h3>
+				<p>Improving, stable, deteriorating or indeterminate, with associated measurement intervals.</p>
+				<h3>11.4 Insurability Rating</h3>
+				<p>An assessment of the practical feasibility of underwriting and transferring the risk.</p>
+				<p>A risk score must never replace the expected-loss estimates or uncertainty distribution needed for technical pricing.</p>
+
+				<h2 id="s12">12. Reference data schema</h2>
+				<p>The following JSON is an illustrative assessment object, not a completed JSON Schema.</p>
+<pre><code>{
+  "schema_version": "0.1",
+  "assessment_id": "dr2-assessment-001",
+  "asset_id": "property-001",
+  "as_of": "2026-10-23T00:00:00Z",
+  "period": {
+    "start": "2026-11-01",
+    "end": "2027-10-31"
+  },
+  "cope": {
+    "construction": {},
+    "occupancy": {},
+    "protection": {},
+    "exposure": {}
+  },
+  "perils": [
+    {
+      "id": "fire",
+      "coverage": "property_damage",
+      "model_version": "fire-0.1",
+      "annual_frequency": 0.02,
+      "mean_claim_severity_aud": 100000,
+      "expected_annual_loss_aud": 2000,
+      "evidence_refs": [],
+      "control_refs": []
+    }
+  ],
+  "ratings": {
+    "risk": null,
+    "evidence": null,
+    "trajectory": "indeterminate",
+    "insurability": null
+  },
+  "status": "provisional",
+  "calibration_status": "unvalidated",
+  "model_manifest_hash": null
+}</code></pre>
+				<p>All monetary values must include an explicit currency and valuation basis.</p>
+				<p>Production schemas must distinguish unknown, not-applicable and zero values.</p>
+
+				<h2 id="s13">13. Rating engine design</h2>
+				<p>The rating engine should operate as a deterministic calculation pipeline where the relevant model supports determinism.</p>
+				<p>Processing sequence:</p>
+				<ol>
+					<li>Receive assessment request.</li>
+					<li>Resolve risk object and policy context.</li>
+					<li>Retrieve versioned COPE attributes.</li>
+					<li>Retrieve evidence and verification state.</li>
+					<li>Evaluate freshness and completeness.</li>
+					<li>Generate a peril-specific feature set.</li>
+					<li>Execute approved peril models.</li>
+					<li>Calculate loss distributions and uncertainty measures.</li>
+					<li>Evaluate mitigation and recovery effects.</li>
+					<li>Produce risk indicators and insurability assessment.</li>
+					<li>Apply decision-support and referral rules.</li>
+					<li>Persist the immutable assessment snapshot.</li>
+					<li>Emit events and explanations.</li>
+				</ol>
+				<h3>13.1 Model manifest</h3>
+				<p>Each model shall define:</p>
+				<ul>
+					<li>Model identifier and semantic version</li>
+					<li>Supported perils and coverage types</li>
+					<li>Input schema</li>
+					<li>Output schema</li>
+					<li>Parameter version</li>
+					<li>Training and calibration provenance</li>
+					<li>Known limitations</li>
+					<li>Applicable jurisdictions</li>
+					<li>Validation status</li>
+					<li>Execution environment</li>
+					<li>Dependency versions and hashes</li>
+					<li>Approval information</li>
+				</ul>
+				<h3>13.2 Reproducibility</h3>
+				<p>Identical inputs, parameters and reference datasets must yield identical outputs for deterministic models.</p>
+				<p>Stochastic models must expose simulation configurations, random seeds where applicable, and documented convergence/error bounds.</p>
+
+				<h2 id="s14">14. API specification</h2>
+				<p>Proposed REST interfaces:</p>
+				<table>
+					<thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th></tr></thead>
+					<tbody>
+						<tr><td>POST</td><td><code>/v1/assets</code></td><td>Register an insured asset</td></tr>
+						<tr><td>PUT</td><td><code>/v1/assets/{id}/cope</code></td><td>Update COPE profile</td></tr>
+						<tr><td>POST</td><td><code>/v1/evidence</code></td><td>Submit supporting evidence</td></tr>
+						<tr><td>POST</td><td><code>/v1/evidence/{id}/verify</code></td><td>Execute or record verification</td></tr>
+						<tr><td>POST</td><td><code>/v1/assessments</code></td><td>Request assessment</td></tr>
+						<tr><td>GET</td><td><code>/v1/assessments/{id}</code></td><td>Retrieve immutable result</td></tr>
+						<tr><td>GET</td><td><code>/v1/assets/{id}/trajectory</code></td><td>Retrieve risk history</td></tr>
+						<tr><td>GET</td><td><code>/v1/assets/{id}/recommendations</code></td><td>Retrieve mitigation actions</td></tr>
+						<tr><td>GET</td><td><code>/v1/models/{id}/manifest</code></td><td>Retrieve model description</td></tr>
+					</tbody>
+				</table>
+				<p>Writes require authentication, authorisation, validation and an audit trail.</p>
+				<p>Assessment and evidence submission APIs should support idempotency and explicit versioning.</p>
+				<h3>14.1 Security</h3>
+				<p>Minimum design requirements include:</p>
+				<ul>
+					<li>Strong service and user authentication</li>
+					<li>Tenant-level data isolation</li>
+					<li>Least-privilege authorisation</li>
+					<li>Encryption in transit and at rest</li>
+					<li>Data minimisation</li>
+					<li>Signed or otherwise authenticated evidence where feasible</li>
+					<li>Tamper-evident audit history</li>
+					<li>Model artifact integrity checks</li>
+					<li>Controlled model promotion</li>
+					<li>Human approval for material underwriting overrides</li>
+				</ul>
+				<p>Evidence signatures validate origin and integrity, not the truth of every observation.</p>
+
+				<h2 id="s15">15. Validation framework</h2>
+				<p>Validation shall occur across six independent domains.</p>
+				<h3>V1 — Data validation</h3>
+				<p>Tests:</p>
+				<ul>
+					<li>Schema correctness</li>
+					<li>Required fields</li>
+					<li>Type and range constraints</li>
+					<li>Timestamp consistency</li>
+					<li>Duplicate detection</li>
+					<li>Valid asset relationships</li>
+					<li>Data provenance completeness</li>
+				</ul>
+				<h3>V2 — Evidence validation</h3>
+				<p>Tests:</p>
+				<ul>
+					<li>Signature or source verification</li>
+					<li>Expiry and revocation</li>
+					<li>Conflicting assertions</li>
+					<li>Stale data</li>
+					<li>Source independence</li>
+					<li>Completeness</li>
+					<li>Invalid evidence rejection</li>
+				</ul>
+				<h3>V3 — Computational validation</h3>
+				<p>Tests:</p>
+				<ul>
+					<li>Repeatability</li>
+					<li>Formula correctness</li>
+					<li>Unit consistency</li>
+					<li>Boundary behaviour</li>
+					<li>Model version pinning</li>
+					<li>Deterministic replay</li>
+					<li>Control interaction handling</li>
+				</ul>
+				<h3>V4 — Actuarial validation</h3>
+				<p>Tests:</p>
+				<ul>
+					<li>Frequency calibration</li>
+					<li>Severity calibration</li>
+					<li>Observed-versus-expected loss</li>
+					<li>Out-of-time validation</li>
+					<li>Segment-level performance</li>
+					<li>Tail-loss estimation</li>
+					<li>Sensitivity and stability</li>
+				</ul>
+				<p>Relevant metrics may include log-likelihood, calibration error, deviance, prediction interval coverage and loss-based backtesting.</p>
+				<p>A single accuracy metric is insufficient for validation.</p>
+				<h3>V5 — Underwriting validation</h3>
+				<p>Tests:</p>
+				<ul>
+					<li>Expert review</li>
+					<li>Peril relevance</li>
+					<li>Decision explainability</li>
+					<li>Comparison with established underwriting practice</li>
+					<li>Referral logic</li>
+					<li>Stability under small data changes</li>
+					<li>Treatment of missing evidence</li>
+				</ul>
+				<h3>V6 — Governance validation</h3>
+				<p>Tests:</p>
+				<ul>
+					<li>Privacy and lawful data use</li>
+					<li>Appropriate discrimination and fairness review</li>
+					<li>Model approvals</li>
+					<li>Human oversight</li>
+					<li>Record retention</li>
+					<li>Access controls</li>
+					<li>Change management</li>
+					<li>Independent review and incident handling</li>
+				</ul>
+
+				<h2 id="s16">16. Hypotheses to test</h2>
+				<p>The programme should be hypothesis-driven rather than assuming the modern framework necessarily outperforms traditional COPE.</p>
+				<h4>H1 — Evidence quality</h4>
+				<p>Verified, current evidence improves confidence in underwriting input data compared with self-declared data alone.</p>
+				<h4>H2 — Predictive improvement</h4>
+				<p>Adding condition and operational signals improves out-of-time loss prediction compared with a COPE-only benchmark.</p>
+				<h4>H3 — Mitigation measurement</h4>
+				<p>Verified controls are associated with measurable reductions in peril-specific frequency or severity after relevant confounders are considered.</p>
+				<h4>H4 — Temporal information</h4>
+				<p>Risk trajectory provides predictive information beyond current static characteristics.</p>
+				<h4>H5 — Customer outcomes</h4>
+				<p>Actionable assessments increase verified risk-improvement activity without encouraging intrusive monitoring.</p>
+				<h4>H6 — Operational efficiency</h4>
+				<p>Standardised, evidence-backed assessments reduce manual review effort while maintaining underwriting quality.</p>
+				<p>Each hypothesis requires a documented dataset, evaluation method, comparator, success threshold and review owner before testing.</p>
+
+				<h2 id="s17">17. Experimental design</h2>
+				<h3>Phase A — Synthetic reference environment</h3>
+				<p>Construct representative synthetic property profiles covering different COPE attributes, controls, conditions and evidence states.</p>
+				<p>Validate calculations, schemas and explanation consistency.</p>
+				<p>Synthetic tests establish software behaviour, not actuarial validity.</p>
+				<h3>Phase B — Historical data study</h3>
+				<p>Obtain de-identified or appropriately governed historical policy, asset and claims datasets.</p>
+				<p>Compare:</p>
+				<ul>
+					<li>Baseline COPE model</li>
+					<li>COPE plus condition and controls</li>
+					<li>COPE plus condition, controls and temporal information</li>
+				</ul>
+				<p>Use temporal train-validation-test separation and prevent data leakage.</p>
+				<h3>Phase C — Independent evidence study</h3>
+				<p>Measure how well supporting evidence confirms actual control state.</p>
+				<p>Compare declared versus independently inspected or instrumented property characteristics.</p>
+				<h3>Phase D — Shadow underwriting</h3>
+				<p>Run DR² alongside established underwriting without affecting actual customer prices or eligibility.</p>
+				<p>Track predictive performance, discrepancies and referrals.</p>
+				<h3>Phase E — Controlled production pilot</h3>
+				<p>Only after appropriate insurer, actuarial, regulatory, privacy and governance approvals, trial limited production use with predefined monitoring and rollback criteria.</p>
+
+				<h2 id="s18">18. Acceptance criteria for v0.1</h2>
+				<p>The reference implementation is accepted when:</p>
+				<ul>
+					<li>Five initial property perils can be represented.</li>
+					<li>All four COPE groups are available through the canonical schema.</li>
+					<li>Each material rating input can link to supporting evidence.</li>
+					<li>Missing and conflicting evidence are represented without silent substitution.</li>
+					<li>Peril-specific reference models are executable.</li>
+					<li>Deterministic assessments reproduce exactly using pinned inputs and models.</li>
+					<li>Assessment history is immutable and queryable.</li>
+					<li>Ratings expose supporting factors and model versions.</li>
+					<li>At least 30 defined scenario tests execute successfully.</li>
+					<li>Unauthorised evidence modification is rejected.</li>
+					<li>Manual overrides are attributable and auditable.</li>
+					<li>Model limitations and unvalidated status appear in every relevant assessment response.</li>
+				</ul>
+				<p>Passing these criteria establishes a functional research prototype, not production insurance suitability.</p>
+
+				<h2 id="s19">19. Delivery roadmap</h2>
+				<table>
+					<thead><tr><th>Stage</th><th>Deliverable</th><th>Primary objective</th></tr></thead>
+					<tbody>
+						<tr><td>0</td><td>Terminology and risk ontology</td><td>Agree canonical definitions</td></tr>
+						<tr><td>1</td><td>COPE and evidence schemas</td><td>Standardise input records</td></tr>
+						<tr><td>2</td><td>Evidence verification engine</td><td>Establish auditable assertions</td></tr>
+						<tr><td>3</td><td>Reference peril engine</td><td>Produce reproducible loss estimates</td></tr>
+						<tr><td>4</td><td>DR² rating service</td><td>Derive interpretable assessment outputs</td></tr>
+						<tr><td>5</td><td>Scenario test suite</td><td>Validate engine behaviour</td></tr>
+						<tr><td>6</td><td>Historical calibration study</td><td>Evaluate predictive performance</td></tr>
+						<tr><td>7</td><td>Underwriter assessment interface</td><td>Enable expert review</td></tr>
+						<tr><td>8</td><td>Shadow production integration</td><td>Compare against operational decisions</td></tr>
+						<tr><td>9</td><td>Governance-approved pilot</td><td>Test controlled real-world use</td></tr>
+					</tbody>
+				</table>
+				<p>Stages 0–5 form the initial engineering MVP.</p>
+				<p>Stages 6–9 require suitable real-world datasets, qualified review and insurer participation.</p>
+
+				<h2 id="s20">20. Proposed technology architecture</h2>
+				<p>A reference implementation could use:</p>
+				<p><strong>Application runtime:</strong> Node.js / TypeScript or JavaScript</p>
+				<p><strong>Calculation components:</strong></p>
+				<ul>
+					<li>Peril-specific rating modules</li>
+					<li>Versioned configuration</li>
+					<li>Deterministic assessment runner</li>
+					<li>Explainability output</li>
+					<li>Independent test harness</li>
+				</ul>
+				<p><strong>Data components:</strong></p>
+				<ul>
+					<li>Relational store for canonical asset and policy data</li>
+					<li>Object storage for evidence</li>
+					<li>Immutable assessment snapshots</li>
+					<li>Content-addressed model artifacts</li>
+					<li>Append-only evidence and audit events</li>
+					<li>Optional graph projection for evidence relationships</li>
+				</ul>
+				<p><strong>Cloud components:</strong></p>
+				<ul>
+					<li>API Gateway</li>
+					<li>Lambda</li>
+					<li>S3</li>
+					<li>RDS or equivalent transactional storage</li>
+					<li>KMS</li>
+					<li>EventBridge</li>
+					<li>Monitoring and audit services</li>
+				</ul>
+				<p>The architecture should remain cloud-portable at the model and data-contract level.</p>
+				<p>The first reference implementation should minimise dependencies and avoid unnecessary infrastructure complexity.</p>
+
+				<h2 id="s21">21. Governance and regulatory alignment</h2>
+				<p>For Australian deployment, the framework should be assessed against applicable insurance, privacy, consumer-protection and prudential obligations.</p>
+				<p>Relevant sources include:</p>
+				<ul>
+					<li>APRA CPS 220 — Risk Management</li>
+					<li>APRA GPG 240 — Insurance Risk</li>
+					<li>APRA GPS 230 — Reinsurance Management, where applicable</li>
+					<li>Australian Privacy Principles</li>
+					<li>Applicable ASIC and insurance consumer obligations</li>
+					<li>Insurer-specific governance, actuarial and pricing policies</li>
+				</ul>
+				<p>The framework does not itself establish compliance.</p>
+				<p>Responsibilities and requirements depend on whether selfdriven.insure operates as a technology provider, service provider, intermediary, underwriting agency or licensed insurer.</p>
+				<p>Governance policies must define decision accountability, permitted data use, complaint and correction pathways, retention, model challenge and independent review.</p>
+
+				<h2 id="s22">22. Initial implementation priorities</h2>
+				<p>The first development iteration should focus on five things:</p>
+				<h4>Priority 1 — Canonical risk objects</h4>
+				<p>A stable representation of properties, locations, perils, coverage and COPE characteristics.</p>
+				<h4>Priority 2 — Evidence as a first-class object</h4>
+				<p>Every significant claim about an asset or risk control should be traceable to its origin and verification state.</p>
+				<h4>Priority 3 — Peril-specific calculation interfaces</h4>
+				<p>A model contract that can support simple reference calculations initially and replace them with calibrated models later.</p>
+				<h4>Priority 4 — Independent reproducibility</h4>
+				<p>A third party should be able to reproduce an assessment using its specified inputs, model manifest and calculation rules, subject to lawful access controls.</p>
+				<h4>Priority 5 — Validation before pricing</h4>
+				<p>Risk indicators should remain separate from commercial pricing until their predictive usefulness and limitations are understood.</p>
+
+				<h2 id="s23">23. Future extensions</h2>
+				<p>The architecture should accommodate:</p>
+				<ul>
+					<li>Real-time sensor observations</li>
+					<li>Dynamic catastrophe intelligence</li>
+					<li>Asset digital twins</li>
+					<li>Parametric products</li>
+					<li>Continuous control assurance</li>
+					<li>Portfolio concentration modelling</li>
+					<li>Privacy-preserving evidence proofs</li>
+					<li>Automated independent model verification</li>
+					<li>AI-assisted explanations and mitigation proposals</li>
+					<li>Federated assessment across insurers and communities</li>
+				</ul>
+				<p>Autonomous agents may propose assessments, identify inconsistencies and recommend control improvements.</p>
+				<p>Material model changes and underwriting decisions should remain governed by explicitly defined authorisation policies.</p>
+
+				<h2 id="s24">24. Framework principle</h2>
+				<blockquote class="principle">
+					<p>COPE describes the foundational property risk.</p>
+					<p>DR² models its peril-specific risk, mitigation, resilience and evolution.</p>
+					<p>Evidence establishes what is known, by whom, when and with what confidence.</p>
+					<p>Validation establishes whether the model works.</p>
+					<p>Insurability establishes whether the risk can be sustainably transferred.</p>
+				</blockquote>
+				<p>Together, these concepts provide the foundation for a more transparent, measurable and continuously improving insurance risk system.</p>
+
+				<hr />
+				<p><strong>Document status:</strong> v0.1 / Foundational technical specification<br />
+				<strong>Next engineering artifact:</strong> DR² Reference Implementation v0.1, including canonical schemas, calculation interfaces, evidence verifier and automated test fixtures.</p>
+
+				<nav class="page-nav" aria-label="Page navigation">
+					<a href="/research">← Research</a>
+					<a href="/">selfdriven.insure →</a>
+				</nav>
+			</article>
+
+			<aside class="toc" aria-label="On this page">
+				<p class="toc-label">On this page</p>
+				<ol>
+					<li><a href="#s1">1. Executive summary</a></li>
+					<li><a href="#s2">2. Scope &amp; objectives</a></li>
+					<li><a href="#s3">3. Conceptual architecture</a></li>
+					<li><a href="#s4">4. COPE data model</a></li>
+					<li><a href="#s5">5. Risk taxonomy</a></li>
+					<li><a href="#s6">6. Peril-specific risk model</a></li>
+					<li><a href="#s7">7. Evidence &amp; verification</a></li>
+					<li><a href="#s8">8. Risk trajectory</a></li>
+					<li><a href="#s9">9. Resilience &amp; recovery</a></li>
+					<li><a href="#s10">10. Insurability</a></li>
+					<li><a href="#s11">11. Rating outputs</a></li>
+					<li><a href="#s12">12. Reference data schema</a></li>
+					<li><a href="#s13">13. Rating engine design</a></li>
+					<li><a href="#s14">14. API specification</a></li>
+					<li><a href="#s15">15. Validation framework</a></li>
+					<li><a href="#s16">16. Hypotheses</a></li>
+					<li><a href="#s17">17. Experimental design</a></li>
+					<li><a href="#s18">18. Acceptance criteria</a></li>
+					<li><a href="#s19">19. Delivery roadmap</a></li>
+					<li><a href="#s20">20. Technology architecture</a></li>
+					<li><a href="#s21">21. Governance &amp; regulation</a></li>
+					<li><a href="#s22">22. Implementation priorities</a></li>
+					<li><a href="#s23">23. Future extensions</a></li>
+					<li><a href="#s24">24. Framework principle</a></li>
+				</ol>
+			</aside>
+		</div>
+	</main>
+
+	<footer class="footer">
+		<div class="footer-left">
+			<a class="logo" href="/"><img class="logo-finance" src="/assets/img/selfdriven-logo-insure-flamingo-transparent.png" alt="selfdriven.insure" /></a>
+			<p>Helping communities and their members share (insure) risk and self-actuate.</p>
+		</div>
+		<div class="footer-cols">
+			<div>
+				<p class="footer-head">Interfaces</p>
+				<a href="/interfaces/human/feeds">Feeds Dashboard</a>
+				<a href="/interfaces/human/property">Property</a>
+				<a href="/interfaces/human/motor-vehicle">Motor Vehicle</a>
+				<a href="/interfaces/human/commercial">Commercial</a>
+				<a href="/interfaces/human/life-health">Life &amp; Health</a>
+			</div>
+			<div>
+				<p class="footer-head">Research</p>
+				<a href="/research">Research</a>
+				<a href="/research-risk-rating-framework/">DR² rating framework</a>
+				<a href="https://github.com/selfdriven-foundation/selfdriven-ai/tree/main/research/use-case-tests/o4-deep-research/insurance">Ecosystem research</a>
+				<a href="https://fida.finance">fida.finance</a>
+			</div>
+			<div>
+				<p class="footer-head">Ecosystem</p>
+				<a href="https://selfdriven.id">selfdriven.id</a>
+				<a href="https://skillzeb.io">skillzeb.io</a>
+				<a href="https://selfdriven.ai">selfdriven.ai</a>
+				<a href="https://selfdriven.network">selfdriven.network</a>
+				<a href="https://selfdriven.fyi/connect">Connect</a>
+			</div>
+		</div>
+		<div class="footer-line">selfdriven.insure · Members share the risk, the community carries on · © 2026 selfdriven</div>
+	</footer>
+
+</body>
+</html>
