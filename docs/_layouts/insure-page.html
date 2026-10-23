@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+	<meta charset="UTF-8" />
+	<title>{{ page.title }}</title>
+	{% if page.description %}<meta name="description" content="{{ page.description }}" />{% endif %}
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+	<link rel="shortcut icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" type="image/png" />
+	<link rel="apple-touch-icon" href="/assets/img/selfdriven-logo-round-blackcurrant-flamingo.png" />
+	<meta property="og:title" content="{{ page.title }}" />
+	{% if page.description %}<meta property="og:description" content="{{ page.description }}" />{% endif %}
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/css/style.css" />
+	<style>
+		/* Content-page additions shared by the research pages */
+		.page-grid.no-toc{grid-template-columns:minmax(0,1fr)}
+		.prose pre{margin:24px 0 28px;padding:22px 24px;background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow-x:auto;font-size:14px;line-height:1.6}
+		.prose pre code{background:none;padding:0;font-size:inherit}
+		.prose div.highlighter-rouge{margin:0}
+		.prose blockquote strong{font-weight:600;color:var(--orange)}
+		.prose .checklist{list-style:none;padding-left:0}
+		.prose .checklist li{padding-left:30px;position:relative}
+		.prose .checklist li::before{content:"";position:absolute;left:0;top:.35em;width:16px;height:16px;border:2px solid var(--orange);border-radius:4px}
+		.prose .lead{font-size:19px;color:var(--muted)}
+		.prose .scope-list{padding:0;margin:20px 0 40px}
+		.prose .scope-list li{margin:0}
+		.prose .scope-list li::marker{content:none}
+		.prose .link-row{text-decoration:none}
+		.prose .link-row strong{font-weight:600}
+		.prose .hub-head{margin-top:44px;padding-top:0;border-top:0}
+	</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+	<header class="header">
+		<a class="logo" href="/"><img class="logo-finance" src="/assets/img/selfdriven-logo-insure-flamingo-transparent.png" alt="selfdriven.insure" /></a>
+		<nav class="nav">
+			<a href="/#purpose">Purpose</a>
+			<a href="/#scope">Scope</a>
+			<a href="/#interfaces">Interfaces</a>
+			<a href="/#references">References</a>
+			<a href="/research">Research</a>
+		</nav>
+	</header>
+
+	<main class="main-content" id="main">
+		<div class="page-grid{% if page.toc == false %} no-toc{% endif %}">
+			<article class="prose">
+				<p class="crumb"><a href="/">selfdriven.insure</a>{% if page.crumb %} / <a href="/research">Research</a> / {{ page.crumb }}{% endif %}</p>
+{{ content }}
+				<nav class="page-nav" aria-label="Page navigation">
+					{% if page.crumb %}<a href="/research">← Research</a>{% else %}<a href="/">← selfdriven.insure</a>{% endif %}
+					{% if page.next_url %}<a href="{{ page.next_url }}">{{ page.next_title }} →</a>{% endif %}
+				</nav>
+			</article>
+			{% unless page.toc == false %}
+			<aside class="toc" aria-label="On this page">
+				<p class="toc-label">On this page</p>
+				<ol id="toc-list"></ol>
+			</aside>
+			{% endunless %}
+		</div>
+	</main>
+
+	<footer class="footer">
+		<div class="footer-left">
+			<a class="logo" href="/"><img class="logo-finance" src="/assets/img/selfdriven-logo-insure-flamingo-transparent.png" alt="selfdriven.insure" /></a>
+			<p>Helping communities and their members share (insure) risk and self-actuate.</p>
+		</div>
+		<div class="footer-cols">
+			<div>
+				<p class="footer-head">Interfaces</p>
+				<a href="/interfaces/human/feeds">Feeds Dashboard</a>
+				<a href="/interfaces/human/property">Property</a>
+				<a href="/interfaces/human/motor-vehicle">Motor Vehicle</a>
+				<a href="/interfaces/human/commercial">Commercial</a>
+				<a href="/interfaces/human/life-health">Life &amp; Health</a>
+			</div>
+			<div>
+				<p class="footer-head">Research</p>
+				<a href="/research">Research</a>
+				<a href="/research-risk-rating-framework/">DR² rating framework</a>
+				<a href="/research/pixels-to-proofs-insurance">Pixels to Proofs</a>
+				<a href="/research/cope">COPE</a>
+				<a href="/research/cost-of-trust">Cost of Trust</a>
+			</div>
+			<div>
+				<p class="footer-head">Ecosystem</p>
+				<a href="https://selfdriven.id">selfdriven.id</a>
+				<a href="https://skillzeb.io">skillzeb.io</a>
+				<a href="https://selfdriven.ai">selfdriven.ai</a>
+				<a href="https://selfdriven.network">selfdriven.network</a>
+				<a href="https://selfdriven.fyi/connect">Connect</a>
+			</div>
+		</div>
+		<div class="footer-line">selfdriven.insure · Members share the risk, the community carries on · © 2026 selfdriven</div>
+	</footer>
+
+	{% unless page.toc == false %}
+	<script>
+		(function(){
+			var list=document.getElementById('toc-list');
+			var heads=document.querySelectorAll('.prose h2');
+			if(!list||heads.length<2){var g=document.querySelector('.page-grid');if(g)g.classList.add('no-toc');var t=document.querySelector('.toc');if(t)t.hidden=true;return;}
+			heads.forEach(function(h,i){
+				if(!h.id)h.id='section-'+(i+1);
+				var li=document.createElement('li'),a=document.createElement('a');
+				a.href='#'+h.id;a.textContent=h.textContent;li.appendChild(a);list.appendChild(li);
+			});
+		})();
+	</script>
+	{% endunless %}
+</body>
+</html>
